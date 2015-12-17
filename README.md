@@ -1,19 +1,17 @@
 # The Projects
 
-"The Projects" est une adaptation du jeu de plateau "Pandémie" ("Pandemic" en VO). Il s'agit d'un jeu coopératif où les joueurs tentent d'éradiquer une pandémie.
+The Projects is an adaptation of the famous boardgame _Pandemic_. It is a game where the players have to help UTBM students with their school projects, without ending overwhelmed.
 
-Adapter le jeu "Pandémie" à l'univers de l'UTBM. Les maladies sont alors représentées par des projets, le but étant de rendre tous ses projets avant d'en être submergé et à temps.
+## Inventory and equivalency Pandemic <-> The Projects
 
-## Inventaire et équivalence Pandémie <-> The Projects
-
-* Pions : Thésard
-* Cartes _Ville_ : Cartes _Salle_
-* Cartes _Epidémie_ : Cartes _Soirée étudiante_
-* Cartes _Evenements_
-* Cartes _Propagation_ : Cartes _Projet_
-* Cartes _Rôle_ : Cartes _Thésard_
-* Marqueur _Vitesse de propagation_ : Jauge d'urgence
-* Marqueur _Eclosion_ : Jauge de burn-out
-* Marqueurs _Remède_ : Marqueurs _Masterisation d'UV/6 ECTS_
-* Cubes de maladie : Projets
-* Stations de recherche : Salles de TP
+* Player pawns : PhD Student pawns
+* _City_ cards : _Room_ cards
+* _Epidemic_ cards : _Party_ cards
+* _Event_ cards
+* _Infection_ cards : _Project_ cards
+* _Role_ cards
+* Infection rate marker : Emergency gauge
+* Outbreaks marker : Burn-out gauge
+* Cure markers : _Course masterisation / 6 ECTS_ markers
+* Disease cubes : Project cubes
+* Research stations : Lab rooms
