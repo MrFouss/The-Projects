@@ -16,8 +16,8 @@ public class View extends Application {
         board = new Board(new Group());
         primaryStage.setScene(board);
 
-        primaryStage.setMinHeight(300);
-        primaryStage.setMinWidth(450);
+        primaryStage.setMinHeight(500);
+        primaryStage.setMinWidth(800);
         primaryStage.setMaximized(true);
         primaryStage.show();
     }
