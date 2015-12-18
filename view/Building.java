@@ -2,22 +2,30 @@ package the_projects.view;
 
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 /**
- * TODO implement
+ * TODO complete
  */
-public class Building extends Shape {
-
+public class Building {
+    private Rectangle rectangle;
+    private Circle circle;
     private Color color;
 
-    public Building(Color c) {
-        color = c;
+    public Building(Circle circle, Rectangle rectangle, Color color) {
+        this.circle = circle;
+        this.rectangle = rectangle;
+        this.color = color;
     }
 
+    public Rectangle getRectangle() {
+        rectangle.setFill(color);
+        return rectangle;
+    }
 
-    @Override
-    public com.sun.javafx.geom.Shape impl_configShape() {
-        return null;
+    public Circle getCircle() {
+        circle.setFill(color);
+        return circle;
     }
 }
