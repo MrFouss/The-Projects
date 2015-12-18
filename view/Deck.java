@@ -16,14 +16,15 @@ public class Deck extends StackPane {
     String text;
     Rectangle rectangle;
 
-    public Deck(Scene scene,String t, Color c, double relativeX, double relativeY) {
+    public Deck(Scene scene,String t, Color c, double relativeX, double relativeY, boolean horizontal) {
         color = c;
         rectangle = new Rectangle();
         rectangle.setFill(color);
         text = t;
 
-        rectangle.widthProperty().bind(scene.widthProperty().multiply(9/100.));
-        rectangle.heightProperty().bind(scene.heightProperty().multiply(22/100.));
+
+        rectangle.widthProperty().bind(scene.widthProperty().multiply((horizontal ? 22*9/16 : 9)/100.));
+        rectangle.heightProperty().bind(scene.heightProperty().multiply((horizontal ? 9*16/9 : 22)/100.));
 
         layoutXProperty().bind(scene.widthProperty().multiply(relativeX));
         layoutYProperty().bind(scene.heightProperty().multiply(relativeY));

@@ -69,10 +69,10 @@ public class Board extends Scene {
         }
 
         group.getChildren().addAll(
-                new Deck(this, "Cartes\nProjet", Color.GREEN, 60/100., 1/100.),
-                new Deck(this, "Défausse\nCartes\nProjet", Color.GREEN, 70/100., 1/100.),
-                new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 60/100.),
-                new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 60/100.)
+                new Deck(this, "Cartes\nProjet", Color.GREEN, 60/100., 1/100., true),
+                new Deck(this, "Défausse\nCartes\nProjet", Color.GREEN, 75/100., 1/100., true),
+                new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 60/100., false),
+                new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 60/100., false)
                 );
     }
 }
