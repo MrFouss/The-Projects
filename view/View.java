@@ -18,6 +18,7 @@ public class View extends Application {
 
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(450);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 }
