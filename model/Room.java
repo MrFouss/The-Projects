@@ -16,13 +16,13 @@ public class Room {
     /**
      * 
      */
-    private Boolean labRoom = FALSE;
+    private Boolean labRoom = false;
 
 
     /**
-     * 
+     *
      */
-    private Project[] projectTab;
+    private Course.Project[] projectTab;
 
 
     /**
@@ -68,10 +68,10 @@ public class Room {
     }
 
     /**
-     * @param course 
+     * @param course
      * @return
      */
-    public Project getProject(Course course) {
+    public Course.Project getProject(Course course) {
         // TODO implement here
         return null;
     }

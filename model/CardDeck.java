@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 
  */
-public class CardDeck {
+public class CardDeck <T>{
 
     /**
      * Default constructor
@@ -30,7 +30,6 @@ public class CardDeck {
      */
     public void shuffle() {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -64,7 +63,6 @@ public class CardDeck {
      */
     public void addCard(T card) {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -73,7 +71,6 @@ public class CardDeck {
      */
     public void addCardsOnTop(CardDeck<T> deck) {
         // TODO implement here
-        return null;
     }
 
     /**

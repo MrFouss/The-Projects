@@ -19,12 +19,12 @@ public class Course {
     /**
      * 
      */
-    private Boolean completed = FALSE;
+    private Boolean completed = false;
 
     /**
      * 
      */
-    private Boolean eradicated = FALSE;
+    private Boolean eradicated = false;
 
     /**
      * 
@@ -60,7 +60,6 @@ public class Course {
      */
     public void setCompleted() {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -76,7 +75,6 @@ public class Course {
      */
     public void setEradicated() {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -121,7 +119,6 @@ public class Course {
          */
         public void setProjectAmount(int amount) {
             // TODO implement here
-            return null;
         }
 
     }

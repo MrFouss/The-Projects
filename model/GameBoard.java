@@ -177,7 +177,6 @@ public class GameBoard {
      */
     public void increaseBurnOutGauge() {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -185,7 +184,6 @@ public class GameBoard {
      */
     public void increaseEmergencyGauge() {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -202,7 +200,6 @@ public class GameBoard {
      */
     public void setLabRoomAmount(int amount) {
         // TODO implement here
-        return null;
     }
 
 }
