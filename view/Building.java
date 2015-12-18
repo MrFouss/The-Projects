@@ -28,4 +28,10 @@ public class Building {
         circle.setFill(color);
         return circle;
     }
+
+    public void setColor(Color c) {
+        color = c;
+        rectangle.setFill(color);
+        circle.setFill(color);
+    }
 }
