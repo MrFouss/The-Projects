@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 /**
  * TODO implement
  */
-public class Carte extends Rectangle {
+public class Card extends Rectangle {
 
     private String Text;
 

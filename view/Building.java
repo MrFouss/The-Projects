@@ -7,11 +7,11 @@ import javafx.scene.shape.Shape;
 /**
  * TODO implement
  */
-public class Batiment extends Shape {
+public class Building extends Shape {
 
     private Color color;
 
-    public Batiment(Color c) {
+    public Building(Color c) {
         color = c;
     }
 

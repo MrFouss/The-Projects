@@ -6,7 +6,7 @@ import javafx.scene.shape.Path;
 /**
  * TODO implement
  */
-public class Couloirs extends Path {
+public class Corridor extends Path {
 
 
 }
