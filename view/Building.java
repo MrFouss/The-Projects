@@ -1,37 +1,41 @@
 package the_projects.view;
 
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /**
  * TODO complete
  */
 public class Building {
-    private Rectangle rectangle;
-    private Circle circle;
+
+    private Shape shape;
     private Color color;
 
     public Building(Circle circle, Rectangle rectangle, Color color) {
-        this.circle = circle;
-        this.rectangle = rectangle;
         this.color = color;
+        shape = Shape.union(circle, rectangle);
+        shape.setFill(color);
+        shape.setStroke(color.darker().darker());
+        shape.setStrokeWidth(3);
+        shape.hoverProperty().addListener((e) -> {
+            if(shape.isHover()) {
+                shape.setStroke(Color.BLACK);
+            }else{
+                shape.setStroke(color.darker().darker());
+            }
+        });
     }
 
-    public Rectangle getRectangle() {
-        rectangle.setFill(color);
-        return rectangle;
-    }
-
-    public Circle getCircle() {
-        circle.setFill(color);
-        return circle;
-    }
 
     public void setColor(Color c) {
         color = c;
-        rectangle.setFill(color);
-        circle.setFill(color);
+        shape.setFill(color);
+        shape.setStroke(color.darker().darker());
+    }
+
+    public Shape getShape() {
+        return shape;
     }
 }

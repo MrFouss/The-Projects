@@ -23,11 +23,11 @@ public class Deck extends StackPane {
         text = t;
 
 
-        rectangle.widthProperty().bind(scene.widthProperty().multiply((horizontal ? 22*9/16 : 9)/100.));
-        rectangle.heightProperty().bind(scene.heightProperty().multiply((horizontal ? 9*16/9 : 22)/100.));
+        rectangle.setWidth(scene.getWidth()*(horizontal ? 22*9/16 : 9)/100.);
+        rectangle.setHeight(scene.getHeight()*(horizontal ? 9*16/9 : 22)/100.);
 
-        layoutXProperty().bind(scene.widthProperty().multiply(relativeX));
-        layoutYProperty().bind(scene.heightProperty().multiply(relativeY));
+        setLayoutX(scene.getWidth()*relativeX);
+        setLayoutY(scene.getHeight()*relativeY);
         getChildren().add(rectangle);
 
         Text label = new Text(text);
