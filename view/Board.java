@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 
 
@@ -24,7 +25,7 @@ public class Board extends Scene {
 
 
     public Board(Group root) {
-        super(root, 900, 600);
+        super(root, 1600, 900);
 
         setFill(Color.PURPLE);
 
@@ -47,7 +48,7 @@ public class Board extends Scene {
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
         rectangle.setX(getWidth()*(1/100.));
         rectangle.setY(getHeight()*(25/100.));
-        batiments[1] = new Building(Color.gray(.5), rectangle);
+        batiments[1] = new Building(Color.GREEN, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
@@ -76,11 +77,13 @@ public class Board extends Scene {
         }
 
         pane.getChildren().addAll(
-                new Deck(this, "Cartes\nProjet", Color.GREEN, 60/100., 1/100., true),
-                new Deck(this, "Défausse\nCartes\nProjet", Color.GREEN, 75/100., 1/100., true),
+                new Deck(this, "Cartes\nProjet", Color.GRAY, 60/100., 1/100., true),
+                new Deck(this, "Défausse\nCartes\nProjet", Color.GRAY, 75/100., 1/100., true),
                 new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 60/100., false),
                 new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 60/100., false)
         );
+
+        pane.getChildren().add(new Room(batiments[0].getColor(), "A200", 400, 75, 5));
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -88,5 +91,17 @@ public class Board extends Scene {
         pane.getTransforms().add(scale);
 
 
+    }
+
+    public static void setHoverListener(Shape shape) {
+        shape.setStrokeWidth(3);
+        shape.setStroke(((Color)shape.getFill()).deriveColor(0,1,.5,1));
+        shape.hoverProperty().addListener((e) -> {
+            if(shape.isHover()) {
+                shape.setStroke(Color.BLUEVIOLET);
+            }else{
+                shape.setStroke(((Color)shape.getFill()).deriveColor(0,1,.5,1));
+            }
+        });
     }
 }

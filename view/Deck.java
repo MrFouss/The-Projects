@@ -12,9 +12,9 @@ import javafx.scene.text.Text;
  * TODO complete
  */
 public class Deck extends StackPane {
-    Color color;
-    String text;
-    Rectangle rectangle;
+    private Color color;
+    private String text;
+    private Rectangle rectangle;
 
     public Deck(Scene scene,String t, Color c, double relativeX, double relativeY, boolean horizontal) {
         color = c;
@@ -31,10 +31,14 @@ public class Deck extends StackPane {
         getChildren().add(rectangle);
 
         Text label = new Text(text);
-        label.setFont(new Font(10));
+        label.setFont(new Font(15));
         label.setFill(Color.GREENYELLOW);
+        label.setMouseTransparent(true);
+
 
         getChildren().add(label);
+
+        Board.setHoverListener(rectangle);
     }
 
 

@@ -14,29 +14,25 @@ public class Building {
     private Color color;
 
     public Building(Color color, Shape ... s) {
-        this.color = color;
+
         if (s.length > 1) {
             shape = Arrays.asList(s).stream().reduce(Shape::union).get();
         }else{
             shape = s[0];
         }
-        shape.setFill(color);
-        shape.setStroke(color.darker().darker());
-        shape.setStrokeWidth(3);
-        shape.hoverProperty().addListener((e) -> {
-            if(shape.isHover()) {
-                shape.setStroke(Color.BLACK);
-            }else{
-                shape.setStroke(color.darker().darker());
-            }
-        });
+        setColor(color);
+        Board.setHoverListener(shape);
     }
 
 
     public void setColor(Color c) {
         color = c;
         shape.setFill(color);
-        shape.setStroke(color.darker().darker());
+        shape.setStroke(color.deriveColor(0,1,.5,1));
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public Shape getShape() {
