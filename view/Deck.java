@@ -31,7 +31,7 @@ public class Deck extends StackPane {
         getChildren().add(rectangle);
 
         Text label = new Text(text);
-        label.setFont(new Font(15));
+        label.setFont(new Font(10));
         label.setFill(Color.GREENYELLOW);
 
         getChildren().add(label);

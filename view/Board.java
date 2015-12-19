@@ -38,38 +38,38 @@ public class Board extends Scene {
         Rectangle rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*3/2)/100.);
         rectangle.setHeight(getHeight()*((Base/2)*16/9.)/100.);
-        rectangle.xProperty().bind(widthProperty().multiply(22/100.));
-        rectangle.yProperty().bind(heightProperty().multiply(1/100.));
-        batiments[0] = new Building(new Circle(), rectangle, Color.BLUE);
+        rectangle.setX(getWidth()*(22/100.));
+        rectangle.setY(getHeight()*(1/100.));
+        batiments[0] = new Building(Color.BLUE, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*Base/100.);
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
-        rectangle.xProperty().bind(widthProperty().multiply(1/100.));
-        rectangle.yProperty().bind(heightProperty().multiply(25/100.));
-        batiments[1] = new Building(new Circle(), rectangle, Color.gray(.5));
+        rectangle.setX(getWidth()*(1/100.));
+        rectangle.setY(getHeight()*(25/100.));
+        batiments[1] = new Building(Color.gray(.5), rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
         rectangle.setHeight(getHeight()*((Base/2)*16/9.)/100.);
-        rectangle.xProperty().bind(widthProperty().multiply(40/100.));
-        rectangle.yProperty().bind(heightProperty().multiply(30/100.));
+        rectangle.setX(getWidth()*(40/100.));
+        rectangle.setY(getHeight()*(30/100.));
         Circle arrondi = new Circle();
-        arrondi.centerXProperty().bind(rectangle.xProperty().add(rectangle.widthProperty().multiply(45/100.)));
-        arrondi.centerYProperty().bind(rectangle.yProperty().add(rectangle.heightProperty()));
-        arrondi.radiusProperty().bind(rectangle.widthProperty().multiply(10/100.));
-        batiments[2] = new Building(arrondi, rectangle, Color.YELLOW);
+        arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(45/100.));
+        arrondi.setCenterY(rectangle.getY() + rectangle.getHeight());
+        arrondi.setRadius(rectangle.getWidth()*(12/100.));
+        batiments[2] = new Building(Color.YELLOW, arrondi, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*5/8)/100.);
         rectangle.setHeight(getHeight()*((Base)*16/9.)/100.);
-        rectangle.xProperty().bind(widthProperty().multiply(25/100.));
-        rectangle.yProperty().bind(heightProperty().multiply(60/100.));
+        rectangle.setX(getWidth()*(25/100.));
+        rectangle.setY(getHeight()*(60/100.));
         arrondi = new Circle();
-        arrondi.centerXProperty().bind(rectangle.xProperty().add(rectangle.widthProperty().multiply(50/100.)));
-        arrondi.centerYProperty().bind(rectangle.yProperty());
-        arrondi.radiusProperty().bind(rectangle.widthProperty().multiply(50/100.));
-        batiments[3] = new Building(arrondi, rectangle, Color.RED);
+        arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(50/100.));
+        arrondi.setCenterY(rectangle.getY());
+        arrondi.setRadius(rectangle.getWidth()*(50/100.));
+        batiments[3] = new Building(Color.RED, arrondi, rectangle);
 
         for (Building s: batiments) {
             pane.getChildren().add(s.getShape());

@@ -1,9 +1,9 @@
 package the_projects.view;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import java.util.Arrays;
+
 
 /**
  * TODO complete
@@ -13,9 +13,13 @@ public class Building {
     private Shape shape;
     private Color color;
 
-    public Building(Circle circle, Rectangle rectangle, Color color) {
+    public Building(Color color, Shape ... s) {
         this.color = color;
-        shape = Shape.union(circle, rectangle);
+        if (s.length > 1) {
+            shape = Arrays.asList(s).stream().reduce(Shape::union).get();
+        }else{
+            shape = s[0];
+        }
         shape.setFill(color);
         shape.setStroke(color.darker().darker());
         shape.setStrokeWidth(3);
