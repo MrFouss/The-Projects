@@ -24,7 +24,7 @@ public class Room extends StackPane {
     public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
         this.color = color;
         this.name = name;
-        circle = new Circle(10, 10, 20);
+        circle = new Circle(10, 10, 25);
         circle.setFill(color);
 
         getChildren().add(circle);

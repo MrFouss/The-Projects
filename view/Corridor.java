@@ -6,19 +6,26 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * TODO complete
  */
 public class Corridor extends Path {
 
-    public Corridor (Room room1, Room room2, Coord... coords) {
+    public Corridor (Room room1, Room room2, ArrayList<Coord> coords) {
         getElements().add(new MoveTo(room1.getPos().getX(), room1.getPos().getY()));
-        if (coords != null) {
-
+        if (!coords.isEmpty()) {
+            coords.stream().forEach((coord) -> getElements().add(new LineTo(coord.getX(), coord.getY())));
         }
         getElements().add(new LineTo(room2.getPos().getX(), room2.getPos().getY()));
-        setFill(Color.BLACK);
-        setStrokeWidth(2);
+        setStroke(Color.GRAY);
+        setStrokeWidth(4);
+    }
+
+    public Corridor (Room room1, Room room2) {
+        this(room1, room2, new ArrayList<>());
     }
 
 }
