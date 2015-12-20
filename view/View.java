@@ -13,10 +13,10 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        board = new Board(new Group());
+        board = new Board(new Group(), 5);
         primaryStage.setScene(board);
 
-        primaryStage.setMinHeight(500);
+        primaryStage.setMinHeight(450);
         primaryStage.setMinWidth(800);
         primaryStage.setMaximized(true);
         primaryStage.show();

@@ -18,7 +18,7 @@ public class Room extends StackPane {
     private Pawn[] pawns;
     private int maxPawns;
 
-    public Room(Color color, String name, float xPos, float yPos, int nbPlayers) {
+    public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
         this.color = color;
         this.name = name;
         circle = new Circle(10, 10, 20);
@@ -30,7 +30,8 @@ public class Room extends StackPane {
         setLayoutY(yPos);
 
         Text text = new Text(this.name);
-        text.setFont(new Font(14));
+        text.setFont(new Font(12));
+        text.setFill(color.deriveColor(100,1,2,1));
         text.setMouseTransparent(true);
         getChildren().add(text);
 

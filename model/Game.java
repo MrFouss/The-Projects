@@ -19,9 +19,4 @@ public class Game {
     private GameBoard board;
 
 
-    public static void main(String[] args) {
-        View view = new View();
-        view.launch(args);
-    }
-
 }

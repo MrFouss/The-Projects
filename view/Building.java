@@ -21,7 +21,7 @@ public class Building {
             shape = s[0];
         }
         setColor(color);
-        Board.setHoverListener(shape);
+        shape.setStrokeWidth(3);
     }
 
 
