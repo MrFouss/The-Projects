@@ -1,19 +1,19 @@
-package the_projects.model;
+package the_projects.model.card;
+
+import the_projects.model.Room;
 
 /**
- * 
+ * Implementation of the PlayerCard interface.
  */
-// TODO add javadoc
 public class RoomCard implements PlayerCard {
 
     /**
-     *
+     * Room object linked to the card.
      */
-    // TODO add javadoc
     private Room room;
 
     /**
-     * Constructor with a Room parameter
+     * Constructor with a Room parameter.
      *
      * @param room a room to link to the card.
      */
@@ -22,9 +22,10 @@ public class RoomCard implements PlayerCard {
     }
 
     /**
-     * @return the card's room
+     * Gets the Room object linked to the card.
+     *
+     * @return the card's room.
      */
-    // TODO add javadoc
     public Room getRoom() {
         return this.room;
     }

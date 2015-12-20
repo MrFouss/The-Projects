@@ -1,5 +1,9 @@
 package the_projects.model;
 
+import the_projects.model.card.CardDeck;
+import the_projects.model.card.PlayerCard;
+import the_projects.model.card.ProjectCard;
+
 import java.util.*;
 
 /**

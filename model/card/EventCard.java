@@ -1,36 +1,29 @@
-package the_projects.model;
+package the_projects.model.card;
 
 /**
- * 
+ * Implementation of PlayerCard, containing an event.
  */
-// TODO add javadoc
 public class EventCard implements PlayerCard {
 
     /**
-     *
+     * Element of the Event enumeration.
      */
-    // TODO add javadoc
     private Event type;
 
     /**
-     * Default constructor
-     */
-    public EventCard() {
-        this.type = null;
-    }
-
-    /**
+     * Constructor with an Event parameter.
+     *
      * @param event the event linked to the card.
      */
-    // TODO add javadoc
     public EventCard(Event event) {
         this.type = event;
     }
 
     /**
+     * Gets the event linked to the card.
+     *
      * @return the type of event linked to the card.
      */
-    // TODO add javadoc
     public Event getEvent() {
         return this.type;
     }

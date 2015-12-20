@@ -1,13 +1,12 @@
-package the_projects.model;
+package the_projects.model.card;
 
 /**
- * 
+ * Implementation of PlayerCard
  */
-// TODO add javadoc
 public class PartyCard implements PlayerCard {
 
     /**
-     * Default constructor
+     * Empty default constructor.
      */
     public PartyCard() {}
 

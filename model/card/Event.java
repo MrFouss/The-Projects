@@ -1,9 +1,8 @@
-package the_projects.model;
+package the_projects.model.card;
 
 /**
- * 
+ * Enumeration containing the different types of event.
  */
-// TODO add javadoc
 public enum Event {
     TIMEOUT,
     GRANT_IN_AID,
