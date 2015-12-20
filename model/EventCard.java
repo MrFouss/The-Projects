@@ -3,32 +3,36 @@ package the_projects.model;
 /**
  * 
  */
+// TODO add javadoc
 public class EventCard implements PlayerCard {
+
+    /**
+     *
+     */
+    // TODO add javadoc
+    private Event type;
 
     /**
      * Default constructor
      */
     public EventCard() {
+        this.type = null;
     }
 
     /**
-     * 
+     * @param event the event linked to the card.
      */
-    private Event type;
-
-    /**
-     * @param event
-     */
-    public void EventCard(Event event) {
-        // TODO implement here
+    // TODO add javadoc
+    public EventCard(Event event) {
+        this.type = event;
     }
 
     /**
-     * @return
+     * @return the type of event linked to the card.
      */
+    // TODO add javadoc
     public Event getEvent() {
-        // TODO implement here
-        return null;
+        return this.type;
     }
 
 }

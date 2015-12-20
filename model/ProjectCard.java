@@ -3,32 +3,30 @@ package the_projects.model;
 /**
  * 
  */
+// TODO add javadoc
 public class ProjectCard implements Card {
 
     /**
-     * Default constructor
+     *
      */
-    public ProjectCard() {
-    }
-
-    /**
-     * 
-     */
+    // TODO add javadoc
     private Room room;
 
     /**
-     * @param room
+     * Constructor with a Room parameter
+     *
+     * @param room a room to link to the card.
      */
-    public void ProjectCard(Room room) {
-        // TODO implement here
+    public ProjectCard(Room room) {
+        this.room = room;
     }
 
     /**
-     * @return
+     * @return the card's room
      */
+    // TODO add javadoc
     public Room getRoom() {
-        // TODO implement here
-        return null;
+        return this.room;
     }
 
 }
