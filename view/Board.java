@@ -1,13 +1,14 @@
 package the_projects.view;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 
 import java.io.IOException;
@@ -40,12 +41,19 @@ public class Board extends Scene {
         pane = new Pane();
         group.getChildren().add(pane);
 
+        Label title = new Label("The Projects");
+        title.setLayoutX(20);
+        title.setLayoutY(40);
+        title.setFont(new Font(40));
+        title.setTextFill(Color.CHARTREUSE);
+        pane.getChildren().add(title);
+
         float Base = 25;
 
         batiments = new Building[4];
         Rectangle rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
-        rectangle.setHeight(getHeight()*((Base/2)*16/9.)/100.);
+        rectangle.setHeight(getHeight()*((Base*1.05/2)*16/9.)/100.);
         rectangle.setX(getWidth()*(20/100.));
         rectangle.setY(getHeight()*(1/100.));
         batiments[0] = new Building(Color.BLUE, rectangle);
@@ -59,7 +67,7 @@ public class Board extends Scene {
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
-        rectangle.setHeight(getHeight()*(((Base+1)/2*16/9.)/100.));
+        rectangle.setHeight(getHeight()*(((Base+3)/2*16/9.)/100.));
         rectangle.setX(getWidth()*(50/100.));
         rectangle.setY(getHeight()*(30/100.));
         Circle arrondi = new Circle();
@@ -86,14 +94,13 @@ public class Board extends Scene {
         pane.getChildren().addAll(
                 new Deck(this, "Cartes\nProjet", Color.GRAY, 60/100., 1/100., true),
                 new Deck(this, "Défausse\nCartes\nProjet", Color.GRAY, 75/100., 1/100., true),
-                new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 60/100., false),
-                new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 60/100., false)
+                new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 75/100., false),
+                new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 75/100., false)
         );
 
         setRooms("the_projects/resources/rooms.csv", nbPlayers);
         setCorridor("the_projects/resources/corridors.csv");
 
-      //  Collections.sort(pane.getChildren(), (c1, c2) -> c1.isInstance() });
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -142,7 +149,18 @@ public class Board extends Scene {
             Corridor newCorridor;
             for (String s : newCorridorsList) {
                 String[] vars = s.split(",");
-                newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]));
+                if(vars.length < 3) {
+                    newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]));
+
+                } else {
+                    ArrayList<Coord> coords = new ArrayList<>();
+
+                    for (int i = 2; i < vars.length; i+=2) {
+                        coords.add(new Coord(Double.parseDouble(vars[i])*1600/100., Double.parseDouble(vars[i+1])*900/100));
+                    }
+
+                    newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]), coords);
+                }
                 pane.getChildren().add(newCorridor);
             }
             rooms.forEach((k,v) -> v.toFront());
