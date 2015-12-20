@@ -7,6 +7,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+
 /**
  * TODO complete
  */
@@ -17,6 +19,7 @@ public class Room extends StackPane {
     private int[] projectCubes;
     private Pawn[] pawns;
     private int maxPawns;
+    private ArrayList<Corridor> corridors;
 
     public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
         this.color = color;
@@ -39,8 +42,9 @@ public class Room extends StackPane {
         projectCubes = new int[maxPawns];
         pawns = new Pawn[5];
 
-        Board.setHoverListener(circle);
-        //TODO complete
+        Board.setHoverStrokeChange(circle);
+
+        corridors = new ArrayList<>();
     }
 
     public Coord addPawn(Pawn pawn) {
@@ -65,6 +69,10 @@ public class Room extends StackPane {
     }
 
     public Coord getPos() {
-        return new Coord(circle.getCenterX(), circle.getCenterY());
+        return new Coord(getLayoutX() + circle.getRadius(), getLayoutY() + circle.getRadius());
+    }
+
+    public void addCorridor(Corridor c) {
+        corridors.add(c);
     }
 }

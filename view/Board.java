@@ -1,6 +1,7 @@
 package the_projects.view;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -12,7 +13,7 @@ import javafx.scene.transform.Scale;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -25,6 +26,7 @@ public class Board extends Scene {
      */
     private Group group;
     private Building[] batiments;
+    private HashMap<String, Room> rooms;
     private Pane pane;
     private Card selectedCard;
 
@@ -88,7 +90,10 @@ public class Board extends Scene {
                 new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 60/100., false)
         );
 
-        setRooms("the_projects/resources/rooms.cvs", nbPlayers);
+        setRooms("the_projects/resources/rooms.csv", nbPlayers);
+        setCorridor("the_projects/resources/corridors.csv");
+
+      //  Collections.sort(pane.getChildren(), (c1, c2) -> c1.isInstance() });
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -97,7 +102,7 @@ public class Board extends Scene {
 
     }
 
-    public static void setHoverListener(Shape shape) {
+    public static void setHoverStrokeChange(Shape shape) {
         shape.setStrokeWidth(3);
         shape.setStroke(((Color)shape.getFill()).deriveColor(0,1,.5,1));
         shape.hoverProperty().addListener((e) -> {
@@ -112,10 +117,14 @@ public class Board extends Scene {
     public void setRooms(String path, int nbPlayers) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            List<String> rooms = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
-            for (String s : rooms) {
+            List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            rooms = new HashMap<>();
+            Room newRoom;
+            for (String s : newRoomsList) {
                 String[] vars = s.split(",");
-                pane.getChildren().add(new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100, nbPlayers));
+                newRoom = new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100, nbPlayers);
+                pane.getChildren().add(newRoom);
+                rooms.put(vars[1], newRoom);
             }
         }
         catch (NullPointerException e) {
@@ -123,6 +132,26 @@ public class Board extends Scene {
         }
         catch (IOException e) {
             System.out.println("Room file not found");
+        }
+    }
+
+    public void setCorridor(String path) {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            List<String> newCorridorsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            Corridor newCorridor;
+            for (String s : newCorridorsList) {
+                String[] vars = s.split(",");
+                newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]));
+                pane.getChildren().add(newCorridor);
+            }
+            rooms.forEach((k,v) -> v.toFront());
+        }
+        catch (NullPointerException e) {
+            System.out.println("Corridor file not found(pointer)");
+        }
+        catch (IOException e) {
+            System.out.println("Corridor file not found");
         }
     }
 }

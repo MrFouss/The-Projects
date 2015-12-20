@@ -38,7 +38,7 @@ public class Deck extends StackPane {
 
         getChildren().add(label);
 
-        Board.setHoverListener(rectangle);
+        Board.setHoverStrokeChange(rectangle);
     }
 
 
