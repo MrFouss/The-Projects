@@ -3,6 +3,5 @@ package the_projects.model;
 /**
  * 
  */
-public interface PlayerCard extends Card {
-
-}
+// TODO add javadoc
+public interface PlayerCard extends Card {}

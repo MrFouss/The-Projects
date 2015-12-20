@@ -3,7 +3,11 @@ package the_projects.model;
 /**
  * 
  */
+// TODO add javadoc
 public enum Event {
     TIMEOUT,
-    Literal1
+    GRANT_IN_AID,
+    ON_DEMAND_TELEPORTATION,
+    ENERGY_DRINK,
+    HOLIDAYS
 }

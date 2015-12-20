@@ -3,7 +3,5 @@ package the_projects.model;
 /**
  * 
  */
-public interface Card {
-
-
-}
+// TODO add javadoc
+public interface Card {}
