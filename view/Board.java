@@ -106,7 +106,7 @@ public class Board extends Scene {
                 new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 75/100., false)
         );
 
-        setRooms("the_projects/resources/rooms.csv", nbPlayers);
+        setRooms("the_projects/resources/rooms.csv");
         setCorridor("the_projects/resources/corridors.csv");
 
         pawns = new ArrayList<>();
@@ -121,6 +121,55 @@ public class Board extends Scene {
             pane.getChildren().add(pawn.getShape());
             movePawn(pawn, rooms.get("B402"));
         }
+
+        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.GREEN, 1);
+        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
+        rooms.get("B402").addProjectCube(Color.RED, 3);
+        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.GREEN, 1);
+        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
+        rooms.get("B402").addProjectCube(Color.RED, 3);
+        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.GREEN, 1);
+        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
+        rooms.get("B402").addProjectCube(Color.RED, 3);
+
+
+        rooms.get("B401").addProjectCube(Color.BLUE, 0);
+        rooms.get("B403").addProjectCube(Color.GREEN, 1);
+        rooms.get("B403").addProjectCube(Color.YELLOW, 2);
+        rooms.get("B406").addProjectCube(Color.RED, 3);
+        rooms.get("B406").addProjectCube(Color.RED, 3);
+        rooms.get("B406").addProjectCube(Color.RED, 3);
+
+        rooms.get("A208").addProjectCube(Color.BLUE, 0);
+        rooms.get("A208").addProjectCube(Color.BLUE, 0);
+        rooms.get("A208").addProjectCube(Color.BLUE, 0);
+        rooms.get("A206").addProjectCube(Color.BLUE, 0);
+        rooms.get("A206").addProjectCube(Color.BLUE, 0);
+        rooms.get("A207").addProjectCube(Color.BLUE, 0);
+
+        rooms.get("H010").addProjectCube(Color.GREEN, 1);
+        rooms.get("H010").addProjectCube(Color.GREEN, 1);
+        rooms.get("H010").addProjectCube(Color.GREEN, 1);
+        rooms.get("H011").addProjectCube(Color.GREEN, 1);
+        rooms.get("H011").addProjectCube(Color.GREEN, 1);
+        rooms.get("H012").addProjectCube(Color.GREEN, 1);
+
+        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P106").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P106").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P107").addProjectCube(Color.YELLOW, 2);
+
+        rooms.get("B404").addProjectCube(Color.RED, 3);
+        rooms.get("B404").addProjectCube(Color.RED, 3);
+        rooms.get("B404").addProjectCube(Color.RED, 3);
+        rooms.get("B404").delProjectCube(3);
+        rooms.get("B404").delProjectCube(3);
+        rooms.get("B404").delProjectCube(3);
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -141,8 +190,7 @@ public class Board extends Scene {
         });
     }
 
-    public void setRooms(String path, int nbPlayers) {
-
+    public void setRooms(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
@@ -150,7 +198,7 @@ public class Board extends Scene {
             Room newRoom;
             for (String s : newRoomsList) {
                 String[] vars = s.split(",");
-                newRoom = new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100, nbPlayers);
+                newRoom = new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100);
                 pane.getChildren().add(newRoom);
                 rooms.put(vars[1], newRoom);
             }
