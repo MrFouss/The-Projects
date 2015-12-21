@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
@@ -35,6 +36,8 @@ public class Board extends Scene {
     private Pane pane;
     private ArrayList<Pawn> pawns;
     private Shape selectedObject;
+    private Deck[] decks;
+    private StackPane playerDiscard;
 
 
     public Board(Group root, Role... roles) {
@@ -45,6 +48,9 @@ public class Board extends Scene {
         group = root;
         pane = new Pane();
         group.getChildren().add(pane);
+        pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
+
+
 
         Label title = new Label("The Projects");
         title.setLayoutX(20);
@@ -96,12 +102,15 @@ public class Board extends Scene {
             pane.getChildren().add(s.getShape());
         }
 
-        pane.getChildren().addAll(
-                new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true),
-                new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true),
-                new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100., false),
-                new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100., false)
-        );
+        decks = new Deck[4];
+        decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
+        decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
+        decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100., false);
+        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100., false);
+
+        playerDiscard = decks[3];
+        Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
+
 
         setRooms("the_projects/resources/rooms.csv");
         setCorridor("the_projects/resources/corridors.csv");
@@ -174,7 +183,8 @@ public class Board extends Scene {
         //end of test lines
 
 
-        pane.getChildren().add(new RoomCard(this, rooms.get("B402"), 70/100., 65/100.));
+        decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
+
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -258,7 +268,7 @@ public class Board extends Scene {
             startRoom.delPawn(pawn);
         }
         PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,pawn.getShape());
-        pathTransition.playFromStart();
+        pathTransition.play();
 
     }
 
@@ -267,7 +277,41 @@ public class Board extends Scene {
     }
 
     public void drawPlayerCards(Card card1, Card card2) {
-        //TODO implement
+        Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
+        Path path2 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()*2/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
+
+
+
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
+        rectangle.setWidth(pane.getWidth());
+        rectangle.setHeight(pane.getHeight());
+        pane.getChildren().addAll(rectangle, card1, card2);
+
+        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path1,card1);
+        pathTransition.play();
+        pathTransition = new PathTransition(Duration.seconds(1),path2,card2);
+        pathTransition.play();
+
+        rectangle.setOnMouseClicked(e -> {
+            discardPlayerCard(card1);
+            discardPlayerCard(card2);
+            pane.getChildren().remove(rectangle);
+        });
+
+    }
+
+    public void discardPlayerCard(Card card) {
+        Path path = new Path(new MoveTo(card.localToScene(0,0).getX(), card.localToScene(0,0).getY()), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
+
+
+        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+        pathTransition.setOnFinished(e -> {
+            pane.getChildren().remove(playerDiscard);
+            playerDiscard = card;
+        });
+
+        pathTransition.play();
     }
 
     public void drawProjectCards(Card card1, Card card2) {
