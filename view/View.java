@@ -3,6 +3,7 @@ package the_projects.view;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
+import the_projects.model.Role;
 
 /**
  *  TODO complete
@@ -13,7 +14,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        board = new Board(new Group(), 5);
+        board = new Board(new Group(), Role.COFFEE_MAKER, Role.DAOUID, Role.GROUP_LEADER, Role.HACKER, Role.INSTALLER);
         primaryStage.setScene(board);
 
         primaryStage.setMinHeight(450);

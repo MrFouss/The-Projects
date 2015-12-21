@@ -13,6 +13,7 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
+import the_projects.model.Role;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,10 +34,10 @@ public class Board extends Scene {
     private HashMap<String, Room> rooms;
     private Pane pane;
     private ArrayList<Pawn> pawns;
-    private Card selectedCard;
+    private Shape selectedObject;
 
 
-    public Board(Group root, int nbPlayers) {
+    public Board(Group root, Role... roles) {
         super(root, 1600, 900);
         Color background = Color.SLATEBLUE;
         setFill(new RadialGradient(0, 0, .5, .5, 1.5, true, CycleMethod.REPEAT, new Stop(0, background), new Stop(.5, background.deriveColor(0,1,.5,1)), new Stop(1, background)));
@@ -60,14 +61,14 @@ public class Board extends Scene {
         rectangle.setHeight(getHeight()*((Base*1.05/2)*16/9.)/100.);
         rectangle.setX(getWidth()*(20/100.));
         rectangle.setY(getHeight()*(1/100.));
-        batiments[0] = new Building(Color.STEELBLUE, rectangle);
+        batiments[0] = new Building(Color.STEELBLUE,"AG44", rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base)/100.);
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
         rectangle.setX(getWidth()*(1/100.));
         rectangle.setY(getHeight()*(25/100.));
-        batiments[1] = new Building(Color.WHITE, rectangle);
+        batiments[1] = new Building(Color.WHITE, "MI41", rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
@@ -78,7 +79,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(48.5/100.));
         arrondi.setCenterY(rectangle.getY() + rectangle.getHeight());
         arrondi.setRadius(rectangle.getWidth()*(12/100.));
-        batiments[2] = new Building(Color.GOLD, arrondi, rectangle);
+        batiments[2] = new Building(Color.GOLD, "SI20", arrondi, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*5/8)/100.);
@@ -89,7 +90,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(50/100.));
         arrondi.setCenterY(rectangle.getY());
         arrondi.setRadius(rectangle.getWidth()*(50/100.));
-        batiments[3] = new Building(Color.FIREBRICK, arrondi, rectangle);
+        batiments[3] = new Building(Color.FIREBRICK, "LO43", arrondi, rectangle);
 
         for (Building s: batiments) {
             pane.getChildren().add(s.getShape());
@@ -109,12 +110,8 @@ public class Board extends Scene {
 
         rooms.get("B402").setTP();
 
+        Arrays.asList(roles).stream().forEach(role -> pawns.add(new Pawn(role)));
 
-        pawns.add(new Pawn(Color.ALICEBLUE));
-        pawns.add(new Pawn(Color.RED));
-        pawns.add(new Pawn(Color.YELLOW));
-        pawns.add(new Pawn(Color.ORANGE));
-        pawns.add(new Pawn(Color.CYAN));
 
         for (Pawn pawn : pawns) {
             pane.getChildren().add(pawn.getShape());
@@ -177,6 +174,7 @@ public class Board extends Scene {
         //end of test lines
 
 
+        pane.getChildren().add(new RoomCard(this, rooms.get("B402"), 70/100., 65/100.));
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -206,7 +204,7 @@ public class Board extends Scene {
             Room newRoom;
             for (String s : newRoomsList) {
                 String[] vars = s.split(",");
-                newRoom = new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100);
+                newRoom = new Room(batiments[Integer.parseInt(vars[0])].getColor().darker(), vars[1], batiments[Integer.parseInt(vars[0])].getUV(), Double.parseDouble(vars[2])*1600/100, Double.parseDouble(vars[3])*900/100);
                 pane.getChildren().add(newRoom);
                 rooms.put(vars[1], newRoom);
             }
@@ -267,4 +265,13 @@ public class Board extends Scene {
     public Color projectIndexToColor(int projectIndex) {
         return batiments[projectIndex].getColor();
     }
+
+    public void drawPlayerCards(Card card1, Card card2) {
+        //TODO implement
+    }
+
+    public void drawProjectCards(Card card1, Card card2) {
+        //TODO implement
+    }
+
 }

@@ -15,14 +15,15 @@ public class Building {
 
     private Shape shape;
     private Color color;
+    private String UV;
 
     /**
      * Constructor of a Building
      * @param color the color of the building
      * @param shapes the different shapes composing the building
      */
-    public Building(Color color, Shape ... shapes) {
-
+    public Building(Color color, String UV, Shape ... shapes) {
+        this.UV = UV;
         if (shapes.length > 1) {
             shape = Arrays.asList(shapes).stream().reduce(Shape::union).get();
         }else{
@@ -48,5 +49,13 @@ public class Building {
      */
     public Shape getShape() {
         return shape;
+    }
+
+    /**
+     * Getter of the UV of the building
+     * @return the UV of the Building
+     */
+    public String getUV() {
+        return UV;
     }
 }

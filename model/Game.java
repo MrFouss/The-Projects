@@ -19,7 +19,7 @@ public class Game {
      */
     private GameBoard board;
 
-    public unefonctionrandom() {
+    public void unefonctionrandom() {
 
   }
 

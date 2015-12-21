@@ -21,6 +21,8 @@ import java.util.ArrayList;
  */
 public class Room extends StackPane {
     private Color color;
+    private String UV;
+    private String name;
     private Circle circle;
     private Shape roomShape;
     private Rectangle[][] projectCubes;
@@ -32,19 +34,21 @@ public class Room extends StackPane {
      * The constructor of the Rooms
      * @param color the color of the room
      * @param name the name of the room
+     * @param UV the name of the main corresponding UV
      * @param xPos the position of the room on the x axis
      * @param yPos the position of the room on the y axis
      */
-    public Room(Color color, String name, double xPos, double yPos) {
+    public Room(Color color, String name, String UV, double xPos, double yPos) {
         this.color = color;
         circle = new Circle(10, 10, 25);
         roomShape = circle;
         circle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color.deriveColor(0,1,1,1)), new Stop(1, color.deriveColor(0,1,.5,1))));
-
         getChildren().add(circle);
 
         setLayoutX(xPos);
         setLayoutY(yPos);
+
+        this.name = name;
 
         Label label = new Label(name);
         label.setFont(new Font(14));
@@ -52,7 +56,7 @@ public class Room extends StackPane {
         label.setMouseTransparent(true);
         getChildren().add(label);
 
-
+        this.UV = UV;
 
         projectCubes = new Rectangle[4][3];
 
@@ -185,6 +189,30 @@ public class Room extends StackPane {
      */
     public Coord getPos() {
         return new Coord(getLayoutX() + circle.getRadius(), getLayoutY() + circle.getRadius());
+    }
+
+    /**
+     * Getter of the color of the room
+     * @return the color of the room
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * Getter of the UV of the room
+     * @return the UV of the room
+     */
+    public String getUV() {
+        return UV;
+    }
+
+    /**
+     * Getter of the name of the room
+     * @return the name of the room
+     */
+    public String getName() {
+        return name;
     }
 
     /**
