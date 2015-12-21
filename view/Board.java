@@ -1,11 +1,9 @@
 package the_projects.view;
 
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -47,8 +45,6 @@ public class Board extends Scene {
         pane = new Pane();
         group.getChildren().add(pane);
 
-       // pane.setBackground(new Background());
-
         Label title = new Label("The Projects");
         title.setLayoutX(20);
         title.setLayoutY(40);
@@ -64,14 +60,14 @@ public class Board extends Scene {
         rectangle.setHeight(getHeight()*((Base*1.05/2)*16/9.)/100.);
         rectangle.setX(getWidth()*(20/100.));
         rectangle.setY(getHeight()*(1/100.));
-        batiments[0] = new Building(Color.BLUE, rectangle);
+        batiments[0] = new Building(Color.STEELBLUE, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base)/100.);
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
         rectangle.setX(getWidth()*(1/100.));
         rectangle.setY(getHeight()*(25/100.));
-        batiments[1] = new Building(Color.GREEN, rectangle);
+        batiments[1] = new Building(Color.FORESTGREEN, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
@@ -82,7 +78,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(48.5/100.));
         arrondi.setCenterY(rectangle.getY() + rectangle.getHeight());
         arrondi.setRadius(rectangle.getWidth()*(12/100.));
-        batiments[2] = new Building(Color.YELLOW, arrondi, rectangle);
+        batiments[2] = new Building(Color.GOLD, arrondi, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*5/8)/100.);
@@ -93,7 +89,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(50/100.));
         arrondi.setCenterY(rectangle.getY());
         arrondi.setRadius(rectangle.getWidth()*(50/100.));
-        batiments[3] = new Building(Color.RED, arrondi, rectangle);
+        batiments[3] = new Building(Color.CRIMSON, arrondi, rectangle);
 
         for (Building s: batiments) {
             pane.getChildren().add(s.getShape());
@@ -111,6 +107,11 @@ public class Board extends Scene {
 
         pawns = new ArrayList<>();
 
+        rooms.get("B402").setTP();
+        rooms.get("P101").setTP();
+        rooms.get("A201").setTP();
+        rooms.get("H010").setTP();
+
         pawns.add(new Pawn(Color.ALICEBLUE));
         pawns.add(new Pawn(Color.RED));
         pawns.add(new Pawn(Color.YELLOW));
@@ -122,33 +123,33 @@ public class Board extends Scene {
             movePawn(pawn, rooms.get("B402"));
         }
 
-        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
         rooms.get("B402").addProjectCube(Color.GREEN, 1);
         rooms.get("B402").addProjectCube(Color.YELLOW, 2);
         rooms.get("B402").addProjectCube(Color.RED, 3);
-        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
         rooms.get("B402").addProjectCube(Color.GREEN, 1);
         rooms.get("B402").addProjectCube(Color.YELLOW, 2);
         rooms.get("B402").addProjectCube(Color.RED, 3);
-        rooms.get("B402").addProjectCube(Color.BLUE, 0);
+        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
         rooms.get("B402").addProjectCube(Color.GREEN, 1);
         rooms.get("B402").addProjectCube(Color.YELLOW, 2);
         rooms.get("B402").addProjectCube(Color.RED, 3);
 
 
-        rooms.get("B401").addProjectCube(Color.BLUE, 0);
+        rooms.get("B401").addProjectCube(Color.STEELBLUE, 0);
         rooms.get("B403").addProjectCube(Color.GREEN, 1);
         rooms.get("B403").addProjectCube(Color.YELLOW, 2);
         rooms.get("B406").addProjectCube(Color.RED, 3);
         rooms.get("B406").addProjectCube(Color.RED, 3);
         rooms.get("B406").addProjectCube(Color.RED, 3);
 
-        rooms.get("A208").addProjectCube(Color.BLUE, 0);
-        rooms.get("A208").addProjectCube(Color.BLUE, 0);
-        rooms.get("A208").addProjectCube(Color.BLUE, 0);
-        rooms.get("A206").addProjectCube(Color.BLUE, 0);
-        rooms.get("A206").addProjectCube(Color.BLUE, 0);
-        rooms.get("A207").addProjectCube(Color.BLUE, 0);
+        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A206").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A206").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A207").addProjectCube(Color.STEELBLUE, 0);
 
         rooms.get("H010").addProjectCube(Color.GREEN, 1);
         rooms.get("H010").addProjectCube(Color.GREEN, 1);
@@ -170,6 +171,9 @@ public class Board extends Scene {
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
+
+
+
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
