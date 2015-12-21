@@ -3,6 +3,9 @@ package the_projects.view;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -13,7 +16,6 @@ import java.util.ArrayList;
  * TODO complete
  */
 public class Room extends StackPane {
-    private Color color;
     private String name;
     private Circle circle;
     private int[] projectCubes;
@@ -23,10 +25,9 @@ public class Room extends StackPane {
 
 
     public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
-        this.color = color;
         this.name = name;
         circle = new Circle(10, 10, 25);
-        circle.setFill(color);
+        circle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
 
         getChildren().add(circle);
 
@@ -35,7 +36,7 @@ public class Room extends StackPane {
 
         Text text = new Text(this.name);
         text.setFont(new Font(12));
-        text.setFill(color.deriveColor(100,1,2,1));
+        text.setFill(color.deriveColor(100,1,4,1));
         text.setMouseTransparent(true);
         getChildren().add(text);
 
@@ -46,7 +47,7 @@ public class Room extends StackPane {
             pawns[i] = null;
         }
 
-        Board.setHoverStrokeChange(circle);
+        Board.setHoverStrokeChange(circle, color);
 
         corridors = new ArrayList<>();
     }

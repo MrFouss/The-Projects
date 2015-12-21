@@ -4,6 +4,9 @@ package the_projects.view;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -12,15 +15,13 @@ import javafx.scene.text.Text;
  * TODO complete
  */
 public class Deck extends StackPane {
-    private Color color;
-    private String text;
+
     private Rectangle rectangle;
 
-    public Deck(Scene scene,String t, Color c, double relativeX, double relativeY, boolean horizontal) {
-        color = c;
+    public Deck(Scene scene,String text, Color color, double relativeX, double relativeY, boolean horizontal) {
+
         rectangle = new Rectangle();
-        rectangle.setFill(color);
-        text = t;
+        rectangle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
 
 
         rectangle.setWidth(scene.getWidth()*(horizontal ? 22*9/16 : 9)/100.);
@@ -38,8 +39,7 @@ public class Deck extends StackPane {
 
         getChildren().add(label);
 
-        Board.setHoverStrokeChange(rectangle);
+        Board.setHoverStrokeChange(rectangle, color);
     }
-
 
 }

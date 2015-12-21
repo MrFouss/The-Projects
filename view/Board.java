@@ -4,8 +4,12 @@ import javafx.animation.PathTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
@@ -36,11 +40,13 @@ public class Board extends Scene {
     public Board(Group root, int nbPlayers) {
         super(root, 1600, 900);
 
-        setFill(Color.PURPLE);
+        setFill(new RadialGradient(0, 0, .5, .5, 1, true, CycleMethod.REPEAT, new Stop(0, Color.rgb(78,19,203)), new Stop(0.3, Color.rgb(106,41,156)), new Stop(1, Color.rgb(78,19,203))));
 
         group = root;
         pane = new Pane();
         group.getChildren().add(pane);
+
+       // pane.setBackground(new Background());
 
         Label title = new Label("The Projects");
         title.setLayoutX(20);
@@ -122,14 +128,14 @@ public class Board extends Scene {
 
     }
 
-    public static void setHoverStrokeChange(Shape shape) {
+    public static void setHoverStrokeChange(Shape shape, Color color) {
         shape.setStrokeWidth(3);
-        shape.setStroke(((Color)shape.getFill()).deriveColor(0,1,.5,1));
+        shape.setStroke(color.deriveColor(0,1,.5,1));
         shape.hoverProperty().addListener((e) -> {
             if(shape.isHover()) {
-                shape.setStroke(((Color)(shape.getStroke())).deriveColor(100,1,4,1));
+                shape.setStroke(color.deriveColor(100,1,4,1));
             }else{
-                shape.setStroke(((Color)shape.getFill()).deriveColor(0,1,.5,1));
+                shape.setStroke(color.deriveColor(0,1,.5,1));
             }
         });
     }

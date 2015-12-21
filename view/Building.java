@@ -1,6 +1,9 @@
 package the_projects.view;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Shape;
 import java.util.Arrays;
 
@@ -27,7 +30,7 @@ public class Building {
 
     public void setColor(Color c) {
         color = c;
-        shape.setFill(color);
+        shape.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
         shape.setStroke(color.deriveColor(0,1,.5,1));
     }
 
