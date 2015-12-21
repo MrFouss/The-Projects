@@ -1,15 +1,15 @@
 package the_projects.view;
 
+import javafx.animation.PathTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +29,7 @@ public class Board extends Scene {
     private Building[] batiments;
     private HashMap<String, Room> rooms;
     private Pane pane;
+    private ArrayList<Pawn> pawns;
     private Card selectedCard;
 
 
@@ -101,6 +102,18 @@ public class Board extends Scene {
         setRooms("the_projects/resources/rooms.csv", nbPlayers);
         setCorridor("the_projects/resources/corridors.csv");
 
+        pawns = new ArrayList<>();
+
+        pawns.add(new Pawn(Color.ALICEBLUE));
+        pawns.add(new Pawn(Color.RED));
+        pawns.add(new Pawn(Color.YELLOW));
+        pawns.add(new Pawn(Color.ORANGE));
+        pawns.add(new Pawn(Color.CYAN));
+
+        for (Pawn pawn : pawns) {
+            pane.getChildren().add(pawn.getShape());
+            movePawn(pawn, rooms.get("B402"));
+        }
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -122,6 +135,7 @@ public class Board extends Scene {
     }
 
     public void setRooms(String path, int nbPlayers) {
+
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
@@ -171,5 +185,18 @@ public class Board extends Scene {
         catch (IOException e) {
             System.out.println("Corridor file not found");
         }
+    }
+
+    public void movePawn(Pawn pawn, Room dest) {
+        Coord destCoords = dest.addPawn(pawn);
+        Path path = new Path(new MoveTo(pawn.getShape().getLayoutX(), pawn.getShape().getLayoutY()), new LineTo(destCoords.getX(), destCoords.getY()));
+
+        Room startRoom = pawn.setRoom(dest);
+        if (startRoom != null) {
+            startRoom.delPawn(pawn);
+        }
+        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,pawn.getShape());
+        pathTransition.play();
+
     }
 }

@@ -21,6 +21,7 @@ public class Room extends StackPane {
     private int maxPawns;
     private ArrayList<Corridor> corridors;
 
+
     public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
         this.color = color;
         this.name = name;
@@ -41,6 +42,9 @@ public class Room extends StackPane {
         maxPawns = nbPlayers;
         projectCubes = new int[maxPawns];
         pawns = new Pawn[5];
+        for(Integer i = 0; i < 5; ++i) {
+            pawns[i] = null;
+        }
 
         Board.setHoverStrokeChange(circle);
 
@@ -48,12 +52,35 @@ public class Room extends StackPane {
     }
 
     public Coord addPawn(Pawn pawn) {
-        //TODO implement
-        return new Coord(0, 0);
+        Coord coord;
+        if (pawns[0] == null) {
+            coord = new Coord(getPos().getX(), getPos().getY() + circle.getRadius()/2);
+            pawns[0] = pawn;
+        }else if (pawns[1] == null) {
+            coord = new Coord(getPos().getX() - circle.getRadius()/3, getPos().getY() - circle.getRadius()/2);
+            pawns[1] = pawn;
+        }else if (pawns[2] == null) {
+            coord = new Coord(getPos().getX() + circle.getRadius()/3, getPos().getY() - circle.getRadius()/2);
+            pawns[2] = pawn;
+        }else if (pawns[3] == null) {
+            coord = new Coord(getPos().getX() - circle.getRadius()/2, getPos().getY() + circle.getRadius()/3);
+            pawns[3] = pawn;
+        }else if (pawns[4] == null) {
+            coord = new Coord(getPos().getX() + circle.getRadius()/2, getPos().getY() + circle.getRadius()/3);
+            pawns[4] = pawn;
+        } else {
+            coord = new Coord(0,0);
+        }
+
+        return coord;
     }
 
     public void delPawn(Pawn pawn) {
-        //TODO implement
+        for (int i = 0; i < 5; ++i) {
+            if (pawns[i] == pawn) {
+                pawns[i] = null;
+            }
+        }
     }
 
     public void addProjectCube(int project) {

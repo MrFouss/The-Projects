@@ -7,7 +7,6 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * TODO complete
