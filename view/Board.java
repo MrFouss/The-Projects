@@ -1,6 +1,7 @@
 package the_projects.view;
 
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -202,7 +203,7 @@ public class Board extends Scene {
             startRoom.delPawn(pawn);
         }
         PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,pawn.getShape());
-        pathTransition.play();
+        pathTransition.playFromStart();
 
     }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * TODO complete
  */
 public class Room extends StackPane {
-    private String name;
+    private Text name;
     private Circle circle;
     private int[] projectCubes;
     private Pawn[] pawns;
@@ -25,7 +25,7 @@ public class Room extends StackPane {
 
 
     public Room(Color color, String name, double xPos, double yPos, int nbPlayers) {
-        this.name = name;
+
         circle = new Circle(10, 10, 25);
         circle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
 
@@ -34,11 +34,11 @@ public class Room extends StackPane {
         setLayoutX(xPos);
         setLayoutY(yPos);
 
-        Text text = new Text(this.name);
-        text.setFont(new Font(12));
-        text.setFill(color.deriveColor(100,1,4,1));
-        text.setMouseTransparent(true);
-        getChildren().add(text);
+        this.name = new Text(name);
+        this.name.setFont(new Font(12));
+        this.name.setFill(color.deriveColor(100,1,4,1));
+        this.name.setMouseTransparent(true);
+        getChildren().add(this.name);
 
         maxPawns = nbPlayers;
         projectCubes = new int[maxPawns];
@@ -55,24 +55,23 @@ public class Room extends StackPane {
     public Coord addPawn(Pawn pawn) {
         Coord coord;
         if (pawns[0] == null) {
-            coord = new Coord(getPos().getX(), getPos().getY() + circle.getRadius()/2);
+            coord = new Coord(getPos().getX(), getPos().getY() + circle.getRadius()/1.6);
             pawns[0] = pawn;
         }else if (pawns[1] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/3, getPos().getY() - circle.getRadius()/2);
+            coord = new Coord(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[1] = pawn;
         }else if (pawns[2] == null) {
-            coord = new Coord(getPos().getX() + circle.getRadius()/3, getPos().getY() - circle.getRadius()/2);
+            coord = new Coord(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[2] = pawn;
         }else if (pawns[3] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/2, getPos().getY() + circle.getRadius()/3);
+            coord = new Coord(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
             pawns[3] = pawn;
         }else if (pawns[4] == null) {
-            coord = new Coord(getPos().getX() + circle.getRadius()/2, getPos().getY() + circle.getRadius()/3);
+            coord = new Coord(getPos().getX() + circle.getRadius()/1.2, getPos().getY());
             pawns[4] = pawn;
         } else {
             coord = new Coord(0,0);
         }
-
         return coord;
     }
 
