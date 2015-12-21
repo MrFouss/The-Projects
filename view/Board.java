@@ -67,7 +67,7 @@ public class Board extends Scene {
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
         rectangle.setX(getWidth()*(1/100.));
         rectangle.setY(getHeight()*(25/100.));
-        batiments[1] = new Building(Color.FORESTGREEN, rectangle);
+        batiments[1] = new Building(Color.WHITE, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
@@ -89,7 +89,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(50/100.));
         arrondi.setCenterY(rectangle.getY());
         arrondi.setRadius(rectangle.getWidth()*(50/100.));
-        batiments[3] = new Building(Color.CRIMSON, arrondi, rectangle);
+        batiments[3] = new Building(Color.FIREBRICK, arrondi, rectangle);
 
         for (Building s: batiments) {
             pane.getChildren().add(s.getShape());
@@ -108,9 +108,7 @@ public class Board extends Scene {
         pawns = new ArrayList<>();
 
         rooms.get("B402").setTP();
-        rooms.get("P101").setTP();
-        rooms.get("A201").setTP();
-        rooms.get("H010").setTP();
+
 
         pawns.add(new Pawn(Color.ALICEBLUE));
         pawns.add(new Pawn(Color.RED));
@@ -123,55 +121,60 @@ public class Board extends Scene {
             movePawn(pawn, rooms.get("B402"));
         }
 
-        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("B402").addProjectCube(Color.GREEN, 1);
-        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
-        rooms.get("B402").addProjectCube(Color.RED, 3);
-        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("B402").addProjectCube(Color.GREEN, 1);
-        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
-        rooms.get("B402").addProjectCube(Color.RED, 3);
-        rooms.get("B402").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("B402").addProjectCube(Color.GREEN, 1);
-        rooms.get("B402").addProjectCube(Color.YELLOW, 2);
-        rooms.get("B402").addProjectCube(Color.RED, 3);
+        //start of test lines
+        rooms.get("P101").setTP();
+        rooms.get("A201").setTP();
+        rooms.get("H010").setTP();
+
+        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
 
 
-        rooms.get("B401").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("B403").addProjectCube(Color.GREEN, 1);
-        rooms.get("B403").addProjectCube(Color.YELLOW, 2);
-        rooms.get("B406").addProjectCube(Color.RED, 3);
-        rooms.get("B406").addProjectCube(Color.RED, 3);
-        rooms.get("B406").addProjectCube(Color.RED, 3);
+        rooms.get("B401").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("B403").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("B403").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
 
-        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("A208").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("A206").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("A206").addProjectCube(Color.STEELBLUE, 0);
-        rooms.get("A207").addProjectCube(Color.STEELBLUE, 0);
+        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A206").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A206").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A207").addProjectCube(batiments[0].getColor(), 0);
 
-        rooms.get("H010").addProjectCube(Color.GREEN, 1);
-        rooms.get("H010").addProjectCube(Color.GREEN, 1);
-        rooms.get("H010").addProjectCube(Color.GREEN, 1);
-        rooms.get("H011").addProjectCube(Color.GREEN, 1);
-        rooms.get("H011").addProjectCube(Color.GREEN, 1);
-        rooms.get("H012").addProjectCube(Color.GREEN, 1);
+        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H011").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H011").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H012").addProjectCube(batiments[1].getColor(), 1);
 
-        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
-        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
-        rooms.get("P108").addProjectCube(Color.YELLOW, 2);
-        rooms.get("P106").addProjectCube(Color.YELLOW, 2);
-        rooms.get("P106").addProjectCube(Color.YELLOW, 2);
-        rooms.get("P107").addProjectCube(Color.YELLOW, 2);
+        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P106").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P106").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P107").addProjectCube(batiments[2].getColor(), 2);
 
-        rooms.get("B404").addProjectCube(Color.RED, 3);
-        rooms.get("B404").addProjectCube(Color.RED, 3);
-        rooms.get("B404").addProjectCube(Color.RED, 3);
+        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
-
+        //end of test lines
 
 
 
