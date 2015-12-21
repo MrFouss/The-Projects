@@ -38,8 +38,8 @@ public class Board extends Scene {
 
     public Board(Group root, int nbPlayers) {
         super(root, 1600, 900);
-
-        setFill(new RadialGradient(0, 0, .5, .5, 1, true, CycleMethod.REPEAT, new Stop(0, Color.rgb(78,19,203)), new Stop(0.3, Color.rgb(106,41,156)), new Stop(1, Color.rgb(78,19,203))));
+        Color background = Color.SLATEBLUE;
+        setFill(new RadialGradient(0, 0, .5, .5, 1.5, true, CycleMethod.REPEAT, new Stop(0, background), new Stop(.5, background.deriveColor(0,1,.5,1)), new Stop(1, background)));
 
         group = root;
         pane = new Pane();
@@ -49,7 +49,7 @@ public class Board extends Scene {
         title.setLayoutX(20);
         title.setLayoutY(40);
         title.setFont(new Font(40));
-        title.setTextFill(Color.CHARTREUSE);
+        title.setTextFill(background.deriveColor(180,1,1,1));
         pane.getChildren().add(title);
 
         float Base = 25;
@@ -96,10 +96,10 @@ public class Board extends Scene {
         }
 
         pane.getChildren().addAll(
-                new Deck(this, "Cartes\nProjet", Color.GRAY, 60/100., 1/100., true),
-                new Deck(this, "Défausse\nCartes\nProjet", Color.GRAY, 75/100., 1/100., true),
-                new Deck(this, "Cartes\nJoueur", Color.BLUE, 1/100., 75/100., false),
-                new Deck(this, "Défausse\nCartes\nJoueur", Color.BLUE, 11/100., 75/100., false)
+                new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true),
+                new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true),
+                new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100., false),
+                new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100., false)
         );
 
         setRooms("the_projects/resources/rooms.csv");
@@ -126,51 +126,51 @@ public class Board extends Scene {
         rooms.get("A201").setTP();
         rooms.get("H010").setTP();
 
-        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B402").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("B402").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("B402").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("B402").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
 
 
-        rooms.get("B401").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("B403").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("B403").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B406").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B401").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("B403").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("B403").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
 
-        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("A208").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("A206").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("A206").addProjectCube(batiments[0].getColor(), 0);
-        rooms.get("A207").addProjectCube(batiments[0].getColor(), 0);
+        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("A206").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("A206").addProjectCube(projectIndexToColor(0), 0);
+        rooms.get("A207").addProjectCube(projectIndexToColor(0), 0);
 
-        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("H010").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("H011").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("H011").addProjectCube(batiments[1].getColor(), 1);
-        rooms.get("H012").addProjectCube(batiments[1].getColor(), 1);
+        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("H011").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("H011").addProjectCube(projectIndexToColor(1), 1);
+        rooms.get("H012").addProjectCube(projectIndexToColor(1), 1);
 
-        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("P108").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("P106").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("P106").addProjectCube(batiments[2].getColor(), 2);
-        rooms.get("P107").addProjectCube(batiments[2].getColor(), 2);
+        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("P106").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("P106").addProjectCube(projectIndexToColor(2), 2);
+        rooms.get("P107").addProjectCube(projectIndexToColor(2), 2);
 
-        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
-        rooms.get("B404").addProjectCube(batiments[3].getColor(), 3);
+        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
+        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
@@ -200,6 +200,7 @@ public class Board extends Scene {
     public void setRooms(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
+            //noinspection ConstantConditions
             List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
             rooms = new HashMap<>();
             Room newRoom;
@@ -221,6 +222,7 @@ public class Board extends Scene {
     public void setCorridor(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
+            //noinspection ConstantConditions
             List<String> newCorridorsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
             Corridor newCorridor;
             for (String s : newCorridorsList) {
@@ -260,5 +262,9 @@ public class Board extends Scene {
         PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,pawn.getShape());
         pathTransition.playFromStart();
 
+    }
+
+    public Color projectIndexToColor(int projectIndex) {
+        return batiments[projectIndex].getColor();
     }
 }

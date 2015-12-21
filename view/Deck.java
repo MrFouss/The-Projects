@@ -33,7 +33,7 @@ public class Deck extends StackPane {
 
         Text label = new Text(text);
         label.setFont(new Font(15));
-        label.setFill(Color.GREENYELLOW);
+        label.setFill(color.deriveColor(0,1,8,1));
         label.setMouseTransparent(true);
 
 
