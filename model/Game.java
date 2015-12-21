@@ -3,7 +3,8 @@ package the_projects.model;
 import the_projects.view.View;
 
 /**
- * 
+ * Un comment
+ * Another comment
  */
 public class Game {
 
@@ -18,5 +19,8 @@ public class Game {
      */
     private GameBoard board;
 
+    public unefonctionrandom() {
+
+  }
 
 }
