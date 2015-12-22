@@ -14,7 +14,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        board = new Board(new Group(), "AG44", "MI41", "SI20", "LO43", Role.COFFEE_MAKER, Role.DAOUID, Role.GROUP_LEADER, Role.HACKER);
+        board = new Board(new Group(), "AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.COFFEE_MAKER), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
         primaryStage.setScene(board);
 
         primaryStage.setMinHeight(450);
