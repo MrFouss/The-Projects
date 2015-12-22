@@ -1,6 +1,7 @@
 package the_projects.view;
 
 import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -38,7 +39,7 @@ public class Board extends Scene {
     private Shape selectedObject;
     private Deck[] decks;
     private StackPane playerDiscard;
-
+    private StackPane projectDiscard;
 
     public Board(Group root, Role... roles) {
         super(root, 1600, 900);
@@ -108,6 +109,7 @@ public class Board extends Scene {
         decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100., false);
         decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100., false);
 
+        projectDiscard = decks[1];
         playerDiscard = decks[3];
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
@@ -184,7 +186,7 @@ public class Board extends Scene {
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
-
+        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")),new RoomCard(pane, rooms.get("A200")), new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
 
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
@@ -302,7 +304,7 @@ public class Board extends Scene {
     }
 
     public void discardPlayerCard(Card card) {
-        Path path = new Path(new MoveTo(card.localToScene(0,0).getX(), card.localToScene(0,0).getY()), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
+        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
 
 
         PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
@@ -310,12 +312,40 @@ public class Board extends Scene {
             pane.getChildren().remove(playerDiscard);
             playerDiscard = card;
         });
-
         pathTransition.play();
     }
 
-    public void drawProjectCards(Card card1, Card card2) {
-        //TODO implement
+    public void drawProjectCards(Card... cards) {
+        int i = 1;
+        for (Card card : cards) {
+            pane.getChildren().add(card);
+            card.setRotate(-90);
+            Path path = new Path(new MoveTo(decks[0].getLayoutX() + decks[0].getWidth()/2, decks[0].getLayoutY() + decks[0].getHeight()/2), new LineTo(getWidth()*(++i)/8 - decks[0].getWidth()/2, getHeight()/2 - decks[0].getHeight()/2));
+            PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+            pathTransition.play();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
+            rotateTransition.setByAngle(90);
+            rotateTransition.play();
+            card.setOnMouseClicked(e->discardProjectCard(card));
+        }
+    }
+
+    public void discardProjectCard(Card card) {
+        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[1].getLayoutX() + decks[1].getWidth()/2, decks[1].getLayoutY() + decks[1].getHeight()/2));
+
+        card.toFront();
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
+        rotateTransition.setByAngle(-90);
+        rotateTransition.play();
+
+        card.setOnMouseClicked(null);
+
+        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+        pathTransition.setOnFinished(e -> {
+            pane.getChildren().remove(projectDiscard);
+            projectDiscard = card;
+        });
+        pathTransition.play();
     }
 
 }
