@@ -43,7 +43,7 @@ public class Board extends Scene {
      * @param root the Parent group
      * @param roles the list of the roles for this match
      */
-    public Board(Group root, Role... roles) {
+    public Board(Group root, String UV1, String UV2, String UV3, String UV4, Role... roles) {
         super(root, 1600, 900);
 
         //creating the group and pane organizing the scene
@@ -72,14 +72,14 @@ public class Board extends Scene {
         rectangle.setHeight(getHeight()*((Base*1.05/2)*16/9.)/100.);
         rectangle.setX(getWidth()*(20/100.));
         rectangle.setY(getHeight()*(1/100.));
-        batiments[0] = new Building(Color.STEELBLUE,"AG44", rectangle);
+        batiments[0] = new Building(Color.STEELBLUE,UV1, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base)/100.);
         rectangle.setHeight(getHeight()*((Base*3/4)*16/9.)/100.);
         rectangle.setX(getWidth()*(1/100.));
         rectangle.setY(getHeight()*(25/100.));
-        batiments[1] = new Building(Color.WHITE, "MI41", rectangle);
+        batiments[1] = new Building(Color.WHITE, UV2, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*1.5)/100.);
@@ -90,7 +90,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(48.5/100.));
         arrondi.setCenterY(rectangle.getY() + rectangle.getHeight());
         arrondi.setRadius(rectangle.getWidth()*(12/100.));
-        batiments[2] = new Building(Color.GOLD, "SI20", arrondi, rectangle);
+        batiments[2] = new Building(Color.GOLD, UV3, arrondi, rectangle);
 
         rectangle = new Rectangle();
         rectangle.setWidth(getWidth()*(Base*5/8)/100.);
@@ -101,7 +101,7 @@ public class Board extends Scene {
         arrondi.setCenterX(rectangle.getX() + rectangle.getWidth()*(50/100.));
         arrondi.setCenterY(rectangle.getY());
         arrondi.setRadius(rectangle.getWidth()*(50/100.));
-        batiments[3] = new Building(Color.FIREBRICK, "LO43", arrondi, rectangle);
+        batiments[3] = new Building(Color.FIREBRICK, UV4, arrondi, rectangle);
 
         for (Building s: batiments) {
             pane.getChildren().add(s.getShape());
@@ -203,9 +203,9 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param shape
-     * @param color
+     * Method making the stroke of a shape change color when hovering it
+     * @param shape the shape to which we want to apply the method
+     * @param color the color of the shape
      */
     public static void setHoverStrokeChange(Shape shape, Color color) {
         shape.setStrokeWidth(3);
@@ -220,8 +220,8 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param path
+     * Method to read the position and place the rooms on the board from a text file
+     * @param path the path to the text file
      */
     public void setRooms(String path) {
         try {
@@ -246,8 +246,8 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param path
+     * Method to read the position and place the corridors on the board from a text file
+     * @param path the path to the text file
      */
     public void setCorridor(String path) {
         try {
@@ -282,9 +282,9 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param pawn
-     * @param dest
+     * Method to move a pawn to a room
+     * @param pawn the pawn to move
+     * @param dest the room welcoming the pawn
      */
     public void movePawn(Pawn pawn, Room dest) {
         Coord destCoords = dest.addPawn(pawn);
@@ -300,18 +300,18 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param projectIndex
-     * @return
+     * Method to get the color of a project
+     * @param projectIndex the index of the project
+     * @return the color of the project
      */
     public Color projectIndexToColor(int projectIndex) {
         return batiments[projectIndex].getColor();
     }
 
     /**
-     * TODO complete doc
-     * @param card1
-     * @param card2
+     * Method to display the drawing of two cards from the player deck
+     * @param card1 first card to draw
+     * @param card2 second card to draw
      */
     public void drawPlayerCards(Card card1, Card card2) {
         Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
@@ -339,8 +339,8 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param card
+     * Method to discard a card to the player discard
+     * @param card the card to display
      */
     public void discardPlayerCard(Card card) {
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
@@ -355,8 +355,8 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param cards
+     *  Method to display the drawing of cards from the project deck
+     * @param cards the cards to draw
      */
     public void drawProjectCards(Card... cards) {
         double i = (6 - cards.length)/2.;
@@ -375,8 +375,8 @@ public class Board extends Scene {
     }
 
     /**
-     * TODO complete doc
-     * @param card
+     * Method to discard a card to the project discard
+     * @param card the card to display
      */
     public void discardProjectCard(Card card) {
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[1].getLayoutX() + decks[1].getWidth()/2, decks[1].getLayoutY() + decks[1].getHeight()/2));

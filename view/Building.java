@@ -20,6 +20,7 @@ public class Building {
     /**
      * Constructor of a Building
      * @param color the color of the building
+     * @param UV the name of the corresponding UV
      * @param shapes the different shapes composing the building
      */
     public Building(Color color, String UV, Shape ... shapes) {
