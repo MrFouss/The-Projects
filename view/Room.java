@@ -62,8 +62,8 @@ public class Room extends StackPane {
 
         nbProjectCubes = 0;
 
-        pawns = new Pawn[5];
-        for(Integer i = 0; i < 5; ++i) {
+        pawns = new Pawn[4];
+        for(Integer i = 0; i < 4; ++i) {
             pawns[i] = null;
         }
 
@@ -80,20 +80,17 @@ public class Room extends StackPane {
     public Coord addPawn(Pawn pawn) {
         Coord coord;
         if (pawns[0] == null) {
-            coord = new Coord(getPos().getX(), getPos().getY() + circle.getRadius()/1.6);
+            coord = new Coord(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[0] = pawn;
         }else if (pawns[1] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+            coord = new Coord(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[1] = pawn;
         }else if (pawns[2] == null) {
-            coord = new Coord(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+            coord = new Coord(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
             pawns[2] = pawn;
         }else if (pawns[3] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
-            pawns[3] = pawn;
-        }else if (pawns[4] == null) {
             coord = new Coord(getPos().getX() + circle.getRadius()/1.2, getPos().getY());
-            pawns[4] = pawn;
+            pawns[3] = pawn;
         } else {
             coord = new Coord(0,0);
         }
@@ -106,7 +103,7 @@ public class Room extends StackPane {
      * @param pawn the pawn to remove
      */
     public void delPawn(Pawn pawn) {
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 4; ++i) {
             if (pawns[i] == pawn) {
                 pawns[i] = null;
             }
@@ -133,11 +130,11 @@ public class Room extends StackPane {
                     break;
                 case 1 :
                     setAlignment(projectCubes[projectIndex][i], Pos.BOTTOM_RIGHT);
-                    setMargin(projectCubes[projectIndex][i], new Insets(0,circle.getRadius()/2.6 + circle.getRadius()*(projectIndex/1.3)/8, circle.getRadius()/3.5 + circle.getRadius()*(projectIndex/1.3)/8,0));
+                    setMargin(projectCubes[projectIndex][i], new Insets(0,circle.getRadius()/2.4 + circle.getRadius()*(projectIndex/1.1)/8, circle.getRadius()/3.5 + circle.getRadius()*(projectIndex/1.3)/8,0));
                     break;
                 case 2 :
                     setAlignment(projectCubes[projectIndex][i], Pos.BOTTOM_LEFT);
-                    setMargin(projectCubes[projectIndex][i], new Insets(0, 0, circle.getRadius()/3.5 + circle.getRadius()*(projectIndex/1.3)/8, circle.getRadius()/2.6 + circle.getRadius()*(projectIndex/1.3)/8));
+                    setMargin(projectCubes[projectIndex][i], new Insets(0, 0, circle.getRadius()/3.5 + circle.getRadius()*(projectIndex/1.3)/8, circle.getRadius()/2.4 + circle.getRadius()*(projectIndex/1.1)/8));
                     break;
                 default:
                     break;
