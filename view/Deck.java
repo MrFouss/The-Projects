@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 /**
- * TODO complete
+ * TODO make fancier ?
  */
 public class Deck extends StackPane {
 

@@ -24,35 +24,37 @@ import java.util.*;
 
 
 /**
+ * The main scene of the game, where the action takes place
  * TODO complete
  */
 public class Board extends Scene {
 
-    /**
-     *
-     */
     private Group group;
     private Building[] batiments;
     private HashMap<String, Room> rooms;
     private Pane pane;
     private ArrayList<Pawn> pawns;
-    private Shape selectedObject;
     private Deck[] decks;
     private StackPane playerDiscard;
     private StackPane projectDiscard;
 
+    /**
+     * The constructor for a new board
+     * @param root the Parent group
+     * @param roles the list of the roles for this match
+     */
     public Board(Group root, Role... roles) {
         super(root, 1600, 900);
-        Color background = Color.SLATEBLUE;
-        setFill(new RadialGradient(0, 0, .5, .5, 1.5, true, CycleMethod.REPEAT, new Stop(0, background), new Stop(.5, background.deriveColor(0,1,.5,1)), new Stop(1, background)));
 
+        //creating the group and pane organizing the scene
         group = root;
         pane = new Pane();
         group.getChildren().add(pane);
         pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
 
-
-
+        //setting the background
+        Color background = Color.SLATEBLUE;
+        setFill(new RadialGradient(0, 0, .5, .5, 1.5, true, CycleMethod.REPEAT, new Stop(0, background), new Stop(.5, background.deriveColor(0,1,.5,1)), new Stop(1, background)));
         Label title = new Label("The Projects");
         title.setLayoutX(20);
         title.setLayoutY(40);
@@ -60,6 +62,8 @@ public class Board extends Scene {
         title.setTextFill(background.deriveColor(180,1,1,1));
         pane.getChildren().add(title);
 
+
+        //Shaping of the buildings
         float Base = 25;
 
         batiments = new Building[4];
@@ -103,6 +107,7 @@ public class Board extends Scene {
             pane.getChildren().add(s.getShape());
         }
 
+        //Creation of the decks
         decks = new Deck[4];
         decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
         decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
@@ -114,22 +119,23 @@ public class Board extends Scene {
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
 
+        //Creation of the rooms and corridors
         setRooms("the_projects/resources/rooms.csv");
         setCorridor("the_projects/resources/corridors.csv");
 
-        pawns = new ArrayList<>();
-
+        //TODO remove line ?
         rooms.get("B402").setTP();
 
+        //Creating the pawns
+        pawns = new ArrayList<>();
         Arrays.asList(roles).stream().forEach(role -> pawns.add(new Pawn(role)));
-
 
         for (Pawn pawn : pawns) {
             pane.getChildren().add(pawn.getShape());
             movePawn(pawn, rooms.get("B402"));
         }
 
-        //start of test lines
+        //TODO remove these test lines
         rooms.get("P101").setTP();
         rooms.get("A201").setTP();
         rooms.get("H010").setTP();
@@ -182,12 +188,13 @@ public class Board extends Scene {
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
         rooms.get("B404").delProjectCube(3);
-        //end of test lines
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
-        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")),new RoomCard(pane, rooms.get("A200")), new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
+        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")), new RoomCard(pane, rooms.get("A200")), new RoomCard(pane, rooms.get("B402")), new RoomCard(pane, rooms.get("P101"))));
+        //end of test lines
 
+        //making the board proportional to the window
         Scale scale = new Scale(1,1,0,0);
         scale.xProperty().bind(widthProperty().divide(getWidth()));
         scale.yProperty().bind(heightProperty().divide(getHeight()));
@@ -195,6 +202,11 @@ public class Board extends Scene {
 
     }
 
+    /**
+     * TODO complete doc
+     * @param shape
+     * @param color
+     */
     public static void setHoverStrokeChange(Shape shape, Color color) {
         shape.setStrokeWidth(3);
         shape.setStroke(color.deriveColor(0,1,.5,1));
@@ -207,6 +219,10 @@ public class Board extends Scene {
         });
     }
 
+    /**
+     * TODO complete doc
+     * @param path
+     */
     public void setRooms(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -229,6 +245,10 @@ public class Board extends Scene {
         }
     }
 
+    /**
+     * TODO complete doc
+     * @param path
+     */
     public void setCorridor(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -261,6 +281,11 @@ public class Board extends Scene {
         }
     }
 
+    /**
+     * TODO complete doc
+     * @param pawn
+     * @param dest
+     */
     public void movePawn(Pawn pawn, Room dest) {
         Coord destCoords = dest.addPawn(pawn);
         Path path = new Path(new MoveTo(pawn.getShape().getLayoutX(), pawn.getShape().getLayoutY()), new LineTo(destCoords.getX(), destCoords.getY()));
@@ -274,10 +299,20 @@ public class Board extends Scene {
 
     }
 
+    /**
+     * TODO complete doc
+     * @param projectIndex
+     * @return
+     */
     public Color projectIndexToColor(int projectIndex) {
         return batiments[projectIndex].getColor();
     }
 
+    /**
+     * TODO complete doc
+     * @param card1
+     * @param card2
+     */
     public void drawPlayerCards(Card card1, Card card2) {
         Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
         Path path2 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()*2/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
@@ -303,6 +338,10 @@ public class Board extends Scene {
 
     }
 
+    /**
+     * TODO complete doc
+     * @param card
+     */
     public void discardPlayerCard(Card card) {
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
 
@@ -315,8 +354,12 @@ public class Board extends Scene {
         pathTransition.play();
     }
 
+    /**
+     * TODO complete doc
+     * @param cards
+     */
     public void drawProjectCards(Card... cards) {
-        int i = 1;
+        double i = (6 - cards.length)/2.;
         for (Card card : cards) {
             pane.getChildren().add(card);
             card.setRotate(-90);
@@ -325,11 +368,16 @@ public class Board extends Scene {
             pathTransition.play();
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
             rotateTransition.setByAngle(90);
+            rotateTransition.setOnFinished(e1->card.setOnMouseClicked(e->discardProjectCard(card)));
             rotateTransition.play();
-            card.setOnMouseClicked(e->discardProjectCard(card));
+
         }
     }
 
+    /**
+     * TODO complete doc
+     * @param card
+     */
     public void discardProjectCard(Card card) {
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[1].getLayoutX() + decks[1].getWidth()/2, decks[1].getLayoutY() + decks[1].getHeight()/2));
 
