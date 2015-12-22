@@ -1,7 +1,7 @@
 package the_projects.model;
 
 /**
- * 
+ * The enumeration containing all PhD Student's roles.
  */
 public enum Role {
     TRELLO_ADEPT,

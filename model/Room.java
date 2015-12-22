@@ -3,85 +3,116 @@ package the_projects.model;
 import java.util.*;
 
 /**
- * 
+ * Class representing each room of the game.
  */
 public class Room {
 
     /**
-     * Default constructor
+     * The name of the room.
      */
-    public Room() {
-    }
+    // TODO add to the class diagram
+    private String name;
 
     /**
-     * 
+     * A boolean attribute used to say if the room is a lab room or not.
      */
-    private Boolean labRoom = false;
-
+    private Boolean labRoom;
 
     /**
-     *
-     */
-    private Course.Project[] projectTab;
-
-
-    /**
-     * 
-     */
-    private Set<Room> neighbours;
-
-    /**
-     * 
+     * The course affected to the room.
      */
     private Course course;
 
     /**
-     * @param course 
-     * @param courses
+     * The list of projects on this room.
      */
-    public void Room(Course course, List<Course> courses) {
-        // TODO implement here
+    private Project[] projectTab;
+
+
+    /**
+     * The list of adjacent rooms to this one.
+     */
+    private LinkedList<Room> neighbours;
+
+    /**
+     * Constructor with parameters.
+     *
+     * @param course The course affected to the room.
+     * @param coursesInGame The list of courses used to create the Project objects.
+     */
+    // TODO update the class diagram
+    public Room(String name, Course course, Course[] coursesInGame) {
+        this.name = name;
+        this.labRoom = false;
+        this.course = course;
+
+        // initialization of projectTab
+        this.projectTab = new Project[4];
+        for(int i = 0; i < 4; ++i) {
+            projectTab[i] = new Project(coursesInGame[i]);
+        }
     }
 
     /**
-     * @return
+     * Gets the name of the room.
+     *
+     * @return the name of the room.
      */
-    public Course getCourse() {
-        // TODO implement here
-        return null;
+    public String getName() {
+        return this.name;
     }
 
     /**
-     * @return
-     */
-    public Boolean toggleLabRoom() {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
+     * Checks if whether or not the room is a lab room.
+     *
+     * @return the labRoom state.
      */
     public Boolean isLabRoom() {
-        // TODO implement here
+        return this.labRoom;
+    }
+
+    /**
+     * Toggles the labRoom state.
+     *
+     * @return the new labRoom state.
+     */
+    public Boolean toggleLabRoom() {
+        this.labRoom = !this.labRoom;
+        return this.labRoom;
+    }
+
+    /**
+     * Gets the course affected to the room.
+     *
+     * @return the course affected to the room.
+     */
+    public Course getCourse() {
+        return this.course;
+    }
+
+    /**
+     * Gets the Project linked to course.
+     *
+     * @param course the course linked to a project.
+     * @return the project linked to the course.
+     */
+    public Project getProject(Course course) {
+        for(int i = 0; i < 4; ++i) {
+            if(this.projectTab[i].getCourse() == course) {
+                return this.projectTab[i];
+            }
+        }
         return null;
     }
 
     /**
-     * @param course
-     * @return
+     * Gets the list of rooms adjacent to this one.
+     *
+     * @return the list of rooms adjacent to this one.
      */
-    public Course.Project getProject(Course course) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public List<Room> getReachableRooms() {
-        // TODO implement here
-        return null;
+    // TODO update the class diagram
+    public LinkedList<Room> getNeighbours() {
+        return this.neighbours;
     }
 
 }

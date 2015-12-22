@@ -5,80 +5,113 @@ import the_projects.model.card.EventCard;
 import the_projects.model.card.PlayerCard;
 
 /**
- * 
+ * The representation of the PhD students.
  */
 public class PhDStudent {
 
     /**
-     * Default constructor
-     */
-    public PhDStudent() {
-    }
-
-    /**
-     * 
+     * The name of the PhD Student.
      */
     private String name;
 
-
     /**
-     * 
-     */
-    private CardDeck cardHand;
-
-    /**
-     * 
-     */
-    private Room position;
-
-    /**
-     * 
-     */
-    private EventCard extraEventCard;
-
-    /**
-     * 
+     * The role played by the PhD student.
      */
     private Role role;
 
     /**
-     * @param name 
-     * @param role
+     * The hand of cards.
      */
-    public void PhDStudent(String name, Role role) {
-        // TODO implement here
+    private CardDeck cardHand;
+
+    /**
+     * The position where the student is.
+     */
+    private Room position;
+
+    /**
+     * The card stored by the student (only used by the TRELLO_ADEPT)
+     */
+    private EventCard extraEventCard;
+
+    /**
+     * Constructor with parameters.
+     *
+     * @param name the name of the student.
+     * @param role the specialization of the PhD student.
+     */
+    public PhDStudent(String name, Role role) {
+        this.name = name;
+        this.role = role;
+        this.cardHand = new CardDeck<PlayerCard>();
+        this.position = null;
+        this.extraEventCard = null;
     }
 
     /**
-     * @return
+     * Gets the name of the student.
+     *
+     * @return the name of the student.
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Gets the role associated to the student.
+     *
+     * @return the role associated to the student.
      */
     public Role getRole() {
-        // TODO implement here
-        return null;
+        return this.role;
     }
 
     /**
-     * @return
+     * Gets the hand of cards of the student.
+     *
+     * @return the hand of cards.
      */
-    public CardDeck<PlayerCard> getCards() {
-        // TODO implement here
-        return null;
+    public CardDeck getCards() {
+        return this.cardHand;
     }
 
     /**
-     * @return
+     * Gets the position of the student.
+     *
+     * @return the position of the student.
+     */
+    // TODO add to the class diagram
+    public Room getPosition() {
+        return this.position;
+    }
+
+    /**
+     * Sets the position of the student.
+     *
+     * @param position the new position of the student.
+     */
+    // TODO add to the class diagram
+    public void setPosition(Room position) {
+        this.position = position;
+    }
+
+    /**
+     * Gets the event card of the TRELLO_ADEPT.
+     *
+     * @return the event card of the TRELLO_ADEPT.
      */
     public EventCard getExtraEventCard() {
-        // TODO implement here
-        return null;
+        return this.extraEventCard;
     }
 
     /**
-     * @return
+     * Sets the event card of the TRELLO_ADEPT.
+     *
+     * @param card the event card of the TRELLO_ADEPT.
      */
-    public EventCard setExtraEventCard() {
-        // TODO implement here
-        return null;
+    // TODO update the class diagram
+    public void setExtraEventCard(EventCard card) {
+        this.extraEventCard = card;
     }
 
 }
