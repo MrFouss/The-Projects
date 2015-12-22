@@ -30,7 +30,6 @@ import java.util.*;
  */
 public class Board extends Scene {
 
-    private Group group;
     private Building[] batiments;
     private HashMap<String, Room> rooms;
     private Pane pane;
@@ -46,9 +45,8 @@ public class Board extends Scene {
         super(root, 1600, 900);
 
         //creating the group and pane organizing the scene
-        group = root;
         pane = new Pane();
-        group.getChildren().add(pane);
+        root.getChildren().add(pane);
         pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
 
         //setting the background
@@ -117,7 +115,6 @@ public class Board extends Scene {
         playerDiscard = decks[3];
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
-
         //Creation of the rooms and corridors
         setRooms("the_projects/resources/rooms.csv");
         setCorridor("the_projects/resources/corridors.csv");
@@ -127,7 +124,7 @@ public class Board extends Scene {
 
         //Creating the pawns
         pawns = new ArrayList<>();
-        Arrays.asList(players).stream().forEach(player -> pawns.add(new Pawn(player.getRole())));
+        Arrays.asList(players).stream().forEach(player -> pawns.add(new Pawn(player)));
 
         for (Pawn pawn : pawns) {
             pane.getChildren().add(pawn.getShape());
@@ -139,54 +136,54 @@ public class Board extends Scene {
         rooms.get("A201").setTP();
         rooms.get("H010").setTP();
 
-        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B402").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("B402").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("B402").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("B402").addProjectCube(projectIndexToColor(3), 3);
+        addProjectToRoom("B402", 0);
+        addProjectToRoom("B402", 1);
+        addProjectToRoom("B402", 2);
+        addProjectToRoom("B402", 3);
+        addProjectToRoom("B402", 0);
+        addProjectToRoom("B402", 1);
+        addProjectToRoom("B402", 2);
+        addProjectToRoom("B402", 3);
+        addProjectToRoom("B402", 0);
+        addProjectToRoom("B402", 1);
+        addProjectToRoom("B402", 2);
+        addProjectToRoom("B402", 3);
 
 
-        rooms.get("B401").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("B403").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("B403").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B406").addProjectCube(projectIndexToColor(3), 3);
+        addProjectToRoom("B401", 0);
+        addProjectToRoom("B403", 1);
+        addProjectToRoom("B403", 2);
+        addProjectToRoom("B406", 3);
+        addProjectToRoom("B406", 3);
+        addProjectToRoom("B406", 3);
 
-        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("A208").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("A206").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("A206").addProjectCube(projectIndexToColor(0), 0);
-        rooms.get("A207").addProjectCube(projectIndexToColor(0), 0);
+        addProjectToRoom("A208", 0);
+        addProjectToRoom("A208", 0);
+        addProjectToRoom("A208", 0);
+        addProjectToRoom("A206", 0);
+        addProjectToRoom("A206", 0);
+        addProjectToRoom("A207", 0);
 
-        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("H010").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("H011").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("H011").addProjectCube(projectIndexToColor(1), 1);
-        rooms.get("H012").addProjectCube(projectIndexToColor(1), 1);
+        addProjectToRoom("H010", 1);
+        addProjectToRoom("H010", 1);
+        addProjectToRoom("H010", 1);
+        addProjectToRoom("H011", 1);
+        addProjectToRoom("H011", 1);
+        addProjectToRoom("H012", 1);
 
-        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("P108").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("P106").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("P106").addProjectCube(projectIndexToColor(2), 2);
-        rooms.get("P107").addProjectCube(projectIndexToColor(2), 2);
+        addProjectToRoom("P108", 2);
+        addProjectToRoom("P108", 2);
+        addProjectToRoom("P108", 2);
+        addProjectToRoom("P106", 2);
+        addProjectToRoom("P106", 2);
+        addProjectToRoom("P107", 2);
 
-        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B404").addProjectCube(projectIndexToColor(3), 3);
-        rooms.get("B404").delProjectCube(3);
-        rooms.get("B404").delProjectCube(3);
-        rooms.get("B404").delProjectCube(3);
+        addProjectToRoom("B404", 3);
+        addProjectToRoom("B404", 3);
+        addProjectToRoom("B404", 3);
+        removeProjectToRoom("B404", 3);
+        removeProjectToRoom("B404", 3);
+        removeProjectToRoom("B404", 3);
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
@@ -214,7 +211,7 @@ public class Board extends Scene {
         shape.setStroke(color.deriveColor(0,1,.5,1));
         shape.hoverProperty().addListener((e) -> {
             if(shape.isHover()) {
-                shape.setStroke(color.deriveColor(100,1,4,1));
+                shape.setStroke(color.deriveColor(100,1,1.2,1));
             }else{
                 shape.setStroke(color.deriveColor(0,1,.5,1));
             }
@@ -311,6 +308,24 @@ public class Board extends Scene {
     }
 
     /**
+     * Method to add a project to a room given its name and the type of project
+     * @param roomName the name of the room
+     * @param projectIndex the index of the project
+     */
+    public void addProjectToRoom(String roomName, int projectIndex) {
+        rooms.get(roomName).addProjectCube(projectIndexToColor(projectIndex), projectIndex);
+    }
+
+    /**
+     * Method to remove a project from a room given its name and the type of project
+     * @param roomName the name of the room
+     * @param projectIndex the index of the project
+     */
+    public void removeProjectToRoom(String roomName, int projectIndex) {
+        rooms.get(roomName).delProjectCube(projectIndex);
+    }
+
+    /**
      * Method to display the movement of a card to a Deck
      * @param card the card to move
      * @param deck the destination deck
@@ -326,8 +341,8 @@ public class Board extends Scene {
         }
 
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
-        scaleTransition.setToX(deck.getScaleX());
-        scaleTransition.setToY(deck.getScaleY());
+        scaleTransition.setToX(deck.isHorizontal()? deck.getScaleY() : deck.getScaleX());
+        scaleTransition.setToY(deck.isHorizontal()? deck.getScaleX() : deck.getScaleY());
         scaleTransition.play();
 
         card.setOnMouseClicked(null);
@@ -388,7 +403,7 @@ public class Board extends Scene {
         for (Card card : cards) {
             pane.getChildren().add(card);
             card.setRotate(-90);
-            Path path = new Path(new MoveTo(decks[0].getLayoutX() + decks[0].getWidth()/2, decks[0].getLayoutY() + decks[0].getHeight()/2), new LineTo(getWidth()*(++i)/8 - decks[0].getWidth()/2, getHeight()/2 - decks[0].getHeight()/2));
+            Path path = new Path(new MoveTo(decks[0].getLayoutX() + decks[0].getWidth()/2, decks[0].getLayoutY() + decks[0].getHeight()/2), new LineTo(pane.getWidth()*(++i)/8, pane.getHeight()/2));
             PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
             pathTransition.play();
             RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);

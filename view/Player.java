@@ -1,5 +1,6 @@
 package the_projects.view;
 
+import javafx.scene.paint.Color;
 import the_projects.model.Role;
 
 import java.util.Collections;
@@ -127,5 +128,32 @@ public class Player {
      */
     public void setHandDeck(Deck handDeck) {
         this.handDeck = handDeck;
+    }
+
+
+    /**
+     * Method associating a role to a color
+     * @param role the role to associate
+     * @return the color associated
+     */
+    public static Color roleToColor(Role role) {
+        switch (role) {
+            case TRELLO_ADEPT :
+                return Color.PURPLE;
+            case GROUP_LEADER :
+                return Color.RED;
+            case MENTOR :
+                return Color.ORANGE;
+            case INSTALLER :
+                return Color.WHITE;
+            case COFFEE_MAKER :
+                return Color.SADDLEBROWN;
+            case DAOUID :
+                return Color.YELLOW;
+            case HACKER :
+                return Color.GREEN;
+            default :
+                return Color.GRAY;
+        }
     }
 }
