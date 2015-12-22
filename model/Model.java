@@ -101,8 +101,12 @@ public class Model {
      * Move the iterator currentPlayer to the next player.
      */
     public void nextPlayer() {
-        this.currentPlayer.next();
-        // TODO check if when the iterator reaches the end, it goes straight to the first position
+        if(!this.currentPlayer.hasNext()){
+            this.currentPlayer = this.playerList.listIterator(0);
+        } else {
+            this.currentPlayer.next();
+        }
+
     }
 
     /**
@@ -227,10 +231,40 @@ public class Model {
     // TODO javadoc
     // TODO add to the class diagram
     public HashMap<String, Integer> reachableRooms (String roomName, int remainingMoves) {
+        LinkedList<Room> stack = new LinkedList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        String sourceName = null;
 
-        // TODO implement here
+        Room source = null;
+        for(Room room: this.getRooms()) {
+            if(room.getName().equals(roomName)) {
+                sourceName = room.getName();
+                source = room;
+            }
+        }
 
-        return null;
+        map.put(sourceName, 0);
+        stack.push(source);
+
+        while(!stack.isEmpty()) {
+            Room tmp = stack.pop();
+            // if the neighbours of tmp are reachable
+            if(map.get(tmp.getName()) + 1 <= remainingMoves) {
+                for(Room neighbour : tmp.getNeighbours()) {
+                    // if a shortest path from source has been found or if neighbour is not yet in
+                    if((!map.containsKey(neighbour.getName())) || (map.get(tmp.getName()) + 1 < map.get(neighbour.getName()))) {
+                        // if neighbour is already inside map
+                        if(map.containsKey(neighbour.getName())) {
+                            map.remove(neighbour.getName());
+                        }
+                        map.put(neighbour.getName(), map.get(tmp.getName()) + 1);
+                        stack.push(neighbour);
+                    }
+                }
+            }
+        }
+
+        return map;
     }
 
 }
