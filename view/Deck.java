@@ -15,13 +15,14 @@ import javafx.scene.text.Font;
  * TODO make fancier ?
  */
 public class Deck extends StackPane {
+    private boolean horizontal;
 
     public Deck (Scene scene,String text, Color color, double relativeX, double relativeY, boolean horizontal) {
 
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
 
-
+        this.horizontal = horizontal;
         rectangle.setWidth(scene.getWidth()*(horizontal ? 22*9/16 : 9)/100.);
         rectangle.setHeight(scene.getHeight()*(horizontal ? 9*16/9 : 22)/100.);
 
@@ -40,4 +41,11 @@ public class Deck extends StackPane {
         Board.setHoverStrokeChange(rectangle, color);
     }
 
+    public Deck (Scene scene,String text, Color color, double relativeX, double relativeY) {
+        this(scene, text, color, relativeX, relativeY, false);
+    }
+
+    public boolean isHorizontal() {
+        return horizontal;
+    }
 }

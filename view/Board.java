@@ -2,6 +2,7 @@ package the_projects.view;
 
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -39,11 +40,9 @@ public class Board extends Scene {
     private StackPane projectDiscard;
 
     /**
-     * The constructor for a new board
-     * @param root the Parent group
-     * @param roles the list of the roles for this match
+     * TODO
      */
-    public Board(Group root, String UV1, String UV2, String UV3, String UV4, Role... roles) {
+    public Board(Group root, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
 
         //creating the group and pane organizing the scene
@@ -111,8 +110,8 @@ public class Board extends Scene {
         decks = new Deck[4];
         decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
         decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
-        decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100., false);
-        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100., false);
+        decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
+        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100.);
 
         projectDiscard = decks[1];
         playerDiscard = decks[3];
@@ -128,7 +127,7 @@ public class Board extends Scene {
 
         //Creating the pawns
         pawns = new ArrayList<>();
-        Arrays.asList(roles).stream().forEach(role -> pawns.add(new Pawn(role)));
+        Arrays.asList(players).stream().forEach(player -> pawns.add(new Pawn(player.getRole())));
 
         for (Pawn pawn : pawns) {
             pane.getChildren().add(pawn.getShape());
@@ -193,6 +192,9 @@ public class Board extends Scene {
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
         decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")), new RoomCard(pane, rooms.get("A200")), new RoomCard(pane, rooms.get("B402")), new RoomCard(pane, rooms.get("P101"))));
         //end of test lines
+
+        Actions actions = new Actions(this, players);
+        pane.getChildren().add(actions);
 
         //making the board proportional to the window
         Scale scale = new Scale(1,1,0,0);
@@ -309,13 +311,38 @@ public class Board extends Scene {
     }
 
     /**
+     * Method to display the movement of a card to a Deck
+     * @param card the card to move
+     * @param deck the destination deck
+     */
+    public PathTransition moveToDeck(Card card, Deck deck) {
+        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(deck.getLayoutX() + deck.getWidth()/2, deck.getLayoutY() + deck.getHeight()/2));
+
+        card.toFront();
+        if (deck.isHorizontal()) {
+            RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
+            rotateTransition.setByAngle(-90);
+            rotateTransition.play();
+        }
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
+        scaleTransition.setToX(deck.getScaleX());
+        scaleTransition.setToY(deck.getScaleY());
+        scaleTransition.play();
+
+        card.setOnMouseClicked(null);
+
+        return new PathTransition(Duration.seconds(.5),path,card);
+    }
+
+    /**
      * Method to display the drawing of two cards from the player deck
      * @param card1 first card to draw
      * @param card2 second card to draw
      */
     public void drawPlayerCards(Card card1, Card card2) {
-        Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
-        Path path2 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(getWidth()*2/3 - decks[2].getWidth()/2, getHeight()/2 - decks[2].getHeight()/2));
+        Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(pane.getWidth()*1.2/3, pane.getHeight()/2));
+        Path path2 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(pane.getWidth()*1.8/3, pane.getHeight()/2));
 
 
 
@@ -325,9 +352,9 @@ public class Board extends Scene {
         rectangle.setHeight(pane.getHeight());
         pane.getChildren().addAll(rectangle, card1, card2);
 
-        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path1,card1);
+        PathTransition pathTransition = new PathTransition(Duration.millis(500),path1,card1);
         pathTransition.play();
-        pathTransition = new PathTransition(Duration.seconds(1),path2,card2);
+        pathTransition = new PathTransition(Duration.millis(500),path2,card2);
         pathTransition.play();
 
         rectangle.setOnMouseClicked(e -> {
@@ -343,10 +370,8 @@ public class Board extends Scene {
      * @param card the card to display
      */
     public void discardPlayerCard(Card card) {
-        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[3].getLayoutX() + decks[3].getWidth()/2, decks[3].getLayoutY() + decks[3].getHeight()/2));
 
-
-        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+        PathTransition pathTransition = moveToDeck(card, decks[3]);
         pathTransition.setOnFinished(e -> {
             pane.getChildren().remove(playerDiscard);
             playerDiscard = card;
@@ -364,9 +389,9 @@ public class Board extends Scene {
             pane.getChildren().add(card);
             card.setRotate(-90);
             Path path = new Path(new MoveTo(decks[0].getLayoutX() + decks[0].getWidth()/2, decks[0].getLayoutY() + decks[0].getHeight()/2), new LineTo(getWidth()*(++i)/8 - decks[0].getWidth()/2, getHeight()/2 - decks[0].getHeight()/2));
-            PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
             pathTransition.play();
-            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
+            RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
             rotateTransition.setByAngle(90);
             rotateTransition.setOnFinished(e1->card.setOnMouseClicked(e->discardProjectCard(card)));
             rotateTransition.play();
@@ -379,16 +404,8 @@ public class Board extends Scene {
      * @param card the card to display
      */
     public void discardProjectCard(Card card) {
-        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(decks[1].getLayoutX() + decks[1].getWidth()/2, decks[1].getLayoutY() + decks[1].getHeight()/2));
 
-        card.toFront();
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1), card);
-        rotateTransition.setByAngle(-90);
-        rotateTransition.play();
-
-        card.setOnMouseClicked(null);
-
-        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,card);
+        PathTransition pathTransition = moveToDeck(card, decks[1]);
         pathTransition.setOnFinished(e -> {
             pane.getChildren().remove(projectDiscard);
             projectDiscard = card;
