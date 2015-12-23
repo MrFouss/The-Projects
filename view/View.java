@@ -1,9 +1,14 @@
 package the_projects.view;
 
+import com.sun.applet2.preloader.event.ErrorEvent;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
+import the_projects.controller.ViewListener;
 import the_projects.model.Role;
+import the_projects.model.card.Event;
+
+import java.util.HashMap;
 
 /**
  *  TODO complete
@@ -11,15 +16,249 @@ import the_projects.model.Role;
 public class View extends Application {
     private MainMenu mainMenu;
     private Board board;
+    private Stage stage;
 
     @Override
     public void start(Stage primaryStage) {
-        board = new Board(new Group(), "AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.COFFEE_MAKER), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
-        primaryStage.setScene(board);
+        stage = primaryStage;
+        stage.setMinHeight(450);
+        stage.setMinWidth(800);
+        stage.setMaximized(true);
+        stage.show();
+        mainMenu = new MainMenu(new Group());
+        //TODO remove next line
+        displayGameBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.COFFEE_MAKER), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
+    }
 
-        primaryStage.setMinHeight(450);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+
+    /**
+     * Method to generate a new board
+     *
+     * @param UV1     the name of the first UV
+     * @param UV2     the name of the second UV
+     * @param UV3     the name of the third UV
+     * @param UV4     the name of the fourth UV
+     * @param players the list of the players (please use the format "new Player(String name, Role role)"
+     */
+    public void displayGameBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
+        board = new Board(new Group(), UV1, UV2, UV3, UV4, players);
+        stage.setScene(board);
+    }
+
+    /**
+     * Method too add a viewListener
+     * @param listener the view listener to add
+     */
+    public void addListener(ViewListener listener) {
+        //TODO implement
+    }
+
+    /**
+     * Method to display a new settings menu
+     */
+    public void displaySetting() {
+        stage.setScene(mainMenu);
+    }
+
+    public void displayInvalidSetting(ErrorEvent errorEvent) {
+        //TODO implement
+    }
+
+    /**
+     * Method to display the reachable rooms
+     * @param rooms the name of the reachable rooms with the number of actions needed to reach them
+     */
+    public void displayReachablePlaces(HashMap<String,Integer> rooms) {
+        board.reachableRooms(rooms);
+    }
+
+    /**
+     * Method to move a pawn along some rooms
+     *
+     * @param role  the role corresponding to the pawn
+     * @param rooms the names of the rooms on the pawns way
+     */
+    public void displayMovePawn(Role role, String... rooms) {
+        board.movePawn(role, rooms);
+    }
+
+    /**
+     * Method to transform a room to a Lab room
+     *
+     * @param roomName the name of the room
+     */
+    public void displaySetRoomToLab(String roomName) {
+        board.setRoomToLab(roomName);
+    }
+
+    /**
+     * Method to add a project to a room given its name and the type of project
+     *
+     * @param roomName     the name of the room
+     * @param projectIndex the index of the project [0-3]
+     */
+    public void displayAddProjectToRoom(String roomName, int projectIndex) {
+        board.addProjectToRoom(roomName, projectIndex);
+    }
+
+    /**
+     * Method to remove a project from a room given its name and the type of project
+     *
+     * @param roomName     the name of the room
+     * @param projectIndex the index of the project
+     */
+    public void displayRemoveProjectFromRoom(String roomName, int projectIndex) {
+        board.removeProjectFromRoom(roomName, projectIndex);
+    }
+
+    /**
+     * Method to increase the propagation gauge
+     */
+    public void displayIncreasePropagationGauge() {
+        board.increasePropagationGauge();
+    }
+
+    /**
+     * Method to increase the burn-out gauge
+     */
+    public void displayIncreaseBurnOutGauge() {
+        board.increaseBurnOutGauge();
+    }
+
+    /**
+     * Method to draw two room cards from the player deck
+     *
+     * @param roomCard1 the name of the room of the first room card to draw
+     * @param roomCard2 the name of the room of the second room card to draw
+     */
+    public void displayDrawPlayerCards(String roomCard1, String roomCard2) {
+        board.drawPlayerCards(roomCard1, roomCard2);
+    }
+
+    /**
+     * Method to draw a room card and an event card from the player deck
+     *
+     * @param roomCard  the name of the room of the room card to draw
+     * @param eventCard the event of the event card to draw
+     */
+    public void displayDrawPlayerCards(String roomCard, Event eventCard) {
+        board.drawPlayerCards(roomCard, eventCard);
+    }
+
+    /**
+     * Method to draw two event cards from the player deck
+     *
+     * @param eventCard1 the event of the first event card to draw
+     * @param eventCard2 the event of the second event card to draw
+     */
+    public void displayDrawPlayerCards(Event eventCard1, Event eventCard2) {
+        board.drawPlayerCards(eventCard1, eventCard2);
+    }
+
+    /**
+     * Method to draw a room card and a student party card from the player deck
+     *
+     * @param roomCard the name of the room of the room card to draw
+     */
+    public void displayDrawPlayerCards(String roomCard) {
+        board.drawPlayerCards(roomCard);
+    }
+
+    /**
+     * Method to draw an event card and a student party card from the player deck
+     *
+     * @param eventCard the event of the event card to draw
+     */
+    public void displayDrawPlayerCards(Event eventCard) {
+        board.drawPlayerCards(eventCard);
+    }
+
+    /**
+     * Method to draw two student party cards from the player deck
+     */
+    public void displayDrawPlayerCards() {
+        board.drawPlayerCards();
+    }
+    /**
+     * Method to discard a room card to the player discard
+     * @param roomCard the name of the room of the room card
+     */
+    public void displayDiscardPlayerCard(String roomCard) {
+        board.discardPlayerCard(roomCard);
+    }
+
+    /**
+     * Method to discard an event card to the player discard
+     * @param eventCard the event of the event card
+     */
+    public void displayDiscardPlayerCard(Event eventCard) {
+        board.discardPlayerCard(eventCard);
+    }
+
+    /**
+     * Method to make a partyCard disappear
+     */
+    public void displayDiscardPartyCard() {
+        board.discardPartyCard();
+    }
+
+    /**
+     * Method to draw project cards from the projects deck
+     * @param roomNames the names of the projects to draw
+     */
+    public void displayDrawProjectCards(String... roomNames) {
+        board.drawProjectCards(roomNames);
+    }
+
+    /**
+     * Method to discard a project card to the project discard
+     * @param roomName the name of the room of the project
+     */
+    public void displayDiscardProjectCard(String roomName) {
+        board.discardProjectCard(roomName);
+    }
+
+    /**
+     * Method to give a room card to a player
+     * @param roomName the name of the room of the room card
+     * @param role the role of the player
+     */
+    public void displayGiveCardToPlayer(String roomName, Role role) {
+        board.giveCardToPlayer(roomName, role);
+    }
+
+    /**
+     * Method to give an event card to a player
+     * @param event the event of the event card
+     * @param role the role of the player
+     */
+    public void displayGiveCardToPlayer(Event event, Role role) {
+        board.giveCardToPlayer(event, role);
+    }
+
+    /**
+     * Method to take a room card from a player
+     * @param roomName the name of the room of the room card
+     * @param role the role of the player
+     */
+    public void displayDiscardCardFromPlayer(String roomName, Role role) {
+        board.discardCardFromPlayer(roomName, role);
+    }
+
+    /**
+     * Method to take an event card from a player
+     * @param event the event of the event card
+     * @param role the role of the player
+     */
+    public void displayDiscardCardFromPlayer(Event event, Role role) {
+        board.discardCardFromPlayer(event, role);
+    }
+
+    /**
+     * Method to draw event cards from the player discard
+     * @param events the events of the event cards to draw
+     */
+    public void displayEventCardsFromDiscard(Event... events) {
+        board.drawEventCardsFromDiscard(events);
     }
 }

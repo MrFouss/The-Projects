@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 public class MainMenu extends Scene {
 
 
-    public MainMenu(Parent root, double width, double height) {
-        super(root, width, height);
+    public MainMenu(Parent root) {
+        super(root);
     }
 }

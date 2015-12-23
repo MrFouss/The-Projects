@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import the_projects.model.Role;
+import the_projects.model.card.Event;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -117,10 +118,10 @@ public class Board extends Scene {
 
         //Creation of the rooms and corridors
         setRooms("the_projects/resources/rooms.csv");
-        setCorridor("the_projects/resources/corridors.csv");
+        setCorridors("the_projects/resources/corridors.csv");
 
         //TODO remove line ?
-        rooms.get("B402").setTP();
+        rooms.get("B402").setLab();
 
         //Creating the pawns
         pawns = new ArrayList<>();
@@ -132,9 +133,9 @@ public class Board extends Scene {
         }
 
         //TODO remove these test lines
-        rooms.get("P101").setTP();
-        rooms.get("A201").setTP();
-        rooms.get("H010").setTP();
+        rooms.get("P101").setLab();
+        rooms.get("A201").setLab();
+        rooms.get("H010").setLab();
 
         addProjectToRoom("B402", 0);
         addProjectToRoom("B402", 1);
@@ -181,9 +182,9 @@ public class Board extends Scene {
         addProjectToRoom("B404", 3);
         addProjectToRoom("B404", 3);
         addProjectToRoom("B404", 3);
-        removeProjectToRoom("B404", 3);
-        removeProjectToRoom("B404", 3);
-        removeProjectToRoom("B404", 3);
+        removeProjectFromRoom("B404", 3);
+        removeProjectFromRoom("B404", 3);
+        removeProjectFromRoom("B404", 3);
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
@@ -257,7 +258,7 @@ public class Board extends Scene {
      * Method to read the position and place the corridors on the board from a text file
      * @param path the path to the text file
      */
-    public void setCorridor(String path) {
+    public void setCorridors(String path) {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             //noinspection ConstantConditions
@@ -308,6 +309,15 @@ public class Board extends Scene {
     }
 
     /**
+     * Method to move a pawn along some rooms
+     * @param role the role corresponding to the pawn
+     * @param rooms the names of the rooms on the pawns way
+     */
+    public void movePawn(Role role, String[] rooms) {
+        //TODO implement
+    }
+
+    /**
      * Method to get the color of a project
      * @param projectIndex the index of the project
      * @return the color of the project
@@ -330,7 +340,7 @@ public class Board extends Scene {
      * @param roomName the name of the room
      * @param projectIndex the index of the project
      */
-    public void removeProjectToRoom(String roomName, int projectIndex) {
+    public void removeProjectFromRoom(String roomName, int projectIndex) {
         rooms.get(roomName).delProjectCube(projectIndex);
     }
 
@@ -451,4 +461,171 @@ public class Board extends Scene {
         pathTransition.play();
     }
 
+    /**
+     * Method to transform a room to a Lab room
+     * @param roomName the name of the room
+     */
+    public void setRoomToLab(String roomName) {
+        rooms.get(roomName).setLab();
+    }
+
+    /**
+     * Method to increase the propagation gauge
+     */
+    public void increasePropagationGauge() {
+        //TODO implement
+    }
+
+    /**
+     * Method to increase the burn-out gauge
+     */
+    public void increaseBurnOutGauge() {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw two room cards from the player deck
+     *
+     * @param roomCard1 the name of the room of the first room card to draw
+     * @param roomCard2 the name of the room of the second room card to draw
+     */
+    public void drawPlayerCards(String roomCard1, String roomCard2) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw a room card and an event card from the player deck
+     *
+     * @param roomCard  the name of the room of the room card to draw
+     * @param eventCard the event of the event card to draw
+     */
+    public void drawPlayerCards(String roomCard, Event eventCard) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw two event cards from the player deck
+     *
+     * @param eventCard1 the event of the first event card to draw
+     * @param eventCard2 the event of the second event card to draw
+     */
+    public void drawPlayerCards(Event eventCard1, Event eventCard2) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw a room card and a student party card from the player deck
+     *
+     * @param roomCard the name of the room of the room card to draw
+     */
+    public void drawPlayerCards(String roomCard) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw an event card and a student party card from the player deck
+     *
+     * @param eventCard the event of the event card to draw
+     */
+    public void drawPlayerCards(Event eventCard) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw two student party cards from the player deck
+     */
+    public void drawPlayerCards() {
+        //TODO implement
+    }
+
+    /**
+     * Method to discard a room card to the player discard
+     * @param roomCard the name of the room of the room card
+     */
+    public void discardPlayerCard(String roomCard) {
+        //TODO implement
+    }
+
+    /**
+     * Method to discard an event card to the player discard
+     * @param eventCard the event of the event card
+     */
+    public void discardPlayerCard(Event eventCard) {
+        //TODO implement
+    }
+
+    /**
+     * Method to make a partyCard disappear
+     */
+    public void discardPartyCard() {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw project cards from the projects deck
+     * @param roomNames the names of the projects to draw
+     */
+    public void drawProjectCards(String... roomNames) {
+        //TODO implement
+    }
+
+    /**
+     * Method to discard a project card to the project discard
+     * @param roomName the name of the room of the project
+     */
+    public void discardProjectCard(String roomName) {
+        //TODO implement
+    }
+
+    /**
+     * Method to display the reachable rooms
+     * @param rooms the name of the reachable rooms with the number of actions needed to reach them
+     */
+    public void reachableRooms(HashMap<String, Integer> rooms) {
+        //TODO implement
+    }
+
+    /**
+     * Method to give a room card to a player
+     * @param roomName the name of the room of the room card
+     * @param role the role of the player
+     */
+    public void giveCardToPlayer(String roomName, Role role) {
+        //TODO implement
+    }
+
+    /**
+     * Method to give an event card to a player
+     * @param event the event of the event card
+     * @param role the role of the player
+     */
+    public void giveCardToPlayer(Event event, Role role) {
+        //TODO implement
+    }
+
+    /**
+     * Method to take a room card from a player
+     * @param roomName the name of the room of the room card
+     * @param role the role of the player
+     */
+    public void discardCardFromPlayer(String roomName, Role role) {
+        //TODO implement
+    }
+
+    /**
+     * Method to take an event card from a player
+     * @param event the event of the event card
+     * @param role the role of the player
+     */
+    public void discardCardFromPlayer(Event event, Role role) {
+        //TODO implement
+    }
+
+    /**
+     * Method to draw event cards from the player discard
+     * @param events the events of the event cards to draw
+     */
+    public void drawEventCardsFromDiscard(Event... events) {
+        //TODO implement
+    }
 }

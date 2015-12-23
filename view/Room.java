@@ -167,9 +167,9 @@ public class Room extends StackPane {
     }
 
     /**
-     * Method transforming a simple room to a TP room
+     * Method transforming a simple room to a Lab room
      */
-    public void setTP() {
+    public void setLab() {
         Rectangle rectangle = new Rectangle(circle.getRadius()*2, circle.getRadius()*2, color.brighter());
         getChildren().add(rectangle);
         rectangle.toBack();
