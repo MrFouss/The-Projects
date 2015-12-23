@@ -3,6 +3,7 @@ package the_projects.view;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -40,7 +41,7 @@ public class Board extends Scene {
     private StackPane projectDiscard;
 
     /**
-     * TODO
+     * TODO doc when finished
      */
     public Board(Group root, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
@@ -129,7 +130,7 @@ public class Board extends Scene {
 
         for (Pawn pawn : pawns) {
             pane.getChildren().add(pawn.getShape());
-            movePawn(pawn, rooms.get("B402"));
+            movePawn(pawn.getPlayer().getRole(), "B402");
         }
 
         Actions actions = new Actions(this,pane, players);
@@ -202,6 +203,7 @@ public class Board extends Scene {
                 new RoomCard(pane, rooms.get("A200")),
                 new RoomCard(pane, rooms.get("P101"))));
 
+        movePawn(Role.DAOUID, "P108", "P110", "P106");
         //end of test lines
 
 
@@ -272,13 +274,13 @@ public class Board extends Scene {
                     newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]));
 
                 } else {
-                    ArrayList<Coord> coords = new ArrayList<>();
+                    ArrayList<Point2D> Point2Ds = new ArrayList<>();
 
                     for (int i = 2; i < vars.length; i+=2) {
-                        coords.add(new Coord(Double.parseDouble(vars[i])*1600/100., Double.parseDouble(vars[i+1])*900/100));
+                        Point2Ds.add(new Point2D(Double.parseDouble(vars[i])*1600/100., Double.parseDouble(vars[i+1])*900/100));
                     }
 
-                    newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]), coords);
+                    newCorridor = new Corridor(rooms.get(vars[0]), rooms.get(vars[1]), Point2Ds);
                 }
                 pane.getChildren().add(newCorridor);
             }
@@ -297,17 +299,14 @@ public class Board extends Scene {
      * @param pawn the pawn to move
      * @param dest the room welcoming the pawn
      */
-    public void movePawn(Pawn pawn, Room dest) {
-        Coord destCoords = dest.addPawn(pawn);
-        Path path = new Path(new MoveTo(pawn.getShape().getLayoutX(), pawn.getShape().getLayoutY()), new LineTo(destCoords.getX(), destCoords.getY()));
+    public PathTransition movePawn(Pawn pawn, Room dest) {
+        Point2D destPoint2Ds = dest.addPawn(pawn);
+        Point2D startPoint2Ds = pawn.setRoom(dest);
 
-        Room startRoom = pawn.setRoom(dest);
-        if (startRoom != null) {
-            startRoom.delPawn(pawn);
-        }
-        PathTransition pathTransition = new PathTransition(Duration.seconds(1),path,pawn.getShape());
-        pathTransition.play();
+        Path path = new Path(new MoveTo(startPoint2Ds.getX(), startPoint2Ds.getY()), new LineTo(destPoint2Ds.getX(), destPoint2Ds.getY()));
 
+
+        return new PathTransition(Duration.seconds(0.8),path,pawn.getShape());
     }
 
     /**
@@ -315,8 +314,25 @@ public class Board extends Scene {
      * @param role the role corresponding to the pawn
      * @param rooms the names of the rooms on the pawns way
      */
-    public void movePawn(Role role, String[] rooms) {
-        //TODO implement
+    public void movePawn(Role role, String... rooms) {
+        Pawn pawn = null;
+        for (Pawn p : pawns) {
+            if (p.getPlayer().getRole() == role) {
+                pawn = p;
+            }
+        }
+        if (pawn != null && rooms.length > 0) {
+            PathTransition[] transitions = new PathTransition[rooms.length];
+            int i = 0;
+            for (String name : rooms) {
+                transitions[i++] = movePawn(pawn, this.rooms.get(name));
+            }
+            for (i = 1; i < transitions.length; ++i) {
+                final int j = i;
+                transitions[i-1].setOnFinished(event -> transitions[j].play());
+            }
+            transitions[0].play();
+        }
     }
 
     /**

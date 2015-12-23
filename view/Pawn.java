@@ -1,5 +1,6 @@
 package the_projects.view;
 
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
@@ -39,12 +40,12 @@ public class Pawn {
      * @param destination the room to which the Pawn is moved
      * @return the Room in which the pawn was
      */
-    public Room setRoom(Room destination) {
+    public Point2D setRoom(Room destination) {
+        Point2D ancientCoords = new Point2D(0,0);
         if (actualRoom != null)
-            actualRoom.delPawn(this);
-        Room ancientRoom = actualRoom;
+            ancientCoords = actualRoom.delPawn(this);
         actualRoom = destination;
-        return  ancientRoom;
+        return  ancientCoords;
     }
 
     /**

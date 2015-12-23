@@ -2,6 +2,7 @@ package the_projects.view;
 
 
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -77,24 +78,24 @@ public class Room extends StackPane {
      * @param pawn The pawn moving
      * @return the new coordinates to give to the pawn
      */
-    public Coord addPawn(Pawn pawn) {
-        Coord coord;
+    public Point2D addPawn(Pawn pawn) {
+        Point2D coord;
         if (pawns[0] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+            coord = new Point2D(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[0] = pawn;
         }else if (pawns[1] == null) {
-            coord = new Coord(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+            coord = new Point2D(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
             pawns[1] = pawn;
         }else if (pawns[2] == null) {
-            coord = new Coord(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
+            coord = new Point2D(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
             pawns[2] = pawn;
         }else if (pawns[3] == null) {
-            coord = new Coord(getPos().getX() + circle.getRadius()/1.2, getPos().getY());
+            coord = new Point2D(getPos().getX() + circle.getRadius()/1.2, getPos().getY());
             pawns[3] = pawn;
         } else {
-            coord = new Coord(0,0);
+            coord = new Point2D(0,0);
         }
-        coord.setX(coord.getX()+circle.getRadius()/15);
+        coord.add(circle.getRadius()/15,0);
         return coord;
     }
 
@@ -102,12 +103,25 @@ public class Room extends StackPane {
      * Method to call when moving a pawn from a room
      * @param pawn the pawn to remove
      */
-    public void delPawn(Pawn pawn) {
+    public Point2D delPawn(Pawn pawn) {
         for (int i = 0; i < 4; ++i) {
             if (pawns[i] == pawn) {
                 pawns[i] = null;
+                switch (i) {
+                    case 0:
+                        return new Point2D(getPos().getX() - circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+                    case 1:
+                        return new Point2D(getPos().getX() + circle.getRadius()/2.5, getPos().getY() - circle.getRadius()/1.5);
+                    case 2:
+                        return new Point2D(getPos().getX() - circle.getRadius()/1.2, getPos().getY());
+                    case 3:
+                        return new Point2D(getPos().getX() + circle.getRadius()/1.2, getPos().getY());
+                    default:
+                        break;
+                }
             }
         }
+        return new Point2D(0,0);
     }
 
     /**
@@ -184,8 +198,8 @@ public class Room extends StackPane {
      * Method to get the center of a room
      * @return the position of the center of the Room
      */
-    public Coord getPos() {
-        return new Coord(getLayoutX() + circle.getRadius(), getLayoutY() + circle.getRadius());
+    public Point2D getPos() {
+        return new Point2D(getLayoutX() + circle.getRadius(), getLayoutY() + circle.getRadius());
     }
 
     /**
@@ -227,4 +241,6 @@ public class Room extends StackPane {
     public ArrayList<Corridor> getCorridors() {
         return corridors;
     }
+
+
 }
