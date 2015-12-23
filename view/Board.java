@@ -187,7 +187,16 @@ public class Board extends Scene {
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
-        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")), new RoomCard(pane, rooms.get("A200")), new RoomCard(pane, rooms.get("B402")), new RoomCard(pane, rooms.get("P101"))));
+        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")),
+                new RoomCard(pane, rooms.get("A200")),
+                new RoomCard(pane, rooms.get("B402")),
+                new RoomCard(pane, rooms.get("A200")),
+                new RoomCard(pane, rooms.get("B402")),
+                new RoomCard(pane, rooms.get("A200")),
+                new RoomCard(pane, rooms.get("B402")),
+                new RoomCard(pane, rooms.get("A200")),
+                new RoomCard(pane, rooms.get("P101"))));
+
         //end of test lines
 
         Actions actions = new Actions(this, players);
@@ -351,15 +360,45 @@ public class Board extends Scene {
     }
 
     /**
+     * Method to display the movement of some cards from a Deck
+     * @param deck the deck from where the cards come
+     * @param cards the cards to move
+     */
+    public void moveFromDeck(Deck deck, Card... cards) {
+        double i = (6 - cards.length)/2., j = 1;
+        if (cards.length > 6) {
+            i = (6 - cards.length/2)/2.;
+        }
+        for (Card card : cards) {
+            Path path;
+            if (cards.length < 6) {
+                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight() / 2));
+            }else{
+                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight()* j / 3));
+                if (i == (6 - cards.length/2)/2. + 5) {
+                    ++j;
+                    i = (6 - cards.length/2)/2.;
+                }
+            }
+            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
+            pathTransition.play();
+
+            if (deck.isHorizontal()) {
+                card.setRotate(-90);
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
+                rotateTransition.setByAngle(90);
+                rotateTransition.setOnFinished(e1 -> card.setOnMouseClicked(e -> discardProjectCard(card)));
+                rotateTransition.play();
+            }
+        }
+    }
+
+    /**
      * Method to display the drawing of two cards from the player deck
      * @param card1 first card to draw
      * @param card2 second card to draw
      */
     public void drawPlayerCards(Card card1, Card card2) {
-        Path path1 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(pane.getWidth()*1.2/3, pane.getHeight()/2));
-        Path path2 = new Path(new MoveTo(decks[2].getLayoutX() + decks[2].getWidth()/2, decks[2].getLayoutY() + decks[2].getHeight()/2), new LineTo(pane.getWidth()*1.8/3, pane.getHeight()/2));
-
-
 
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
@@ -367,17 +406,12 @@ public class Board extends Scene {
         rectangle.setHeight(pane.getHeight());
         pane.getChildren().addAll(rectangle, card1, card2);
 
-        PathTransition pathTransition = new PathTransition(Duration.millis(500),path1,card1);
-        pathTransition.play();
-        pathTransition = new PathTransition(Duration.millis(500),path2,card2);
-        pathTransition.play();
-
         rectangle.setOnMouseClicked(e -> {
             discardPlayerCard(card1);
             discardPlayerCard(card2);
             pane.getChildren().remove(rectangle);
         });
-
+        moveFromDeck(decks[2], card1, card2);
     }
 
     /**
@@ -399,19 +433,8 @@ public class Board extends Scene {
      * @param cards the cards to draw
      */
     public void drawProjectCards(Card... cards) {
-        double i = (6 - cards.length)/2.;
-        for (Card card : cards) {
-            pane.getChildren().add(card);
-            card.setRotate(-90);
-            Path path = new Path(new MoveTo(decks[0].getLayoutX() + decks[0].getWidth()/2, decks[0].getLayoutY() + decks[0].getHeight()/2), new LineTo(pane.getWidth()*(++i)/8, pane.getHeight()/2));
-            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
-            pathTransition.play();
-            RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
-            rotateTransition.setByAngle(90);
-            rotateTransition.setOnFinished(e1->card.setOnMouseClicked(e->discardProjectCard(card)));
-            rotateTransition.play();
-
-        }
+        pane.getChildren().addAll(cards);
+        moveFromDeck(decks[0], cards);
     }
 
     /**

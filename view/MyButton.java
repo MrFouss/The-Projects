@@ -36,6 +36,13 @@ public class MyButton extends Button {
                 setBorder(new Border(new BorderStroke(color.deriveColor(0, 1, .5, 1), BorderStrokeStyle.SOLID, new CornerRadii(20), new BorderWidths(2))));
             }
         });
+        pressedProperty().addListener(e -> {
+            if (isPressed()) {
+                setBackground(new Background(new BackgroundFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color.deriveColor(0,1,1,1)), new Stop(1, color.deriveColor(0,1,.1,1))), new CornerRadii(20), new Insets(0))));
+            }else{
+                setBackground(new Background(new BackgroundFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))), new CornerRadii(20), new Insets(0))));
+            }
+        });
 
         setMaxWidth(Double.POSITIVE_INFINITY);
         setCursor(Cursor.HAND);
