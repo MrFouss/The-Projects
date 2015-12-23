@@ -15,13 +15,13 @@ import javafx.scene.text.Font;
  */
 public class Card extends StackPane {
 
-    public Card(Pane scene, String title, String text, Color color) {
+    public Card(Pane pane, String title, String text, Color color) {
 
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(color);
 
-        rectangle.setWidth(scene.getWidth() * 9 / 100.);
-        rectangle.setHeight(scene.getHeight() * 22 / 100.);
+        rectangle.setWidth(pane.getWidth() * 9 / 100.);
+        rectangle.setHeight(pane.getHeight() * 22 / 100.);
 
         setLayoutX(0);
         setLayoutY(0);
@@ -33,7 +33,7 @@ public class Card extends StackPane {
         label.setMouseTransparent(true);
         getChildren().add(label);
         setAlignment(label, Pos.TOP_CENTER);
-        setMargin(label, new Insets(scene.getHeight()/100,0,0,0));
+        setMargin(label, new Insets(pane.getHeight()/100,0,0,0));
 
         label = new Label(text);
         label.setFont(new Font(15));

@@ -3,7 +3,6 @@ package the_projects.view;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
-import the_projects.model.Role;
 
 /**
  * The representation of a player, a shape appearing in the room he is.
@@ -18,6 +17,7 @@ public class Pawn {
      * @param player the player associated the pawn
      */
     public Pawn(Player player) {
+        this.player = player;
         Circle circle = new Circle(10,10,5, Player.roleToColor(player.getRole()));
         Polygon triangle= new Polygon(circle.getCenterX(), circle.getCenterY() - circle.getRadius(), circle.getCenterX() + circle.getRadius(), circle.getCenterY() + circle.getRadius()*3, circle.getCenterX() - circle.getRadius(), circle.getCenterY() + circle.getRadius()*3);
         shape = Shape.union(circle, triangle);

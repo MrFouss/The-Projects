@@ -8,25 +8,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.transform.Scale;
 
 /**
  * TODO complete
  */
 public class Actions extends BorderPane {
 
-    public Actions(Board parent, Player... players) {
+    public Actions(Board board, Pane pane, Player... players) {
         Color color = Color.DARKSLATEBLUE;
         setBackground(new Background(new BackgroundFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))), new CornerRadii(20), new Insets(0))));
 
 
 
-        setLayoutX(parent.getWidth()*50/100.);
-        setLayoutY(parent.getHeight()*65/100.);
-        setPrefSize(parent.getWidth()*48/100.,parent.getHeight()*32/100.);
+        setLayoutX(board.getWidth()*50/100.);
+        setLayoutY(board.getHeight()*65/100.);
+        setPrefSize(board.getWidth()*48/100.,board.getHeight()*32/100.);
 
-        VBox buttons = new VBox(parent.getHeight()*1/100.);
+        VBox buttons = new VBox(board.getHeight()*.5/100.);
         setLeft(buttons);
-        setMargin(buttons, new Insets(parent.getHeight()*1/100.));
+        setMargin(buttons, new Insets(board.getHeight()*1/100.));
 
         buttons.setFillWidth(true);
 
@@ -70,15 +71,30 @@ public class Actions extends BorderPane {
                 "\nVous pourrez ensuite la consulter et l'utiliser quand vous voulez gratuitement puis la retirer du jeu.");
         testButton.setTooltip(tooltip);
         buttons.getChildren().add(testButton);
+        testButton = new MyButton("Fin de phase");
+        tooltip = new Tooltip("Termine la phase, vous fait piocher des cartes et lance la phase de propagation");
+        testButton.setTooltip(tooltip);
+        buttons.getChildren().add(testButton);
 
-        VBox center = new VBox();
-        setRight(center);
+        VBox right = new VBox();
+        setRight(right);
+        right.maxWidthProperty().bind(widthProperty());
+        setMargin(right, new Insets(board.getHeight()*1/100.));
 
+        int i = 0;
         for (Player player : players) {
-            //TODO add player infos
+            right.getChildren().add(player.getPane());
+            Deck playerDeck = new Deck(board, "", Color.TRANSPARENT, 94/100., (66.5 + (i++)*31./players.length)/100.);
+            Scale scale = new Scale(.3,.3,0,0);
+            playerDeck.getTransforms().add(scale);
+
+
+            pane.getChildren().add(playerDeck);
+
+            player.getPane().setPrefHeight(getPrefHeight()/players.length);
+            player.getPane().setPrefWidth(getPrefWidth()/1.5);
+            player.setHandDeck(playerDeck);
+
         }
-
-
-
     }
 }

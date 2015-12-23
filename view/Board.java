@@ -132,7 +132,11 @@ public class Board extends Scene {
             movePawn(pawn, rooms.get("B402"));
         }
 
+        Actions actions = new Actions(this,pane, players);
+        pane.getChildren().add(actions);
+
         //TODO remove these test lines
+
         rooms.get("P101").setLab();
         rooms.get("A201").setLab();
         rooms.get("H010").setLab();
@@ -200,8 +204,6 @@ public class Board extends Scene {
 
         //end of test lines
 
-        Actions actions = new Actions(this, players);
-        pane.getChildren().add(actions);
 
         //making the board proportional to the window
         Scale scale = new Scale(1,1,0,0);

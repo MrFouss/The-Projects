@@ -5,6 +5,9 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import the_projects.controller.ViewListener;
+import the_projects.model.Course;
+import the_projects.model.Model;
+import the_projects.model.PhDStudent;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
 
@@ -14,9 +17,14 @@ import java.util.HashMap;
  *  TODO complete
  */
 public class View extends Application {
+    private Model model;
     private MainMenu mainMenu;
     private Board board;
     private Stage stage;
+
+    public View() {
+        mainMenu = new MainMenu(new Group());
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -25,11 +33,22 @@ public class View extends Application {
         stage.setMinWidth(800);
         stage.setMaximized(true);
         stage.show();
-        mainMenu = new MainMenu(new Group());
         //TODO remove next line
-        displayGameBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.COFFEE_MAKER), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
+        setBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.DAOUID), new Player("TATA", Role.MENTOR), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
     }
 
+    /**
+     * Method to generate a new board
+     */
+    public void displayGameBoard(Model model){
+        this.model = model;
+        Course[] courses = model.getCourses();
+        Player[] players = new Player[model.getPlayers().size()];
+        int i = 0;
+        for (PhDStudent phDStudent : model.getPlayers())
+                players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
+        setBoard(courses[0].getName(), courses[0].getName(), courses[0].getName(), courses[0].getName(), players);
+    }
 
     /**
      * Method to generate a new board
@@ -40,7 +59,7 @@ public class View extends Application {
      * @param UV4     the name of the fourth UV
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
-    public void displayGameBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
+    private void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
         board = new Board(new Group(), UV1, UV2, UV3, UV4, players);
         stage.setScene(board);
     }
