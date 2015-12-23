@@ -1,11 +1,15 @@
 package the_projects.controller;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
+
+import com.sun.swing.internal.plaf.synth.resources.synth;
 
 import the_projects.model.Course;
 import the_projects.model.Model;
 import the_projects.model.PhDStudent;
+import the_projects.model.Role;
 import the_projects.model.Room;
 import the_projects.model.card.Card;
 import the_projects.model.card.PartyCard;
@@ -25,6 +29,7 @@ public class Controller extends Thread implements ViewListener {
 	ActionType action;
 	
 	int actionPoints;
+	HashMap<String, Integer> reachablePlaces;
 	PhDStudent selectedPlayer;
     
     public void run() {
@@ -36,28 +41,29 @@ public class Controller extends Thread implements ViewListener {
     			status = GameStatus.VALID;
     			model = null;
     			view = new View();
-    			//view.addListener(this);
+    			view.addListener(this);
     			actionPoints = 0;
     			action = ActionType.NONE;
     			selectedPlayer = null;
+    			reachablePlaces = null;
     			
     			//setting phase
     			
-    	    	//view.displaySetting()
+    	    	view.displaySetting();
     			while (phase == GamePhase.SETTING) {
     				this.wait(); //waiting for the user to enter and validate his settings
 				}
     			
     			//game loop
     			
-    			//view.displayGameBoard()
+    			view.displayGameBoard(model);
     			
     			while (status == GameStatus.VALID) {
     				
     				//action phase
     				
     				actionPoints = 4;
-    				selectedPlayer = model.getCurrentPlayer();
+    				pawnCLicked(model.getCurrentPlayer());
     				while (phase == GamePhase.ACTION && status == GameStatus.VALID) {
 						this.wait(); //wait for an action to be chosen and executed						
 					}
@@ -68,6 +74,7 @@ public class Controller extends Thread implements ViewListener {
     					//card phase
     					
 						//display card phase
+    					
     					if (actionPoints == 0) { //nb cartes deck joueur < 2
     						status = GameStatus.CARD_LACK;
     					} else {
@@ -187,26 +194,38 @@ public class Controller extends Thread implements ViewListener {
     }
 
 	@Override
-	public void placeClicked() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pawnCLicked(PhDStudent player) {
+	synchronized public void placeClicked(String name) {
 		if (phase == GamePhase.ACTION) {
-			selectedPlayer = player;
-			//model.reachableRooms(roomName, remainingMoves)
-			//view.displayReachablePlaces(model.reachableRooms(selectedPlayer, actionPoints))
+			HashMap<String, Integer> reach = getReachablePlaces();
+			if (reach.containsKey(name)) {
+				actionPoints -= reach.get(name);
+				//selectedPlayer.setPosition(model.getRooms().get(name));
+				//model must notify that the player changed position
+			}
+			this.notify();
 		}
-		
 	}
 
+	public HashMap<String, Integer> getReachablePlaces() {
+		HashMap<String, Integer> reachable = model.reachableRooms(selectedPlayer.getPosition().getName(), actionPoints);
+		if (model.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
+			for (PhDStudent p : model.getPlayers()) {
+				reachable.put(p.getPosition().getName(), 1);
+			}
+			reachable.remove(selectedPlayer);
+		} else {
+			reachable = new HashMap<>();
+		}
+
+		return reachable;
+	}
+	
 	@Override
-	public void moveButtonClicked() {
+	synchronized public void pawnCLicked(PhDStudent player) {
 		if (phase == GamePhase.ACTION) {
-			//view.displayReachablePlaces(model.getReachablePlaces(selectedPlayer, actionPoints)
-		}		
+			HashMap<String, Integer> reach = getReachablePlaces();
+			view.displayReachablePlaces(reach);
+		}
 	}
 	
 	@Override
@@ -227,8 +246,9 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void removeProjectButtonClicked() {
-		// TODO Auto-generated method stub
-		
+		if (phase == GamePhase.ACTION && actionPoints > 0) {
+			action = ActionType.PROJECT_REMOVAL;
+		}
 	}
 
 	@Override
