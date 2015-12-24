@@ -5,12 +5,12 @@ import java.util.*;
 /**
  * Deck of cards that can be used as a real deck or as a discard pile.
  */
-public class CardDeck <T extends Card>{
+public class CardDeck <T extends Card> {
 
     /**
      * List containing all cards of the deck.
      */
-    private LinkedList cardList;
+    private LinkedList<T> cardList;
 
     /**
      * Random object used to shuffle the deck.
@@ -22,8 +22,17 @@ public class CardDeck <T extends Card>{
      * Default constructor that initializes all attributes.
      */
     public CardDeck() {
-        this.cardList = new LinkedList<T>();
+        this.cardList = new LinkedList<>();
         this.rnd = new Random();
+    }
+
+    /**
+     * Gets the size of the deck.
+     *
+     * @return the size of the deck.
+     */
+    public int getSize() {
+        return this.cardList.size();
     }
 
     /**
@@ -33,7 +42,7 @@ public class CardDeck <T extends Card>{
         LinkedList<T> newList = new LinkedList<>();
 
         while(this.cardList.size() > 0) {
-            T tmpCard = (T) this.cardList.remove(this.rnd.nextInt(this.cardList.size()));
+            T tmpCard = this.cardList.remove(this.rnd.nextInt(this.cardList.size()));
             newList.add(tmpCard);
         }
 
@@ -47,7 +56,7 @@ public class CardDeck <T extends Card>{
      */
     public T drawFirst() throws NoSuchElementException {
         try {
-            return (T) this.cardList.removeFirst();
+            return this.cardList.removeFirst();
         } catch(NoSuchElementException e) {
             throw new NoSuchElementException();
         }
@@ -60,7 +69,7 @@ public class CardDeck <T extends Card>{
      */
     public T drawLast() throws NoSuchElementException {
         try {
-            return (T) this.cardList.removeLast();
+            return this.cardList.removeLast();
         } catch(NoSuchElementException e) {
             throw new NoSuchElementException();
         }
@@ -73,7 +82,7 @@ public class CardDeck <T extends Card>{
      * @return the card at the specified index.
      */
     public T draw(int index) {
-        return (T) this.cardList.remove(index);
+        return this.cardList.remove(index);
     }
 
     /**
