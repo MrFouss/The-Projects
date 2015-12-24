@@ -1,6 +1,6 @@
 package the_projects.view;
 
-import com.sun.applet2.preloader.event.ErrorEvent;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
