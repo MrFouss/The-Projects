@@ -44,7 +44,7 @@ public class Board extends Scene {
     /**
      * TODO doc when finished
      */
-    public Board(Group root, String UV1, String UV2, String UV3, String UV4, Player... players) {
+    public Board(Group root, View view, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
 
         //creating the group and pane organizing the scene
@@ -134,7 +134,7 @@ public class Board extends Scene {
             movePawn(pawn.getPlayer().getRole(), "B402");
         }
 
-        Actions actions = new Actions(this,pane, players);
+        Actions actions = new Actions(this, view,pane, players);
         pane.getChildren().add(actions);
 
 

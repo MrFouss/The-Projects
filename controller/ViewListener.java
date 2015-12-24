@@ -1,16 +1,18 @@
 package the_projects.controller;
 
-import the_projects.model.PhDStudent;
+import the_projects.model.Role;
 
 public interface ViewListener {
-	public void placeClicked(String name);
-	public void pawnCLicked(PhDStudent player);
+	void placeClicked(String name);
+	void pawnCLicked(Role player);
 	
-	public void settingValidationButtonCLicked();
-	public void removeProjectButtonClicked();
-	public void shareKnowledgeButtonCLicked();
-	public void useCardButtonClicked();
-	public void useCardsButtonCliked();
-	public void buildTPButtonClicked();
-	public void hackButtonCliked();
+	void settingValidationButtonCLicked();
+	void moveButtonClicked();
+	void removeProjectButtonClicked();
+	void shareKnowledgeButtonCLicked();
+	void useCardButtonClicked();
+	void masterButtonCliked();
+	void buildTPButtonClicked();
+	void hackButtonCliked();
+	void endOfStageButtonClicked();
 }

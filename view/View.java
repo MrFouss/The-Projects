@@ -4,6 +4,7 @@ package the_projects.view;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
+import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
 import the_projects.model.Course;
 import the_projects.model.Model;
@@ -12,6 +13,7 @@ import the_projects.model.Role;
 import the_projects.model.card.Event;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *  TODO complete
@@ -21,6 +23,7 @@ public class View extends Application {
     private MainMenu mainMenu;
     private Board board;
     private Stage stage;
+    private final HashSet<ViewListener> listeners = new HashSet<>();
 
     public View() {
         mainMenu = new MainMenu(new Group());
@@ -60,7 +63,7 @@ public class View extends Application {
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
     private void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
-        board = new Board(new Group(), UV1, UV2, UV3, UV4, players);
+        board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players);
         stage.setScene(board);
     }
 
@@ -69,7 +72,7 @@ public class View extends Application {
      * @param listener the view listener to add
      */
     public void addListener(ViewListener listener) {
-        //TODO implement
+        listeners.add(listener);
     }
 
     /**
@@ -295,5 +298,51 @@ public class View extends Application {
      */
     public void displayEventCardsFromDiscard(Event... events) {
         board.drawEventCardsFromDiscard(events);
+    }
+
+
+
+    public void firePlaceClicked(String name) {//TODO use
+        listeners.forEach(event->event.placeClicked(name));
+    }
+
+    public void firePawnCLicked(Role role) {//TODO use
+        listeners.forEach(event->event.pawnCLicked(role));
+    }
+
+    public void fireSettingValidationButtonCLicked() {//TODO use
+        listeners.forEach(ViewListener::settingValidationButtonCLicked);
+    }
+
+    public void fireMoveButtonClicked() {
+        listeners.forEach(ViewListener::moveButtonClicked);
+    }
+
+    public void fireRemoveProjectButtonClicked() {
+        listeners.forEach(ViewListener::removeProjectButtonClicked);
+    }
+
+    public void fireShareKnowledgeButtonCLicked() {
+        listeners.forEach(ViewListener::shareKnowledgeButtonCLicked);
+    }
+
+    public void fireUseCardButtonClicked() {
+        listeners.forEach(ViewListener::useCardButtonClicked);
+    }
+
+    public void fireMasterButtonCliked() {
+        listeners.forEach(ViewListener::masterButtonCliked);
+    }
+
+    public void fireBuildTPButtonClicked() {
+        listeners.forEach(ViewListener::buildTPButtonClicked);
+    }
+
+    public void fireHackButtonCliked() {
+        listeners.forEach(ViewListener::hackButtonCliked);
+    }
+
+    public void fireEndOfStageButtonClicked() {
+        listeners.forEach(ViewListener::endOfStageButtonClicked);
     }
 }
