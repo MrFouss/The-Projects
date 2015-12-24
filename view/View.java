@@ -316,6 +316,8 @@ public class View extends Application {
 
     public void fireMoveButtonClicked() {
         listeners.forEach(ViewListener::moveButtonClicked);
+        //TODO erase this test line
+        displayIncreasePropagationGauge();
     }
 
     public void fireRemoveProjectButtonClicked() {

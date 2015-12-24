@@ -505,7 +505,7 @@ public class Board extends Scene {
      * Method to increase the propagation gauge
      */
     public void increasePropagationGauge() {
-        //TODO implement
+        propagationGauge.increase();
     }
 
     /**
