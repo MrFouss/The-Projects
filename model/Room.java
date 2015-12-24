@@ -45,6 +45,7 @@ public class Room {
         this.name = name;
         this.labRoom = false;
         this.course = course;
+        this.neighbours = new LinkedList<>();
 
         // initialization of projectTab
         this.projectTab = new Project[4];
