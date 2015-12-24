@@ -322,6 +322,8 @@ public class View extends Application {
 
     public void fireRemoveProjectButtonClicked() {
         listeners.forEach(ViewListener::removeProjectButtonClicked);
+        //TODO erase this test line
+        displayIncreaseBurnOutGauge();
     }
 
     public void fireShareKnowledgeButtonCLicked() {

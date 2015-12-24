@@ -16,7 +16,7 @@ import javafx.util.Duration;
 /**
  * Representation of the Propagation Gauge
  */
-public class PropagationGauge extends Pane {
+public class PropagationGauge extends Pane implements Gauge {
 
     private int lvl;
     private Circle actual;

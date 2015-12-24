@@ -40,6 +40,7 @@ public class Board extends Scene {
     private StackPane playerDiscard;
     private StackPane projectDiscard;
     private PropagationGauge propagationGauge;
+    private OutbreaksGauge outbreaksGauge;
 
     /**
      * TODO doc when finished
@@ -140,6 +141,9 @@ public class Board extends Scene {
 
         propagationGauge = new PropagationGauge(this, 68.5/100., 18.5/100.);
         pane.getChildren().add(propagationGauge);
+
+        outbreaksGauge = new OutbreaksGauge(this, 89/100., 1/100.);
+        pane.getChildren().add(outbreaksGauge);
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -512,7 +516,7 @@ public class Board extends Scene {
      * Method to increase the burn-out gauge
      */
     public void increaseBurnOutGauge() {
-        //TODO implement
+        outbreaksGauge.increase();
     }
 
     /**

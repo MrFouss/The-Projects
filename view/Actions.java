@@ -47,7 +47,7 @@ public class Actions extends BorderPane {
                 "\nDéplacer un pion vers un autre si vous êtes le leader." +
                 "\n(Vous pouvez cliquer directement sur un pion pour le déplacer)");
         moves.setTooltip(tooltip);
-        moves.setOnMouseClicked(event1 -> view.fireMoveButtonClicked());
+        moves.setOnMouseClicked(event -> view.fireMoveButtonClicked());
         buttons.getChildren().add(moves);
 
         projects = new MyButton("Rendre un ou plusieurs projets");
@@ -55,14 +55,14 @@ public class Actions extends BorderPane {
                 "\nSi l'UV à été masterisée ou si vous êtes le Mentor, vous rendez tous les projets de l'UV." +
                 "\nSi il y a des projects d'UVs differentes dans la salle, l'UV est choisie au hasard.");
         projects.setTooltip(tooltip);
-        projects.setOnMouseClicked(e->view.fireRemoveProjectButtonClicked());
+        projects.setOnMouseClicked(event -> view.fireRemoveProjectButtonClicked());
         buttons.getChildren().add(projects);
 
         share = new MyButton("Partager des connaissances");
         tooltip = new Tooltip("Vous permet de donner ou recevoir la carte de la salle dans laquelle vous êtes." +
                 "\nSi vous êtes l'Adepte de Trello, vous pouvez donner n'importe quelle carte");
         share.setTooltip(tooltip);
-        projects.setOnMouseClicked(e->view.fireShareKnowledgeButtonCLicked());
+        share.setOnMouseClicked(event -> view.fireShareKnowledgeButtonCLicked());
         buttons.getChildren().add(share);
 
         card = new MyButton("Utiliser une carte");
