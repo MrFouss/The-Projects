@@ -10,10 +10,16 @@ import javafx.scene.shape.Path;
 import java.util.ArrayList;
 
 /**
- * TODO complete
+ * The representation of a corridor between two rooms
  */
 public class Corridor extends Path {
 
+    /**
+     * Complete constructor
+     * @param room1 the starting room
+     * @param room2 the destination room
+     * @param coords the different points the corridor traversal
+     */
     public Corridor (Room room1, Room room2, ArrayList<Point2D> coords) {
         getElements().add(new MoveTo(room1.getPos().getX(), room1.getPos().getY()));
         if (!coords.isEmpty()) {
@@ -24,6 +30,11 @@ public class Corridor extends Path {
         setStrokeWidth(4);
     }
 
+    /**
+     * Simplified constructor with just the two connected rooms
+     * @param room1 the starting room
+     * @param room2 the destination room
+     */
     public Corridor (Room room1, Room room2) {
         this(room1, room2, new ArrayList<>());
     }

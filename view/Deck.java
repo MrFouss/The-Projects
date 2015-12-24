@@ -12,11 +12,20 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 /**
- * TODO make fancier ?
+ * The place where card are drawn/discarded
  */
 public class Deck extends StackPane {
     private boolean horizontal;
 
+    /**
+     * complete constructor
+     * @param scene the scene in which the Deck appear
+     * @param text the text on the Deck
+     * @param color the color of the Deck
+     * @param relativeX the relative x position of the Deck
+     * @param relativeY the relative y position of the Deck
+     * @param horizontal the horizontality of the Deck
+     */
     public Deck (Scene scene,String text, Color color, double relativeX, double relativeY, boolean horizontal) {
 
         Rectangle rectangle = new Rectangle();
@@ -41,10 +50,22 @@ public class Deck extends StackPane {
         Board.setHoverStrokeChange(rectangle, color);
     }
 
+    /**
+     * Default Constructor for vertical Decks
+     * @param scene the scene in which the Deck appear
+     * @param text the text on the Deck
+     * @param color the color of the Deck
+     * @param relativeX the relative x position of the Deck
+     * @param relativeY the relative y position of the Deck
+     */
     public Deck (Scene scene,String text, Color color, double relativeX, double relativeY) {
         this(scene, text, color, relativeX, relativeY, false);
     }
 
+    /**
+     * Getter of horizontality
+     * @return true if horizontal
+     */
     public boolean isHorizontal() {
         return horizontal;
     }

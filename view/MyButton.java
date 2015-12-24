@@ -10,10 +10,14 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 
 /**
- * TODO implement
+ * Customized button
  */
 public class MyButton extends Button {
 
+    /**
+     * Constructor with text to display
+     * @param text the text to display
+     */
     public MyButton(String text) {
         super(text);
         setTextFill(Color.BLUEVIOLET);
