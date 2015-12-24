@@ -168,7 +168,7 @@ public class Player {
                 return "L’Adepte de Trello : pour une action, il peut donner" +
                         "\nn’importe quelle carte de Salle à un autre joueur" +
                         "\nsitué dans la même salle. La carte échangée n’a pas" +
-                        "\nà correspondre à la salle surlaquelle sont les pions.";
+                        "\nà correspondre à la salle sur laquelle sont les pions.";
             case GROUP_LEADER :
                 return "Le Leader : avec une action, le Leader peut déplacer \n" +
                         "le pion d’un autre joueur comme si c’était le sien, \n" +

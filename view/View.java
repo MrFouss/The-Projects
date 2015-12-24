@@ -34,7 +34,7 @@ public class View extends Application {
         stage.setMaximized(true);
         stage.show();
         //TODO remove next line
-        setBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.DAOUID), new Player("TATA", Role.MENTOR), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
+        setBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.TRELLO_ADEPT), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
     }
 
     /**
@@ -142,6 +142,22 @@ public class View extends Application {
      */
     public void displayIncreaseBurnOutGauge() {
         board.increaseBurnOutGauge();
+    }
+
+    /**
+     * Set a course to mastered state
+     * @param courseIndex the index of the course
+     */
+    public void displayCourseMastered(int courseIndex) {
+        board.setCourseMastered(courseIndex);
+    }
+
+    /**
+     * Set a course to Eradicated state
+     * @param courseIndex the index of the course
+     */
+    public void displayCourseEradicated(int courseIndex) {
+        board.setCourseEradicated(courseIndex);
     }
 
     /**

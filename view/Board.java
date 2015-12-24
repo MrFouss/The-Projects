@@ -39,6 +39,7 @@ public class Board extends Scene {
     private Deck[] decks;
     private StackPane playerDiscard;
     private StackPane projectDiscard;
+    private PropagationGauge propagationGauge;
 
     /**
      * TODO doc when finished
@@ -49,7 +50,7 @@ public class Board extends Scene {
         //creating the group and pane organizing the scene
         pane = new Pane();
         root.getChildren().add(pane);
-        pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
+       // pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
 
         //setting the background
         Color background = Color.SLATEBLUE;
@@ -136,6 +137,17 @@ public class Board extends Scene {
         Actions actions = new Actions(this,pane, players);
         pane.getChildren().add(actions);
 
+
+        propagationGauge = new PropagationGauge(this, 68.5/100., 18.5/100.);
+        pane.getChildren().add(propagationGauge);
+
+        //making the board proportional to the window
+        pane.setMaxSize(getWidth(),getHeight());
+        Scale scale = new Scale(1,1,0,0);
+        scale.xProperty().bind(widthProperty().divide(getWidth()));
+        scale.yProperty().bind(heightProperty().divide(getHeight()));
+        pane.getTransforms().add(scale);
+
         //TODO remove these test lines
 
         rooms.get("P101").setLab();
@@ -203,15 +215,8 @@ public class Board extends Scene {
                 new RoomCard(pane, rooms.get("A200")),
                 new RoomCard(pane, rooms.get("P101"))));
 
-        movePawn(Role.DAOUID, "P108", "P110", "P106");
-        //end of test lines
 
-
-        //making the board proportional to the window
-        Scale scale = new Scale(1,1,0,0);
-        scale.xProperty().bind(widthProperty().divide(getWidth()));
-        scale.yProperty().bind(heightProperty().divide(getHeight()));
-        pane.getTransforms().add(scale);
+        movePawn(Role.DAOUID,"B404", "B402", "A204", "H210", "H211", "H212", "P108", "P110", "P106", "P102", "P100", "P101", "P104", "P109", "P111", "B411", "B409", "B405", "B406", "B402");
 
     }
 
@@ -300,13 +305,17 @@ public class Board extends Scene {
      * @param dest the room welcoming the pawn
      */
     public PathTransition movePawn(Pawn pawn, Room dest) {
-        Point2D destPoint2Ds = dest.addPawn(pawn);
-        Point2D startPoint2Ds = pawn.setRoom(dest);
+        if (dest != null) {
+            Point2D destPoint2Ds = dest.addPawn(pawn);
+            Point2D startPoint2Ds = pawn.setRoom(dest);
 
-        Path path = new Path(new MoveTo(startPoint2Ds.getX(), startPoint2Ds.getY()), new LineTo(destPoint2Ds.getX(), destPoint2Ds.getY()));
+            Path path = new Path(new MoveTo(startPoint2Ds.getX(), startPoint2Ds.getY()), new LineTo(destPoint2Ds.getX(), destPoint2Ds.getY()));
 
 
-        return new PathTransition(Duration.seconds(0.8),path,pawn.getShape());
+            return new PathTransition(Duration.seconds(0.8), path, pawn.getShape());
+        }else{
+            return new PathTransition();
+        }
     }
 
     /**
@@ -411,6 +420,11 @@ public class Board extends Scene {
             PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
             pathTransition.play();
 
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
+            scaleTransition.setToX(decks[2].getScaleX());
+            scaleTransition.setToY(decks[2].getScaleY());
+            scaleTransition.play();
+
             if (deck.isHorizontal()) {
                 card.setRotate(-90);
                 RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
@@ -498,6 +512,22 @@ public class Board extends Scene {
      * Method to increase the burn-out gauge
      */
     public void increaseBurnOutGauge() {
+        //TODO implement
+    }
+
+    /**
+     * Set a course to mastered state
+     * @param courseIndex the index of the course
+     */
+    public void setCourseMastered(int courseIndex) {
+        //TODO implement
+    }
+
+    /**
+     * Set a course to Eradicated state
+     * @param courseIndex the index of the course
+     */
+    public void setCourseEradicated(int courseIndex) {
         //TODO implement
     }
 
