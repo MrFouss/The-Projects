@@ -41,6 +41,7 @@ public class Board extends Scene {
     private StackPane projectDiscard;
     private PropagationGauge propagationGauge;
     private OutbreaksGauge outbreaksGauge;
+    private MasteredCoursesDisplay masteredCoursesDisplay;
 
     /**
      * TODO doc when finished
@@ -144,6 +145,10 @@ public class Board extends Scene {
 
         outbreaksGauge = new OutbreaksGauge(this, 89/100., 1/100.);
         pane.getChildren().add(outbreaksGauge);
+
+        masteredCoursesDisplay = new MasteredCoursesDisplay(this, batiments, 1/100., 60/100.);
+        pane.getChildren().add(masteredCoursesDisplay);
+
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
