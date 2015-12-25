@@ -114,7 +114,7 @@ public class Board extends Scene {
         decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
         decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
         decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
-        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100.);
+        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.);
 
         projectDiscard = decks[1];
         playerDiscard = decks[3];
@@ -522,6 +522,22 @@ public class Board extends Scene {
      */
     public void increaseBurnOutGauge() {
         outbreaksGauge.increase();
+    }
+
+    /**
+     * Method to make a course mastered
+     * @param projectIndex the index of the course
+     */
+    public void toMastered(int projectIndex) {
+        masteredCoursesDisplay.toMastered(projectIndex);
+    }
+
+    /**
+     * Method to make a course eradicated
+     * @param projectIndex the index of the course
+     */
+    public void toEradicated(int projectIndex) {
+        masteredCoursesDisplay.toEradicated(projectIndex);
     }
 
     /**

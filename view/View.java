@@ -148,6 +148,22 @@ public class View extends Application {
     }
 
     /**
+     * Method to make a course mastered
+     * @param projectIndex the index of the course
+     */
+    public void displayToMastered(int projectIndex) {
+        board.toMastered(projectIndex);
+    }
+
+    /**
+     * Method to make a course eradicated
+     * @param projectIndex the index of the course
+     */
+    public void displayToEradicated(int projectIndex) {
+        board.toEradicated(projectIndex);
+    }
+
+    /**
      * Set a course to mastered state
      * @param courseIndex the index of the course
      */
@@ -301,7 +317,6 @@ public class View extends Application {
     }
 
 
-
     public void firePlaceClicked(String name) {//TODO use
         listeners.forEach(event->event.placeClicked(name));
     }
@@ -328,10 +343,15 @@ public class View extends Application {
 
     public void fireShareKnowledgeButtonCLicked() {
         listeners.forEach(ViewListener::shareKnowledgeButtonCLicked);
+        //TODO erase these test lines
+        displayToMastered(0);
+        displayToMastered(1);
     }
 
     public void fireUseCardButtonClicked() {
         listeners.forEach(ViewListener::useCardButtonClicked);
+        //TODO erase this test line
+        displayToEradicated(0);
     }
 
     public void fireMasterButtonCliked() {
