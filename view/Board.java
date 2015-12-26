@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -158,7 +159,7 @@ public class Board extends Scene {
         giveUp = new MyButton("Abandonner ?");
         giveUp.setLayoutX(600);
         giveUp.setLayoutY(300);
-        giveUp.setOnMouseClicked(event -> fireGiveUpButtonClicked());
+        giveUp.setOnMouseClicked(event -> view.fireGiveUpButtonClicked());
         pane.getChildren().add(giveUp);
 
 
@@ -241,14 +242,11 @@ public class Board extends Scene {
         pawns.get(0).setClickable(true, view);
 
         rooms.get("A200").setClickable(true, view);
-        rooms.get("A201").setClickable(true, view);
+        rooms.get("A200").setClickable(true, view);
         movePawn(Role.DAOUID,"B404", "B402", "A204", "H210", "H211", "H212", "P108", "P110", "P106", "P102", "P100", "P101", "P104", "P109", "P111", "B411", "B409", "B405", "B406", "B402");
 
     }
 
-    private void fireGiveUpButtonClicked() {
-        //TODO implement
-    }
 
     /**
      * Method making the stroke of a shape change color when hovering it
@@ -542,6 +540,7 @@ public class Board extends Scene {
      */
     public void increasePropagationGauge() {
         propagationGauge.increase();
+        putInFront(true, rooms.get("B402"));
     }
 
     /**
@@ -727,5 +726,37 @@ public class Board extends Scene {
      */
     public void drawEventCardsFromDiscard(Event... events) {
         //TODO implement
+    }
+
+    public void putInFront(boolean clickable, Node... nodes) {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.6));
+        rectangle.setWidth(pane.getWidth());
+        rectangle.setHeight(pane.getHeight());
+        pane.getChildren().add(rectangle);
+        for (Node node : nodes) {
+            node.toFront();
+            if (node.getClass() == Room.class) {
+                for ( Pawn pawn : ((Room)node).getPawns()) {
+                    pawn.getShape().toFront();
+                }
+            }
+            if (clickable) {
+                try {
+                    ((Clickable)node).setClickable(true,view);
+                }catch (Exception ignore) {}
+            }
+        }
+
+        rectangle.setOnMouseClicked(e -> {
+            pane.getChildren().remove(rectangle);
+            for (Node node : nodes) {
+                if (clickable) {
+                    try {
+                        ((Clickable)node).setClickable(false,view);
+                    }catch (Exception ignore) {}
+                }
+            }
+        });
     }
 }

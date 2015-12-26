@@ -367,6 +367,10 @@ public class View extends Stage {
         //TODO implement
     }
 
+    protected void fireGiveUpButtonClicked() {
+        //TODO implement
+    }
+
     public void displayInfoMessage(String s) {
         //TODO implement
     }

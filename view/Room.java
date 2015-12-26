@@ -241,6 +241,9 @@ public class Room extends StackPane implements Clickable {
         return corridors;
     }
 
+    public Pawn[] getPawns() {
+        return pawns;
+    }
 
     @Override
     public void setClickable(boolean clickable, View view) {
