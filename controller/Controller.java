@@ -40,7 +40,7 @@ public class Controller extends Thread implements ViewListener {
 	HashMap<String, Integer> selectedReachableRooms;
 	PhDStudent selectedPlayer;
 
-	public void run(View view //The launcher create the view as View is a Stage) {
+	public void run(View view /*The launcher create the view as View is a Stage*/) {
 		try {
 			synchronized (this) {
 				// init
@@ -59,8 +59,7 @@ public class Controller extends Thread implements ViewListener {
 
 				view.displaySetting();
 				this.wait(); // waiting for the user to enter and validate his settings
-				view.hideSetting();
-				
+
 				// game loop
 
 				view.displayGameBoard(model);
@@ -89,13 +88,13 @@ public class Controller extends Thread implements ViewListener {
 							status = GameStatus.CARD_LACK;
 						} else {							
 							for (int i = 0; i < 2; i++) {
-								PlayerCard card = model.getPlayerDeck().drawFirst();
+								PlayerCard card = (PlayerCard)model.getPlayerDeck().drawFirst();
 								
 								if (card.getClass() == RoomCard.class) {
-									view.displayDrawPlayerCards((RoomCard)card.getRoom().getName());
+									view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName());
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else if (card.getClass() == EventCard.class) {
-									view.displayDrawPlayerCards((RoomCard)card.getEvent());
+									view.displayDrawPlayerCards(((EventCard)card).getEvent());
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else {
 									// résoudre épidémie
@@ -131,18 +130,19 @@ public class Controller extends Thread implements ViewListener {
 								phase = GamePhase.DISCARD;
 								LinkedList<String> roomCards = new LinkedList<>();
 								LinkedList<Event> eventCards = new LinkedList<>();
-								
+								/*
 								for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
 									if (card.getClass() == RoomCard.class) {
 										roomCards.add(card.getRoom().getName());
 									} else {
 										eventCards.add(card.getEvent());
 									}
-								}
+								}*/
 								
 								view.displayInfoMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
-								view.displayEventCards(eventCards);
-								view.displayRoomCards(roomCards);
+								/*view.displayEventCards(eventCards);
+								view.displayRoomCards(roomCards);*/
+								view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
 							}
 
 							phase = GamePhase.PROPAGATION;
@@ -150,7 +150,7 @@ public class Controller extends Thread implements ViewListener {
 
 							if (status == GameStatus.VALID) {
 								for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
-									ProjectCard card = model.getProjectDeck().drawFirst();
+									ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
 									view.displayDrawProjectCards(card.getRoom().getName());
 
 									int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
@@ -270,8 +270,8 @@ public class Controller extends Thread implements ViewListener {
 	synchronized public void placeClicked(String name) {
 		if (selectedReachableRooms.containsKey(name)) {
 			actionPoints -= selectedReachableRooms.get(name);
-			selectedPlayer.setPosition(model.getRooms().get(name));
-			view.displayMovePawn(selectedPlayer.getRole(), model.shortestPath(selectedPlayer.getPosition().getName(), name));
+		//TODO	selectedPlayer.setPosition(model.getRooms().get(name));
+		//TODO	view.displayMovePawn(selectedPlayer.getRole(), model.shortestPath(selectedPlayer.getPosition().getName(), name));
 			view.clean();
 		}
 	}
@@ -344,7 +344,7 @@ public class Controller extends Thread implements ViewListener {
 		if (actionPoints > 0) {
 			if (cards.size() > 0) {
 				//view.displayCards(model.getCurrentPlayer().getCards().getCardList());
-				action = ActionType.CARD_USE;
+				action = ActionType.USE_CARD;
 			} else {
 				view.displayMessage("No cards in your hands");
 			}
@@ -382,13 +382,13 @@ public class Controller extends Thread implements ViewListener {
 						}
 					}
 					if (!discardEvents.isEmpty()) {
-						action = ActionType.HACKING;
+						action = ActionType.HACK;
 						// view.displayCards(discardEvents);
 					} else {
 						// view.displayErrorMessage("There is no event card in the player discard pile.");
 					}
 				} else {
-					action = ActionType.HACKING;
+					action = ActionType.HACK;
 
 					// view.displayConfirmationMessage("Do you really want to use your extra event card ?");
 				}
@@ -399,7 +399,7 @@ public class Controller extends Thread implements ViewListener {
 	@Override
 	public void ConfirmationButtonClicked() {
 		if (phase == GamePhase.ACTION) {
-			if (action == ActionType.HACKING) {
+			if (action == ActionType.HACK) {
 				resolveEventCard(model.getCurrentPlayer().getExtraEventCard());
 				model.getCurrentPlayer().setExtraEventCard(null);
 				// view.extraEventCardChanged(null);
@@ -409,10 +409,13 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
+	private void resolveEventCard(EventCard extraEventCard) {
+	}
+
 	@Override
 	public void cardClicked(Card card) {
 		if (phase == GamePhase.ACTION) {
-			if (action == ActionType.HACKING) {
+			if (action == ActionType.HACK) {
 				model.getCurrentPlayer().setExtraEventCard((EventCard) card);
 				model.getPlayerDiscard().getCardList().remove(card);
 				// view.extraEventCardChanged((EventCard)card);
@@ -426,7 +429,7 @@ public class Controller extends Thread implements ViewListener {
 					model.getPlayerDiscard().addCard(card);
 					// notify that card was put on the player discard pile
 				}
-			} else if (action == ActionType.CARD_USE) {
+			} else if (action == ActionType.USE_CARD) {
 				if (card.getClass() == EventCard.class) {
 					resolveEventCard((EventCard) card);
 					model.getPlayerDiscard().addCard(card);
@@ -442,8 +445,8 @@ public class Controller extends Thread implements ViewListener {
 					} else {
 						reach.put(rCard.getRoom().getName(), 1);
 					}
-					reachablePlaces = reach;
-					//view.displayReachablePlaces(reach);
+					//TODO reachablePlaces = reach;
+					//TODO view.displayReachablePlaces(reach);
 				}
 			}
 		}
@@ -475,26 +478,6 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void roomCardClicked(String room) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void shareKnowledgeButtonClicked() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void endOfStageButtonClicked() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hackButtonCliked() {
 		// TODO Auto-generated method stub
 		
 	}

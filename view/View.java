@@ -13,6 +13,7 @@ import the_projects.model.card.Event;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  *  TODO complete
@@ -78,7 +79,7 @@ public class View extends Stage {
      * Method to display the reachable rooms
      * @param rooms the name of the reachable rooms with the number of actions needed to reach them
      */
-    public void displayReachablePlaces(HashMap<String,Integer> rooms) {
+    public void displayReachableRooms(HashMap<String,Integer> rooms) {
         board.reachableRooms(rooms);
     }
 
@@ -304,6 +305,10 @@ public class View extends Stage {
         board.drawEventCardsFromDiscard(events);
     }
 
+    public void displayCardsOfPlayer(Role role) {
+        //TODO implement
+    }
+
 
     public void firePlaceClicked(String name) {//TODO use
         listeners.forEach(event->event.placeClicked(name));
@@ -356,5 +361,41 @@ public class View extends Stage {
 
     public void fireEndOfStageButtonClicked() {
         listeners.forEach(ViewListener::endOfStageButtonClicked);
+    }
+
+    public void displayInfoMessage(String s) {
+        //TODO implement
+    }
+
+    public LinkedList<String> getPlayerNames() {
+        //TODO implement
+        return null;
+    }
+
+    public LinkedList<String> getUVNames() {
+        //TODO implement
+        return null;
+    }
+
+    public int getDifficulty() {
+        //TODO implement
+        return 0;
+    }
+
+    public LinkedList<Role> getRoles() {
+        //TODO implement
+        return null;
+    }
+
+    public void clean() {
+        //TODO implement
+    }
+
+    public void disableAll() {
+        //TODO implement
+    }
+
+    public void displayMessage(String s) {
+        //TODO implement
     }
 }

@@ -1,6 +1,7 @@
 package the_projects.controller;
 
 import the_projects.model.Role;
+import the_projects.model.card.Card;
 import the_projects.model.card.Event;
 
 public interface ViewListener {
@@ -21,6 +22,9 @@ public interface ViewListener {
 	void giveUpButtonClicked();
 	void YesButtonClicked();
 	void NoButtonClicked();
+	void ConfirmationButtonClicked();
 	
 	void endOfStageButtonClicked();
+
+	void cardClicked(Card card);
 }
