@@ -52,7 +52,7 @@ public class Controller extends Thread implements ViewListener {
 				actionPoints = 0;
 				action = ActionType.NONE;
 				selectedPlayer = null;
-				reachablePlaces = null;
+				selectedReachableRooms = null;
 
 				phase = GamePhase.SETTING;
 				// setting phase
@@ -196,105 +196,6 @@ public class Controller extends Thread implements ViewListener {
 			e.printStackTrace();
 		}
 
-	}
-
-	public LinkedList<ActionType> possibleActions() {
-		LinkedList<ActionType> actions = new LinkedList<ActionType>();
-		Boolean containsEvent = false, ContainsRoom = false;
-		HashMap<Course, Integer> roomCards = new HashMap<>();
-		for (int i = 0; i < 4; i++) {
-			roomCards.put(model.getCourses()[i], 0);	
-		}
-		
-		for (PlayerCard card : (LinkedList<PlayerCard>) model.getCurrentPlayer().getCards().getCardList()) {
-			if (card.getClass() == EventCard.class) {
-				containsEvent = true;
-			} else {
-				ContainsRoom = true;
-				RoomCard rCard = (RoomCard) card;
-				roomCards.put(rCard.getRoom().getCourse(), roomCards.get(rCard.getRoom().getCourse()) +1);
-			}
-		}
-		
-		Boolean canBuildTP = false;
-		
-		for (Course c : actions) {
-			
-		}
-		
-		if (containsEvent) {
-			actions.add(ActionType.USE_CARD);
-		}
-		
-		if (model.getCurrentPlayer().getCards().getCardList().con) {
-			
-		}
-		if (actionPoints > 0) {
-			
-		} else {
-			
-		}
-		
-		return actions;
-	}
-	
-	public void resolveEventCard(EventCard event) {
-		switch (event.getEvent()) {
-		case ENERGY_DRINK:
-
-			break;
-		case GRANT_IN_AID:
-
-			break;
-		case HOLIDAYS:
-
-			break;
-		case ON_DEMAND_TELEPORTATION:
-
-			break;
-		case TIMEOUT:
-
-			break;
-		default:
-			break;
-		}
-	}
-	
-	private void resolvePartyCard(PlayerCard card) {
-		if (PartyCard.class == card.getClass()) {
-			// résoudre épidémie
-
-			// exams
-
-			model.increaseEmergencyGauge();
-
-			// stress
-
-			ProjectCard pCard = (ProjectCard) model.getProjectDeck().drawLast();
-			Course course = pCard.getRoom().getCourse();
-			if (!course.isCompleted()) {
-				if (pCard.getRoom().getProject(course).getProjectAmount() > 0) {
-					pCard.getRoom().getProject(course).setProjectAmount(3);
-					burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
-				} else {
-					pCard.getRoom().getProject(course).setProjectAmount(3);
-				}
-			}
-			model.getProjectDiscard().addCard(pCard);
-
-			// intensification
-
-			model.getProjectDiscard().shuffle();
-			model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
-		} else {
-			model.getCurrentPlayer().getCards().addCard(card);
-		}
-
-		if (model.getCurrentPlayer().getCards().getCardList().size() > 7) {
-			action = ActionType.DISCARD;
-			// view.displayMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
-			// view.displayCards(model.getCurrentPlayer().getCards().getCardList())
-		}
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {
@@ -588,6 +489,12 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void endOfStageButtonClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hackButtonCliked() {
 		// TODO Auto-generated method stub
 		
 	}
