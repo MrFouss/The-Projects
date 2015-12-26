@@ -1,13 +1,11 @@
 package the_projects.model;
 
-import sun.awt.image.ImageWatched;
 import the_projects.model.card.CardDeck;
 import the_projects.model.card.PlayerCard;
 import the_projects.model.card.ProjectCard;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -30,22 +28,22 @@ public class Model {
     /**
      * The project deck.
      */
-    private CardDeck projectDeck;
+    private CardDeck<ProjectCard> projectDeck;
 
     /**
      * The discard pile of the project deck.
      */
-    private CardDeck projectDiscard;
+    private CardDeck<ProjectCard> projectDiscard;
 
     /**
      * The player deck.
      */
-    private CardDeck playerDeck;
+    private CardDeck<PlayerCard> playerDeck;
 
     /**
      * The discard pile of the player deck.
      */
-    private CardDeck playerDiscard;
+    private CardDeck<PlayerCard> playerDiscard;
 
     /**
      * An iterator on the current player.
@@ -71,11 +69,12 @@ public class Model {
     /**
      * Constructor with the list of the players' names and of the courses' names.
      *
-     * @param players The names of the players.
-     * @param roles The roles of the players.
-     * @param courses The names of the courses.
+     * @param players the names of the players.
+     * @param roles the roles of the players.
+     * @param courses the names of the courses.
+     * @param difficulty the level of difficulty.
      */
-    public Model(LinkedList<String> players, LinkedList<Role> roles, LinkedList<String> courses) {
+    public Model(LinkedList<String> players, LinkedList<Role> roles, LinkedList<String> courses, int difficulty) {
         // TODO implement here
     }
 
@@ -106,7 +105,6 @@ public class Model {
         } else {
             this.currentPlayer.next();
         }
-
     }
 
     /**
@@ -226,25 +224,36 @@ public class Model {
     // TODO update the class diagram (-setLabRoomAmount)
 
     /**
+     * Gets the list of rooms reachable by a player, considering its remaining actions.
      *
+     * @param playerRole the role of the moving player.
+     * @param remainingMoves the amount of actions remaining.
+     * @return the hash map containing each room reachable linked to the amount of actions needed to go to the room.
      */
-    // TODO javadoc
     // TODO add to the class diagram
-    public HashMap<String, Integer> reachableRooms (String roomName, int remainingMoves) {
+    public HashMap<String, Integer> reachableRooms(Role playerRole, int remainingMoves) {
         LinkedList<Room> stack = new LinkedList<>();
         HashMap<String, Integer> map = new HashMap<>();
-        String sourceName = null;
 
-        Room source = null;
-        for(Room room: this.getRooms()) {
-            if(room.getName().equals(roomName)) {
-                sourceName = room.getName();
-                source = room;
+        String sourceName;
+
+        for(PhDStudent student : this.getPlayers()) {
+            if(student.getRole().equals(playerRole)) {
+                sourceName = student.getPosition().getName();
+
+                map.put(sourceName, 0);
+                stack.push(student.getPosition());
+
+                if(this.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
+                    for(PhDStudent otherStudent : this.getPlayers()) {
+                        if(!otherStudent.equals(student)) {
+                            map.put(otherStudent.getPosition().getName(), 1);
+                            stack.push(otherStudent.getPosition());
+                        }
+                    }
+                }
             }
         }
-
-        map.put(sourceName, 0);
-        stack.push(source);
 
         while(!stack.isEmpty()) {
             Room tmp = stack.pop();
@@ -265,6 +274,28 @@ public class Model {
         }
 
         return map;
+    }
+
+    // TODO javadoc
+    public LinkedList<String> shortestPath(String start, String end) {
+        return null;
+    }
+
+    /**
+     * Adds a new lab room to the game.
+     *
+     * @param newRoom the name of the new lab room.
+     */
+    public void addLabRoom(String newRoom) {
+        for(Room room : this.roomTab) {
+            if(room.getName().equals(newRoom)) {
+                for(Room labRoom : this.getLabRooms()) {
+                    room.getNeighbours().add(labRoom);
+                    labRoom.getNeighbours().add(room);
+                }
+                room.toggleLabRoom();
+            }
+        }
     }
 
 }
