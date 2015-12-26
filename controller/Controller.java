@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sun.swing.internal.plaf.synth.resources.synth;
 
+import sun.awt.DisplayChangedListener;
 import the_projects.model.Course;
 import the_projects.model.Model;
 import the_projects.model.PhDStudent;
@@ -44,7 +45,6 @@ public class Controller extends Thread implements ViewListener {
 			synchronized (this) {
 				// init
 
-				phase = GamePhase.SETTING;
 				status = GameStatus.VALID;
 				model = null;
 				view = new View();
@@ -54,70 +54,110 @@ public class Controller extends Thread implements ViewListener {
 				selectedPlayer = null;
 				reachablePlaces = null;
 
+				phase = GamePhase.SETTING;
 				// setting phase
 
 				view.displaySetting();
-				while (phase == GamePhase.SETTING) {
-					//update doable actions
-					this.wait(); // waiting for the user to enter and validate
-									// his settings
-				}
-
+				this.wait(); // waiting for the user to enter and validate his settings
+				view.hideSetting();
+				
 				// game loop
 
 				view.displayGameBoard(model);
 
 				while (status == GameStatus.VALID) {
 
+					phase = GamePhase.ACTION;
 					// action phase
 
+					/*
 					actionPoints = 4;
-					while (phase == GamePhase.ACTION && status == GameStatus.VALID) {
+						//view.clean();
+						//update doable actions
 						this.wait(); // wait for an action to be chosen and executed
 					}
 					actionPoints = 0;
-
+					//clean
+					*/
+					
 					if (status == GameStatus.VALID) {
 
+						phase = GamePhase.CARD_DRAWING;
 						// card phase
 
-						// display card phase
-
-						if (actionPoints == 0) { // nb cartes deck joueur < 2
+						if (model.getPlayerDeck().getSize() < 2) {
 							status = GameStatus.CARD_LACK;
-						} else {
-							PlayerCard card1, card2;
-							card1 = (PlayerCard) model.getPlayerDeck()
-									.drawFirst();
-							card2 = (PlayerCard) model.getPlayerDeck()
-									.drawFirst();
-							// view.displayCards(card1, card2)
-							resolvePlayerCard(card1);
-							if (status == GameStatus.VALID) {
-								resolvePlayerCard(card2);
+						} else {							
+							for (int i = 0; i < 2; i++) {
+								PlayerCard card = model.getPlayerDeck().drawFirst();
+								
+								if (card.getClass() == RoomCard.class) {
+									view.displayDrawPlayerCards((RoomCard)card.getRoom().getName());
+									model.getCurrentPlayer().getCards().addCard(card);
+								} else if (card.getClass() == EventCard.class) {
+									view.displayDrawPlayerCards((RoomCard)card.getEvent());
+									model.getCurrentPlayer().getCards().addCard(card);
+								} else {
+									// résoudre épidémie
+
+									// exams
+
+									model.increaseEmergencyGauge();
+
+									// stress
+
+									ProjectCard pCard = (ProjectCard) model.getProjectDeck().drawLast();
+									Course course = pCard.getRoom().getCourse();
+									if (!course.isCompleted()) {
+										if (pCard.getRoom().getProject(course).getProjectAmount() > 0) {
+											pCard.getRoom().getProject(course).setProjectAmount(3);
+											burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
+										} else {
+											pCard.getRoom().getProject(course).setProjectAmount(3);
+										}
+									}
+									model.getProjectDiscard().addCard(pCard);
+
+									// intensification
+
+									model.getProjectDiscard().shuffle();
+									model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
+								}
+							}
+							
+							//discard
+							
+							if (model.getCurrentPlayer().getCards().getSize() > 7) {
+								phase = GamePhase.DISCARD;
+								LinkedList<String> roomCards = new LinkedList<>();
+								LinkedList<Event> eventCards = new LinkedList<>();
+								
+								for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
+									if (card.getClass() == RoomCard.class) {
+										roomCards.add(card.getRoom().getName());
+									} else {
+										eventCards.add(card.getEvent());
+									}
+								}
+								
+								view.displayInfoMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
+								view.displayEventCards(eventCards);
+								view.displayRoomCards(roomCards);
 							}
 
+							phase = GamePhase.PROPAGATION;
 							// infection phase
 
 							if (status == GameStatus.VALID) {
-								for (int i = 0; i < model.getEmergencyValue()
-										&& status == GameStatus.VALID; i++) {
-									ProjectCard card = (ProjectCard) model
-											.getProjectDeck().drawFirst();
+								for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
+									ProjectCard card = model.getProjectDeck().drawFirst();
+									view.displayDrawProjectCards(card.getRoom().getName());
 
-									if (card.getRoom()
-											.getProject(
-													card.getRoom().getCourse())
-											.getProjectAmount() < 3) {
-										card.getRoom()
-												.getProject(
-														card.getRoom()
-																.getCourse())
-												.setProjectAmount(3);
+									int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
+									if (projAmount < 3) {
+										card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(projAmount + 1);
 									} else {
-										burnOut(new LinkedList<Room>(),
-												card.getRoom(), card.getRoom()
-														.getCourse());
+										burnOut(new LinkedList<Room>(),card.getRoom(), card.getRoom().getCourse());
 									}
 
 									model.getProjectDiscard().addCard(card);
@@ -220,7 +260,7 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 	
-	private void resolvePlayerCard(PlayerCard card) {
+	private void resolvePartyCard(PlayerCard card) {
 		if (PartyCard.class == card.getClass()) {
 			// résoudre épidémie
 
@@ -286,6 +326,34 @@ public class Controller extends Thread implements ViewListener {
 	
 	
 	
+	@Override
+	synchronized public void settingValidationButtonClicked() {
+		LinkedList<String> players = view.getPlayerNames();
+		LinkedList<String> uvs = view.getUVNames();
+		int diff = view.getDifficulty();
+		LinkedList<Role> roles = view.getRoles();
+		LinkedList<Role> testedRoles = new LinkedList<Role>();
+		
+		Boolean validSetting = true;
+
+		for (Role role : roles) {
+			if (testedRoles.contains(role)) {
+				validSetting = false;
+				break;
+			} else {
+				testedRoles.add(role);
+			}
+		}
+
+		if (validSetting == true) {
+			model = new Model(players, testedRoles, uvs, diff);
+			this.notify();
+		} else {
+			view.displayInfoMessage("Invalid settings");
+		}
+	}
+	
+	
 	
 	@Override
 	public void giveUpButtonClicked() {
@@ -311,23 +379,6 @@ public class Controller extends Thread implements ViewListener {
 	synchronized public void pawnClicked(Role player) {
 		selectedReachableRooms = model.reachableRooms(player, actionPoints);
 		view.displayReachableRooms(selectedReachableRooms);
-	}
-
-	@Override
-	synchronized public void settingValidationButtonClicked() {
-		if (phase == GamePhase.SETTING) {
-			// check values and if they are OK : playerNames, UVsNames,
-			// difficulty, playerRoles
-			// model = new Model(//récupérer les données)
-			// view.getPlayerNames()
-			// view.getUVNames()
-			// view.getDifficulty()
-			// view.getRoles()
-			phase = GamePhase.ACTION;
-			this.notify();
-			// otherwise
-			// view.displayInvalidSetting();
-		}
 	}
 
 	@Override
@@ -516,6 +567,18 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void NoButtonClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void shareKnowledgeButtonClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endOfStageButtonClicked() {
 		// TODO Auto-generated method stub
 		
 	}
