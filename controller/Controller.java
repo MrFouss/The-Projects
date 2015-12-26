@@ -39,7 +39,7 @@ public class Controller extends Thread implements ViewListener {
 	HashMap<String, Integer> selectedReachableRooms;
 	PhDStudent selectedPlayer;
 
-	public void run() {
+	public void run(View view //The launcher create the view as View is a Stage) {
 		try {
 			synchronized (this) {
 				// init
@@ -47,7 +47,7 @@ public class Controller extends Thread implements ViewListener {
 				phase = GamePhase.SETTING;
 				status = GameStatus.VALID;
 				model = null;
-				view = new View();
+				this.view = view;
 				view.addListener(this);
 				actionPoints = 0;
 				action = ActionType.NONE;
@@ -369,7 +369,12 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void shareKnowledgeButtonCLicked() {
+	public void moveButtonClicked() {
+
+	}
+
+	@Override
+	public void shareKnowledgeButtonClicked() {
 		if (action != ActionType.NONE) {
 			// view.clean();
 			action = ActionType.NONE;
@@ -389,13 +394,18 @@ public class Controller extends Thread implements ViewListener {
 				//view.displayCards(model.getCurrentPlayer().getCards().getCardList());
 				action = ActionType.CARD_USE;
 			} else {
-				view.displayMessage("No cards in your hands")
+				view.displayMessage("No cards in your hands");
 			}
 		} else {
 			view.displayMessage("No cards in your hands");
 		}
 	}
-	
+
+	@Override
+	public void masterButtonClicked() {
+
+	}
+
 	@Override
 	public void buildTPButtonClicked() {
 		if (action != ActionType.NONE) {
@@ -405,7 +415,7 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void hackButtonCliked() {
+	public void hackButtonClicked() {
 		if (phase == GamePhase.ACTION) {
 			if (action != ActionType.NONE) {
 				// view.clean();
@@ -494,11 +504,15 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void NoButtonCLicked() {
+	public void NoButtonClicked() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void endOfStageButtonClicked() {
+
+	}
 
 
 	@Override
@@ -514,10 +528,5 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 
-	@Override
-	public void NoButtonClicked() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

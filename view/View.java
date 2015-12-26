@@ -1,7 +1,6 @@
 package the_projects.view;
 
 
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
 import the_projects.controller.ErrorEvent;
@@ -18,27 +17,16 @@ import java.util.HashSet;
 /**
  *  TODO complete
  */
-public class View extends Application {
+public class View extends Stage {
     private Model model;
     private MainMenu mainMenu;
     private Board board;
-    private Stage stage;
     private final HashSet<ViewListener> listeners = new HashSet<>();
 
     public View() {
         mainMenu = new MainMenu(new Group());
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        stage = primaryStage;
-        stage.setMinHeight(450);
-        stage.setMinWidth(800);
-        stage.setMaximized(true);
-        stage.show();
-        //TODO remove next line
-        setBoard("AG44", "MI41", "SI20", "LO43", new Player("TOTO", Role.TRELLO_ADEPT), new Player("TATA", Role.DAOUID), new Player("TUTU", Role.GROUP_LEADER), new Player("TITI", Role.HACKER));
-    }
 
     /**
      * Method to generate a new board
@@ -62,9 +50,9 @@ public class View extends Application {
      * @param UV4     the name of the fourth UV
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
-    private void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
+    public void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
         board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players);
-        stage.setScene(board);
+        setScene(board);
     }
 
     /**
@@ -79,7 +67,7 @@ public class View extends Application {
      * Method to display a new settings menu
      */
     public void displaySetting() {
-        stage.setScene(mainMenu);
+        setScene(mainMenu);
     }
 
     public void displayInvalidSetting(ErrorEvent errorEvent) {
@@ -322,11 +310,11 @@ public class View extends Application {
     }
 
     public void firePawnCLicked(Role role) {//TODO use
-        listeners.forEach(event->event.pawnCLicked(role));
+        listeners.forEach(event->event.pawnClicked(role));
     }
 
     public void fireSettingValidationButtonCLicked() {//TODO use
-        listeners.forEach(ViewListener::settingValidationButtonCLicked);
+        listeners.forEach(ViewListener::settingValidationButtonClicked);
     }
 
     public void fireMoveButtonClicked() {
@@ -342,7 +330,7 @@ public class View extends Application {
     }
 
     public void fireShareKnowledgeButtonCLicked() {
-        listeners.forEach(ViewListener::shareKnowledgeButtonCLicked);
+        listeners.forEach(ViewListener::shareKnowledgeButtonClicked);
         //TODO erase these test lines
         displayToMastered(0);
         displayToMastered(1);
@@ -354,16 +342,16 @@ public class View extends Application {
         displayToEradicated(0);
     }
 
-    public void fireMasterButtonCliked() {
-        listeners.forEach(ViewListener::masterButtonCliked);
+    public void fireMasterButtonClicked() {
+        listeners.forEach(ViewListener::masterButtonClicked);
     }
 
     public void fireBuildTPButtonClicked() {
         listeners.forEach(ViewListener::buildTPButtonClicked);
     }
 
-    public void fireHackButtonCliked() {
-        listeners.forEach(ViewListener::hackButtonCliked);
+    public void fireHackButtonClicked() {
+        listeners.forEach(ViewListener::hackButtonClicked);
     }
 
     public void fireEndOfStageButtonClicked() {
