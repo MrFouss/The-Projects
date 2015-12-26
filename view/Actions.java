@@ -77,7 +77,7 @@ public class Actions extends BorderPane {
         tooltip = new Tooltip("Vous pouvez utlisez 5 (ou 4 si vous ètes Daouid) carte de salle d'une UV pour la masteriser" +
                 "\nCependant vous devez être dans une salle de TP");
         master.setTooltip(tooltip);
-        master.setOnMouseClicked(event -> view.fireMasterButtonCliked());
+        master.setOnMouseClicked(event -> view.fireMasterButtonClicked());
         buttons.getChildren().add(master);
 
         labRoom = new MyButton("Construire une salle de TP");
@@ -91,7 +91,7 @@ public class Actions extends BorderPane {
         tooltip = new Tooltip("Si vous êtes le Hacker, vous pouvez retirer une carte d'èvenement de la défausse pour la mettre en réserve." +
                 "\nVous pourrez ensuite la consulter et l'utiliser quand vous voulez gratuitement puis la retirer du jeu.");
         hacker.setTooltip(tooltip);
-        hacker.setOnMouseClicked(event -> view.fireHackButtonCliked());
+        hacker.setOnMouseClicked(event -> view.fireHackButtonClicked());
         buttons.getChildren().add(hacker);
 
         endButton = new MyButton("Fin de phase");
