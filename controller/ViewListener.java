@@ -13,11 +13,13 @@ public interface ViewListener {
 	
 	public void settingValidationButtonClicked();
 	public void removeProjectButtonClicked();
-	public void shareKnowledgeButtonCLicked();
+	public void shareKnowledgeButtonClicked();
 	public void useCardButtonClicked();
 	public void buildTPButtonClicked();
 	public void hackButtonCliked();
 	public void giveUpButtonClicked();	
 	public void YesButtonClicked();
 	public void NoButtonClicked();
+	
+	void endOfStageButtonClicked();
 }

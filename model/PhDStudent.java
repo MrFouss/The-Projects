@@ -22,7 +22,7 @@ public class PhDStudent {
     /**
      * The hand of cards.
      */
-    private CardDeck cardHand;
+    private CardDeck<PlayerCard> cardHand;
 
     /**
      * The position where the student is.
@@ -43,7 +43,7 @@ public class PhDStudent {
     public PhDStudent(String name, Role role) {
         this.name = name;
         this.role = role;
-        this.cardHand = new CardDeck<PlayerCard>();
+        this.cardHand = new CardDeck<>();
         this.position = null;
         this.extraEventCard = null;
     }

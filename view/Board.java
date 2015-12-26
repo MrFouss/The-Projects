@@ -40,11 +40,13 @@ public class Board extends Scene {
     private StackPane playerDiscard;
     private StackPane projectDiscard;
     private PropagationGauge propagationGauge;
+    private OutbreaksGauge outbreaksGauge;
+    private MasteredCoursesDisplay masteredCoursesDisplay;
 
     /**
      * TODO doc when finished
      */
-    public Board(Group root, String UV1, String UV2, String UV3, String UV4, Player... players) {
+    public Board(Group root, View view, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
 
         //creating the group and pane organizing the scene
@@ -112,7 +114,7 @@ public class Board extends Scene {
         decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
         decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
         decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
-        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 11/100., 75/100.);
+        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.);
 
         projectDiscard = decks[1];
         playerDiscard = decks[3];
@@ -134,12 +136,19 @@ public class Board extends Scene {
             movePawn(pawn.getPlayer().getRole(), "B402");
         }
 
-        Actions actions = new Actions(this,pane, players);
+        Actions actions = new Actions(this, view,pane, players);
         pane.getChildren().add(actions);
 
 
         propagationGauge = new PropagationGauge(this, 68.5/100., 18.5/100.);
         pane.getChildren().add(propagationGauge);
+
+        outbreaksGauge = new OutbreaksGauge(this, 89/100., 1/100.);
+        pane.getChildren().add(outbreaksGauge);
+
+        masteredCoursesDisplay = new MasteredCoursesDisplay(this, batiments, 1/100., 60/100.);
+        pane.getChildren().add(masteredCoursesDisplay);
+
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -505,14 +514,30 @@ public class Board extends Scene {
      * Method to increase the propagation gauge
      */
     public void increasePropagationGauge() {
-        //TODO implement
+        propagationGauge.increase();
     }
 
     /**
      * Method to increase the burn-out gauge
      */
     public void increaseBurnOutGauge() {
-        //TODO implement
+        outbreaksGauge.increase();
+    }
+
+    /**
+     * Method to make a course mastered
+     * @param projectIndex the index of the course
+     */
+    public void toMastered(int projectIndex) {
+        masteredCoursesDisplay.toMastered(projectIndex);
+    }
+
+    /**
+     * Method to make a course eradicated
+     * @param projectIndex the index of the course
+     */
+    public void toEradicated(int projectIndex) {
+        masteredCoursesDisplay.toEradicated(projectIndex);
     }
 
     /**
