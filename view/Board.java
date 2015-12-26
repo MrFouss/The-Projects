@@ -42,6 +42,7 @@ public class Board extends Scene {
     private PropagationGauge propagationGauge;
     private OutbreaksGauge outbreaksGauge;
     private MasteredCoursesDisplay masteredCoursesDisplay;
+    private MyButton giveUp;
 
     /**
      * TODO doc when finished
@@ -149,6 +150,12 @@ public class Board extends Scene {
         masteredCoursesDisplay = new MasteredCoursesDisplay(this, batiments, 1/100., 60/100.);
         pane.getChildren().add(masteredCoursesDisplay);
 
+        giveUp = new MyButton("Abandonner ?");
+        giveUp.setLayoutX(600);
+        giveUp.setLayoutY(300);
+        giveUp.setOnMouseClicked(event -> fireGiveUpButtonClicked());
+        pane.getChildren().add(giveUp);
+
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -227,6 +234,10 @@ public class Board extends Scene {
 
         movePawn(Role.DAOUID,"B404", "B402", "A204", "H210", "H211", "H212", "P108", "P110", "P106", "P102", "P100", "P101", "P104", "P109", "P111", "B411", "B409", "B405", "B406", "B402");
 
+    }
+
+    private void fireGiveUpButtonClicked() {
+        //TODO implement
     }
 
     /**
