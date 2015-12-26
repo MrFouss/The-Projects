@@ -1,6 +1,7 @@
 package the_projects.view;
 
 
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * The nodes of the games, the rooms where the Projects are done
  */
-public class Room extends StackPane {
+public class Room extends StackPane implements Clickable {
     private Color color;
     private String UV;
     private String name;
@@ -30,6 +31,7 @@ public class Room extends StackPane {
     private int nbProjectCubes;
     private Pawn[] pawns;
     private ArrayList<Corridor> corridors;
+    private ChangeListener hoverListener;
 
     /**
      * The constructor of the Rooms
@@ -67,8 +69,6 @@ public class Room extends StackPane {
         for(Integer i = 0; i < 4; ++i) {
             pawns[i] = null;
         }
-
-        Board.setHoverStrokeChange(circle, color);
 
         corridors = new ArrayList<>();
     }
@@ -187,7 +187,6 @@ public class Room extends StackPane {
         Rectangle rectangle = new Rectangle(circle.getRadius()*2, circle.getRadius()*2, color.brighter());
         getChildren().add(rectangle);
         rectangle.toBack();
-        Board.setHoverStrokeChange(rectangle, color);
         getChildren().remove(circle);
 
         roomShape = rectangle;
@@ -243,4 +242,15 @@ public class Room extends StackPane {
     }
 
 
+    @Override
+    public void setClickable(boolean clickable, View view) {
+        if (clickable) {
+            hoverListener = Board.setHoverStrokeChange(roomShape, color);
+            roomShape.setOnMouseClicked(event -> view.fireRoomClicked(name));
+        }else {
+            roomShape.hoverProperty().removeListener(hoverListener);
+            roomShape.setStrokeWidth(0);
+            roomShape.setOnMouseClicked(null);
+        }
+    }
 }

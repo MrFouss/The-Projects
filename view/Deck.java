@@ -47,6 +47,7 @@ public class Deck extends StackPane {
 
         getChildren().add(label);
 
+        //TODO erase
         Board.setHoverStrokeChange(rectangle, color);
     }
 

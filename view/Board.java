@@ -3,6 +3,8 @@ package the_projects.view;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -32,6 +34,7 @@ import java.util.*;
  */
 public class Board extends Scene {
 
+    private View view;
     private Building[] batiments;
     private HashMap<String, Room> rooms;
     private Pane pane;
@@ -49,6 +52,8 @@ public class Board extends Scene {
      */
     public Board(Group root, View view, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
+
+        this.view = view;
 
         //creating the group and pane organizing the scene
         pane = new Pane();
@@ -221,7 +226,8 @@ public class Board extends Scene {
 
 
         decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
-        decks[0].setOnMouseClicked(e -> drawProjectCards(new RoomCard(pane, rooms.get("H010")),
+        decks[0].setOnMouseClicked(e -> drawProjectCards(
+                new RoomCard(pane, rooms.get("H010")),
                 new RoomCard(pane, rooms.get("A200")),
                 new RoomCard(pane, rooms.get("B402")),
                 new RoomCard(pane, rooms.get("A200")),
@@ -229,9 +235,13 @@ public class Board extends Scene {
                 new RoomCard(pane, rooms.get("A200")),
                 new RoomCard(pane, rooms.get("B402")),
                 new RoomCard(pane, rooms.get("A200")),
-                new RoomCard(pane, rooms.get("P101"))));
+                new RoomCard(pane, rooms.get("P101"))
+        ));
 
+        pawns.get(0).setClickable(true, view);
 
+        rooms.get("A200").setClickable(true, view);
+        rooms.get("A201").setClickable(true, view);
         movePawn(Role.DAOUID,"B404", "B402", "A204", "H210", "H211", "H212", "P108", "P110", "P106", "P102", "P100", "P101", "P104", "P109", "P111", "B411", "B409", "B405", "B406", "B402");
 
     }
@@ -245,16 +255,18 @@ public class Board extends Scene {
      * @param shape the shape to which we want to apply the method
      * @param color the color of the shape
      */
-    public static void setHoverStrokeChange(Shape shape, Color color) {
+    public static ChangeListener setHoverStrokeChange(Shape shape, Color color) {
         shape.setStrokeWidth(3);
-        shape.setStroke(color.deriveColor(0,1,.5,1));
-        shape.hoverProperty().addListener((e) -> {
-            if(shape.isHover()) {
-                shape.setStroke(color.deriveColor(100,1,1.2,1));
-            }else{
-                shape.setStroke(color.deriveColor(0,1,.5,1));
+        shape.setStroke(color.deriveColor(0, 1, .5, 1));
+        ChangeListener changeListener = (observable, oldValue, newValue) -> {
+            if (shape.isHover()) {
+                shape.setStroke(color.deriveColor(100, 1, 1.2, 1));
+            } else {
+                shape.setStroke(color.deriveColor(0, 1, .5, 1));
             }
-        });
+        };
+        shape.hoverProperty().addListener(changeListener);
+        return changeListener;
     }
 
     /**
@@ -412,6 +424,7 @@ public class Board extends Scene {
         scaleTransition.play();
 
         card.setOnMouseClicked(null);
+        card.setClickable(false, view);
 
         return new PathTransition(Duration.seconds(.5),path,card);
     }
@@ -452,7 +465,10 @@ public class Board extends Scene {
                 rotateTransition.setOnFinished(e1 -> card.setOnMouseClicked(e -> discardProjectCard(card)));
                 rotateTransition.play();
             }
+
+            card.setClickable(true, view);
         }
+
     }
 
     /**

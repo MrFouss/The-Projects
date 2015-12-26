@@ -1,6 +1,8 @@
 package the_projects.view;
 
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -13,11 +15,17 @@ import javafx.scene.text.Font;
 /**
  * TODO make fancier
  */
-public class Card extends StackPane {
+public class Card extends StackPane implements Clickable {
+    private Rectangle rectangle;
+    private Color color;
+    private String title;
+    private ChangeListener hoverListener;
 
     public Card(Pane pane, String title, String text, Color color) {
+        this.color = color;
+        this.title = title;
 
-        Rectangle rectangle = new Rectangle();
+        rectangle = new Rectangle();
         rectangle.setFill(color);
 
         rectangle.setWidth(pane.getWidth() * 9 / 100.);
@@ -41,7 +49,17 @@ public class Card extends StackPane {
         label.setMouseTransparent(true);
         getChildren().add(label);
 
-        Board.setHoverStrokeChange(rectangle, color);
     }
 
+    @Override
+    public void setClickable(boolean clickable, View view) {
+        if (clickable) {
+            hoverListener = Board.setHoverStrokeChange(rectangle, color);
+            rectangle.setOnMouseClicked(event -> view.fireCardClicked(title));
+        }else {
+            rectangle.hoverProperty().removeListener(hoverListener);
+            rectangle.setStrokeWidth(0);
+            rectangle.setOnMouseClicked(null);
+        }
+    }
 }

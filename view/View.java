@@ -363,6 +363,10 @@ public class View extends Stage {
         listeners.forEach(ViewListener::endOfStageButtonClicked);
     }
 
+    public void fireCardClicked(String title) {
+        //TODO implement
+    }
+
     public void displayInfoMessage(String s) {
         //TODO implement
     }
@@ -397,5 +401,9 @@ public class View extends Stage {
 
     public void displayMessage(String s) {
         //TODO implement
+    }
+
+    public void fireRoomClicked(String name) {
+        listeners.forEach(listener -> listener.placeClicked(name));
     }
 }
