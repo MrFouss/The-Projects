@@ -1,5 +1,5 @@
 package the_projects.controller;
 
 public enum GameStatus {
-	VALID, BURN_OUT, PROJECT_LACK, CARD_LACK, WIN;
+	VALID, BURN_OUT, PROJECT_LACK, CARD_LACK, WIN, GIVE_UP;
 }
