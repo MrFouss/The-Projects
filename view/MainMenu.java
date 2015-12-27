@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -21,14 +22,14 @@ import java.util.LinkedList;
 public class MainMenu extends Scene {
 
 
-    private int difficulty;
+    private ScrollBar difficulty;
     private TextField[] courses;
     private TextField[] playersFields;
     private ChoiceBox<String>[] rolesBoxes;
 
     public MainMenu(Group root, View view) {
         super(root);
-        difficulty = 0;
+
 
         GridPane gridPane = new GridPane();
         root.getChildren().add(gridPane);
@@ -112,13 +113,25 @@ public class MainMenu extends Scene {
         checkBox1.setSelected(true);
         gridPane.add(checkBox1,0,3);
 
+        gridPane.add(new Text("Difficulté :"), 0, 5);
+        difficulty = new ScrollBar();
+        difficulty.setMax(0);
+        difficulty.setMax(2);
+        difficulty.setValue(0);
+        gridPane.add(difficulty,1,5);
+        Text difficultyText = new Text("1");
+        difficulty.valueProperty().addListener(observable -> difficultyText.setText(Integer.toString((int)difficulty.getValue() + 1)));
+        gridPane.add(difficultyText,2,5);
+
+
+
         MyButton confirmButton = new MyButton("Confirmer");
         confirmButton.setOnMouseClicked(event -> view.fireSettingValidationButtonCLicked());
         gridPane.add(confirmButton, 3, 9);
     }
 
     public int getDifficulty() {
-        return difficulty;
+        return (int)difficulty.getValue();
     }
 
     public LinkedList<Role> getRoles() {
