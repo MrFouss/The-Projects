@@ -46,6 +46,7 @@ public class Board extends Scene {
     private OutbreaksGauge outbreaksGauge;
     private MasteredCoursesDisplay masteredCoursesDisplay;
     private MyButton giveUp;
+    private ArrayList<Card> displayedCards;
 
     /**
      * TODO doc when finished
@@ -158,6 +159,7 @@ public class Board extends Scene {
         giveUp.setOnMouseClicked(event -> view.fireGiveUpButtonClicked());
         pane.getChildren().add(giveUp);
 
+        displayedCards = new ArrayList<>();
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -351,7 +353,7 @@ public class Board extends Scene {
      * @param deck the deck from where the cards come
      * @param cards the cards to move
      */
-    public void moveFromDeck(Deck deck, Card... cards) {
+    public void moveFromDeck(boolean clickable, Deck deck, Card... cards) {
         double i = (6 - cards.length)/2., j = 1;
         if (cards.length > 6) {
             i = (6 - cards.length/2)/2.;
@@ -379,13 +381,12 @@ public class Board extends Scene {
                 card.setRotate(-90);
                 RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
                 rotateTransition.setByAngle(90);
-                rotateTransition.setOnFinished(e1 -> card.setOnMouseClicked(e -> discardProjectCard(card)));
                 rotateTransition.play();
             }
 
-            card.setClickable(true, view);
+            displayedCards.add(card);
         }
-
+        putInFront(clickable, (Card[])displayedCards.toArray());
     }
 
     /**
@@ -406,7 +407,7 @@ public class Board extends Scene {
             discardPlayerCard(card2);
             pane.getChildren().remove(rectangle);
         });
-        moveFromDeck(decks[2], card1, card2);
+        moveFromDeck(false, decks[2], card1, card2);
     }
 
     /**
@@ -429,7 +430,7 @@ public class Board extends Scene {
      */
     public void drawProjectCards(Card... cards) {
         pane.getChildren().addAll(cards);
-        moveFromDeck(decks[0], cards);
+        moveFromDeck(false, decks[0], cards);
     }
 
     /**

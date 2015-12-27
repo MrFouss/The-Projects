@@ -2,6 +2,7 @@ package the_projects.view;
 
 
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
@@ -362,8 +363,14 @@ public class View extends Stage {
     }
 
     public void displayInfoMessage(String s) {
-        //TODO implement
+        Alert popup = new Alert(Alert.AlertType.INFORMATION);
+        popup.setTitle("Fenêtre d'information");
+        popup.setHeaderText(null);
+        popup.setContentText(s);
+
+        popup.showAndWait();
     }
+
 
     public LinkedList<String> getPlayerNames() {
         return mainMenu.getPlayerNames();
