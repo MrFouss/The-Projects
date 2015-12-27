@@ -25,7 +25,14 @@ public class View extends Stage {
     private final HashSet<ViewListener> listeners = new HashSet<>();
 
     public View() {
+        setMinHeight(450);
+        setMinWidth(800);
+        setMaximized(true);
+    }
+
+    public void displaySettings() {
         mainMenu = new MainMenu(new Group());
+        setScene(mainMenu);
     }
 
 

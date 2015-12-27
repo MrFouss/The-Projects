@@ -59,7 +59,6 @@ public class Board extends Scene {
         //creating the group and pane organizing the scene
         pane = new Pane();
         root.getChildren().add(pane);
-       // pane.getChildren().add(new Rectangle(getWidth(),getHeight(),0,0));
 
         //setting the background
         Color background = Color.SLATEBLUE;
