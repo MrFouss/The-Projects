@@ -89,23 +89,35 @@ public enum Role {
      * @return the associated role
      */
     public static Role nameToRole(String name) {
-        switch (name) {
-            case "Adepte de Trello":
-                return Role.TRELLO_ADEPT;
-            case "Leader":
-                return Role.GROUP_LEADER;
-            case "Mentor":
-                return Role.MENTOR;
-            case "Installer":
-                return Role.INSTALLER;
-            case "Addict au Café":
-                return Role.COFFEE_MAKER;
-            case "Daouid":
-                return Role.DAOUID;
-            case "Hacker":
-                return Role.HACKER;
+        for (Role role : Role.values()) {
+            if (role.roleToName().equals(name))
+                return role;
+        }
+        return null;
+    }
+
+    /**
+     * Method to associate a role to its name
+     * @return the associated name
+     */
+    public String roleToName() {
+        switch (this) {
+            case TRELLO_ADEPT:
+                return "Adepte de Trello";
+            case GROUP_LEADER:
+                return "Leader";
+            case MENTOR:
+                return "Mentor";
+            case INSTALLER:
+                return "Installer";
+            case COFFEE_MAKER:
+                return "Addict au Café";
+            case DAOUID:
+                return "Daouid";
+            case HACKER:
+                return "Hacker";
             default:
-                return null;
+                return "";
         }
     }
 }

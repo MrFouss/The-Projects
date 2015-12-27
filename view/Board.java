@@ -669,4 +669,8 @@ public class Board extends Scene {
             }
         });
     }
+
+    public void displayCardsOfPlayer(Role role) {
+        //TODO implement
+    }
 }

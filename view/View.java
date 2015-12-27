@@ -3,6 +3,7 @@ package the_projects.view;
 
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
@@ -15,6 +16,7 @@ import the_projects.model.card.Event;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 
 /**
  *  TODO complete
@@ -26,6 +28,7 @@ public class View extends Stage {
     private final HashSet<ViewListener> listeners = new HashSet<>();
 
     public View() {
+        setTitle("The Projects");
         setMinHeight(450);
         setMinWidth(800);
         mainMenu = new MainMenu(new Group(), this);
@@ -75,9 +78,6 @@ public class View extends Stage {
         setScene(mainMenu);
     }
 
-    public void displayInvalidSetting(ErrorEvent errorEvent) {
-        //TODO implement
-    }
 
     /**
      * Method to display the reachable rooms
@@ -310,12 +310,12 @@ public class View extends Stage {
     }
 
     public void displayCardsOfPlayer(Role role) {
-        //TODO implement
+        board.displayCardsOfPlayer(role);
     }
 
 
-    public void firePlaceClicked(String name) {//TODO use
-        listeners.forEach(event->event.placeClicked(name));
+    public void fireRoomClicked(String name) {
+        listeners.forEach(listener -> listener.placeClicked(name));
     }
 
     public void firePawnCLicked(Role role) {//TODO use
@@ -355,16 +355,23 @@ public class View extends Stage {
     }
 
     public void fireCardClicked(String title) {
-        //TODO implement
+    }
+
+    public void fireRoomCardClicked(String roomName) {
+        listeners.forEach(event -> event.roomCardClicked(roomName));
+    }
+
+    public void fireEventCardClicked(Event event) {
+        listeners.forEach(e -> e.eventCardClicked(event));
     }
 
     protected void fireGiveUpButtonClicked() {
-        //TODO implement
+        listeners.forEach(ViewListener::giveUpButtonClicked);
     }
 
     public void displayInfoMessage(String s) {
         Alert popup = new Alert(Alert.AlertType.INFORMATION);
-        popup.setTitle("Fenêtre d'information");
+        popup.setTitle("The-Projects");
         popup.setHeaderText(null);
         popup.setContentText(s);
 
@@ -396,15 +403,28 @@ public class View extends Stage {
         //TODO implement
     }
 
-    public void displayMessage(String s) {
-        //TODO implement
+    public void displayValidationMessage(String s) {
+        Alert message = new Alert(Alert.AlertType.CONFIRMATION);
+        message.setTitle("The-Projects");
+        message.setContentText(s);
+        Optional<ButtonType> choice = message.showAndWait();
+        if (choice.get() == ButtonType.OK) {
+            listeners.forEach(ViewListener::YesButtonClicked);
+        }else {
+            listeners.forEach(ViewListener::NoButtonClicked);
+        }
     }
 
-    public void fireRoomClicked(String name) {
-        listeners.forEach(listener -> listener.placeClicked(name));
+    public void displayMessage(String s) {
+        Alert message = new Alert(Alert.AlertType.NONE);
+        message.setTitle("The-Projects");
+        message.setContentText(s);
+        message.show();
     }
 
     public void fireSettingValidationButtonClicked() {
         listeners.forEach(ViewListener::settingValidationButtonClicked);
     }
+
+
 }

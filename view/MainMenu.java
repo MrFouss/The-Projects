@@ -45,14 +45,10 @@ public class MainMenu extends Scene {
         }
 
         //Roles
-        String[] roleNames = new String[7];
-        roleNames[0] = "Adepte de Trello";
-        roleNames[1] = "Leader";
-        roleNames[2] = "Mentor";
-        roleNames[3] = "Installer";
-        roleNames[4] = "Addict au Café";
-        roleNames[5] = "Daouid";
-        roleNames[6] = "Hacker";
+        String[] roleNames = new String[Role.values().length];
+        int index = 0;
+        for (Role role : Role.values())
+            roleNames[index++] = role.roleToName();
 
         playersFields = new TextField[4];
         rolesBoxes = new ChoiceBox[4];
@@ -114,11 +110,11 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Difficulté :"), 0, 5);
         difficulty = new ScrollBar();
         difficulty.setMax(0);
-        difficulty.setMax(2);
+        difficulty.setMax(3);
         difficulty.setValue(0);
         gridPane.add(difficulty,1,5);
-        Text difficultyText = new Text("1");
-        difficulty.valueProperty().addListener(observable -> difficultyText.setText(Integer.toString((int)difficulty.getValue() + 1)));
+        Text difficultyText = new Text(Integer.toString((int)(difficulty.getValue()+.5)));
+        difficulty.valueProperty().addListener(observable -> difficultyText.setText(Integer.toString((int)(difficulty.getValue()+.5))));
         gridPane.add(difficultyText,2,5);
 
 
@@ -144,7 +140,7 @@ public class MainMenu extends Scene {
     }
 
     public int getDifficulty() {
-        return (int)difficulty.getValue();
+        return (int)(difficulty.getValue()+.5);
     }
 
     public LinkedList<Role> getRoles() {

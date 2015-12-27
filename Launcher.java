@@ -9,14 +9,16 @@ import the_projects.view.View;
  * Launcher of the game
  */
 public class Launcher extends Application{
-    private View stage;
     public static void main(String[] args) {
+        //starts the Application
         launch(args);
+        //kills all threads when the main window is closed
+        System.exit(0);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        stage = new View();
+        View stage = new View();
         Controller controller = new Controller(stage);
         controller.start();
         stage.show();
