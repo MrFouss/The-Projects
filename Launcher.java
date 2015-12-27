@@ -17,6 +17,8 @@ public class Launcher extends Application{
     @Override
     public void start(Stage primaryStage) {
         stage = new View();
+        Controller controller = new Controller(stage);
+        controller.start();
         stage.show();
     }
 }

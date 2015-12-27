@@ -239,6 +239,7 @@ public class Controller extends Thread implements ViewListener {
 		
 		Boolean validSetting = true;
 
+		//TODO add random Management
 		for (Role role : roles) {
 			if (testedRoles.contains(role)) {
 				validSetting = false;

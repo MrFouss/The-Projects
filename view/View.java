@@ -28,10 +28,7 @@ public class View extends Stage {
     public View() {
         setMinHeight(450);
         setMinWidth(800);
-        setMaximized(true);
-        mainMenu = new MainMenu(new Group());
-        Controller controller = new Controller(this);
-        controller.start();
+        mainMenu = new MainMenu(new Group(), this);
     }
 
 
@@ -58,6 +55,7 @@ public class View extends Stage {
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
     public void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
+        setMaximized(true);
         board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players);
         setScene(board);
     }
@@ -373,23 +371,19 @@ public class View extends Stage {
     }
 
     public LinkedList<String> getPlayerNames() {
-        //TODO implement
-        return null;
+        return mainMenu.getPlayerNames();
     }
 
     public LinkedList<String> getUVNames() {
-        //TODO implement
-        return null;
+        return mainMenu.getUVNames();
     }
 
     public int getDifficulty() {
-        //TODO implement
-        return 0;
+        return mainMenu.getDifficulty();
     }
 
     public LinkedList<Role> getRoles() {
-        //TODO implement
-        return null;
+        return mainMenu.getRoles();
     }
 
     public void clean() {
@@ -406,5 +400,9 @@ public class View extends Stage {
 
     public void fireRoomClicked(String name) {
         listeners.forEach(listener -> listener.placeClicked(name));
+    }
+
+    public void fireSettingValidationButtonClicked() {
+        listeners.forEach(listener -> listener.settingValidationButtonClicked());
     }
 }
