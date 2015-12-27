@@ -40,20 +40,21 @@ public class Controller extends Thread implements ViewListener {
 	HashMap<String, Integer> selectedReachableRooms;
 	PhDStudent selectedPlayer;
 
-	public void run(View view /*The launcher create the view as View is a Stage*/) {
+	public Controller(View view) {
+		this.view = view;
+		
+		status = GameStatus.VALID;
+		model = null;
+		view.addListener(this);
+		actionPoints = 0;
+		action = ActionType.NONE;
+		selectedPlayer = null;
+		selectedReachableRooms = null;
+	}
+	
+	public void run() {
 		try {
 			synchronized (this) {
-				// init
-
-				status = GameStatus.VALID;
-				model = null;
-				this.view = view;
-				view.addListener(this);
-				actionPoints = 0;
-				action = ActionType.NONE;
-				selectedPlayer = null;
-				selectedReachableRooms = null;
-
 				phase = GamePhase.SETTING;
 				// setting phase
 
