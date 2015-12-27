@@ -2,7 +2,6 @@ package the_projects.view;
 
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,9 +10,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import the_projects.model.Role;
 
@@ -128,7 +124,7 @@ public class MainMenu extends Scene {
 
 
         MyButton confirmButton = new MyButton("Confirmer");
-        confirmButton.setOnMouseClicked(event -> view.fireSettingValidationButtonCLicked());
+        confirmButton.setOnMouseClicked(event -> view.fireSettingValidationButtonClicked());
         gridPane.add(confirmButton, 4, 9);
 
         gridPane.add(new Text("Decription des rôles :"), 0, 6);

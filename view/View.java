@@ -321,10 +321,6 @@ public class View extends Stage {
         listeners.forEach(event->event.pawnClicked(role));
     }
 
-    public void fireSettingValidationButtonCLicked() {//TODO use
-        listeners.forEach(ViewListener::settingValidationButtonClicked);
-    }
-
     public void fireMoveButtonClicked() {
         listeners.forEach(ViewListener::moveButtonClicked);
     }
