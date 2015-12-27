@@ -502,7 +502,7 @@ public class Board extends Scene {
      * @param eventCard the event of the event card to draw
      */
     public void drawPlayerCards(String roomCard, Event eventCard) {
-        //TODO implement
+        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard)), new EventCard(pane, eventCard));
     }
 
     /**
@@ -512,7 +512,8 @@ public class Board extends Scene {
      * @param eventCard2 the event of the second event card to draw
      */
     public void drawPlayerCards(Event eventCard1, Event eventCard2) {
-        //TODO implement
+        drawPlayerCards(new EventCard(pane, eventCard1), new EventCard(pane, eventCard2));
+
     }
 
     /**
@@ -521,7 +522,7 @@ public class Board extends Scene {
      * @param roomCard the name of the room of the room card to draw
      */
     public void drawPlayerCards(String roomCard) {
-        //TODO implement
+        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard)), new PartyCard(pane));
     }
 
     /**
@@ -530,14 +531,14 @@ public class Board extends Scene {
      * @param eventCard the event of the event card to draw
      */
     public void drawPlayerCards(Event eventCard) {
-        //TODO implement
+        drawPlayerCards(new EventCard(pane, eventCard), new PartyCard(pane));
     }
 
     /**
      * Method to draw two student party cards from the player deck
      */
     public void drawPlayerCards() {
-        //TODO implement
+        drawPlayerCards(new PartyCard(pane), new PartyCard(pane));
     }
 
     /**

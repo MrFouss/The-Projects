@@ -14,7 +14,7 @@ public enum Event {
      * Method to associate an Event to its name
      * @return its name
      */
-    public String eventToName() {//TODO check names
+    public String eventToName() {
         switch (this) {
             case TIMEOUT:
                 return "Temps mort";
@@ -35,27 +35,36 @@ public enum Event {
      * Method to associate an Event to its description
      * @return its description
      */
-    public String eventToDescription() {//TODO check descriptions
+    public String eventToDescription() {
         switch (this) {
             case TIMEOUT:
-                return "La prochaine phase de \n" +
-                        "propagation est ignorée";
+                return "Ne faites pas \n" +
+                        "la prochaine phase \n" +
+                        "de propagation.";
             case GRANT_IN_AID:
-                return "Construisez une salle \n" +
-                        "de TP où vous voulez";
+                return "Placez gratuitement \n" +
+                        "une salle de TP sur \n" +
+                        "la salle de votre \n" +
+                        "choix.";
             case ON_DEMAND_TELEPORTATION:
-                return "Téléporez vous où \n" +
-                        "vous voulez";
+                return "Déplacez un pion \n" +
+                        "quelconque sur \n" +
+                        "la salle de votre \n" +
+                        "choix.";
             case ENERGY_DRINK:
                 return "Gagnez 2 actions \n" +
                         "supplémentaires \n" +
-                        "pour ce tour";
+                        "ce tour-ci.";
             case HOLIDAYS:
-                return "Jusqu'à votre prochain\n" +
-                        "tour, une seule carte\n" +
-                        "de projet est tirée \n" +
-                        "pendant la phasse de \n" +
-                        "propagation.";
+                return "Une seule carte \n" +
+                        "Projet est tirée \n" +
+                        "durant la phase \n" +
+                        "de propagation \n" +
+                        "jusqu’au début\n" +
+                        "du prochain tour \n" +
+                        "du joueur à qui \n" +
+                        "est assignée \n" +
+                        "cette carte.";
             default:
                 return "";
         }
