@@ -128,8 +128,8 @@ public class Board extends Scene {
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
         //Creation of the rooms and corridors
-        setRooms("the_projects/resources/rooms.csv");
-        setCorridors("the_projects/resources/corridors.csv");
+        setRooms("/src/the_projects/resources/rooms.csv");
+        setCorridors("/src/the_projects/resources/corridors.csv");
 
         //TODO remove line ?
         rooms.get("B402").setLab();
@@ -275,7 +275,7 @@ public class Board extends Scene {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             //noinspection ConstantConditions
-            List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             rooms = new HashMap<>();
             Room newRoom;
             for (String s : newRoomsList) {
@@ -301,7 +301,7 @@ public class Board extends Scene {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             //noinspection ConstantConditions
-            List<String> newCorridorsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            List<String> newCorridorsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             Corridor newCorridor;
             for (String s : newCorridorsList) {
                 String[] vars = s.split(",");
