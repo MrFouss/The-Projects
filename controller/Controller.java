@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sun.swing.internal.plaf.synth.resources.synth;
 
+import javafx.application.Platform;
 import sun.awt.DisplayChangedListener;
 import the_projects.model.Course;
 import the_projects.model.Model;
@@ -42,7 +43,7 @@ public class Controller extends Thread implements ViewListener {
 
 	public Controller(View view) {
 		this.view = view;
-		
+
 		status = GameStatus.VALID;
 		model = null;
 		view.addListener(this);
@@ -58,7 +59,7 @@ public class Controller extends Thread implements ViewListener {
 				phase = GamePhase.SETTING;
 				// setting phase
 
-				view.displaySetting();
+				Platform.runLater(() -> view.displaySetting());
 				this.wait(); // waiting for the user to enter and validate his settings
 
 				// game loop

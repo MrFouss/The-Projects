@@ -2,6 +2,7 @@ package the_projects;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import the_projects.controller.Controller;
 import the_projects.view.View;
 
 /**

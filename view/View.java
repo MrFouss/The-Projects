@@ -3,6 +3,7 @@ package the_projects.view;
 
 import javafx.scene.Group;
 import javafx.stage.Stage;
+import the_projects.controller.Controller;
 import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
 import the_projects.model.Course;
@@ -28,11 +29,9 @@ public class View extends Stage {
         setMinHeight(450);
         setMinWidth(800);
         setMaximized(true);
-    }
-
-    public void displaySettings() {
         mainMenu = new MainMenu(new Group());
-        setScene(mainMenu);
+        Controller controller = new Controller(this);
+        controller.start();
     }
 
 
