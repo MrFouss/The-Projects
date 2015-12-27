@@ -194,8 +194,6 @@ public class Board extends Scene {
      */
     public void setRooms(String path) {
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            //noinspection ConstantConditions
             List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             rooms = new HashMap<>();
             Room newRoom;
@@ -222,8 +220,6 @@ public class Board extends Scene {
      */
     public void setCorridors(String path) {
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            //noinspection ConstantConditions
             List<String> newCorridorsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             Corridor newCorridor;
             for (String s : newCorridorsList) {
@@ -488,21 +484,6 @@ public class Board extends Scene {
         masteredCoursesDisplay.toEradicated(projectIndex);
     }
 
-    /**
-     * Set a course to mastered state
-     * @param courseIndex the index of the course
-     */
-    public void setCourseMastered(int courseIndex) {
-        //TODO implement
-    }
-
-    /**
-     * Set a course to Eradicated state
-     * @param courseIndex the index of the course
-     */
-    public void setCourseEradicated(int courseIndex) {
-        //TODO implement
-    }
 
     /**
      * Method to draw two room cards from the player deck
@@ -511,7 +492,7 @@ public class Board extends Scene {
      * @param roomCard2 the name of the room of the second room card to draw
      */
     public void drawPlayerCards(String roomCard1, String roomCard2) {
-        //TODO implement
+        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard1)), new RoomCard(pane, rooms.get(roomCard2)));
     }
 
     /**
@@ -650,6 +631,11 @@ public class Board extends Scene {
         //TODO implement
     }
 
+    /**
+     * Method to put elements in front and make only them clickable
+     * @param clickable if true, the elements will be clickable
+     * @param nodes the list of elements to put in front
+     */
     public void putInFront(boolean clickable, Node... nodes) {
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.6));

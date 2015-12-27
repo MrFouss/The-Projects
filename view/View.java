@@ -160,7 +160,7 @@ public class View extends Stage {
      * @param courseIndex the index of the course
      */
     public void displayCourseMastered(int courseIndex) {
-        board.setCourseMastered(courseIndex);
+        board.toMastered(courseIndex);
     }
 
     /**
@@ -168,7 +168,7 @@ public class View extends Stage {
      * @param courseIndex the index of the course
      */
     public void displayCourseEradicated(int courseIndex) {
-        board.setCourseEradicated(courseIndex);
+        board.toEradicated(courseIndex);
     }
 
     /**

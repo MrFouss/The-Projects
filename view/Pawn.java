@@ -23,11 +23,11 @@ public class Pawn implements Clickable{
      */
     public Pawn(Player player) {
         this.player = player;
-        color = Player.roleToColor(player.getRole());
+        color = player.getRole().roleToColor();
         Circle circle = new Circle(10,10,5, color);
         Polygon triangle= new Polygon(circle.getCenterX(), circle.getCenterY() - circle.getRadius(), circle.getCenterX() + circle.getRadius(), circle.getCenterY() + circle.getRadius()*3, circle.getCenterX() - circle.getRadius(), circle.getCenterY() + circle.getRadius()*3);
         shape = Shape.union(circle, triangle);
-        shape.setFill(Player.roleToColor(player.getRole()));
+        shape.setFill(player.getRole().roleToColor());
         shape.setStroke(color.deriveColor(0, 1, .5, 1));
         shape.setStrokeWidth(2);
     }

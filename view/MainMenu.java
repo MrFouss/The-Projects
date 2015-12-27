@@ -130,8 +130,8 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Decription des rôles :"), 0, 6);
         int i = 1, j = 6;
         for (Role role : Role.values()) {
-            Label roleLabel = new Label(Player.roleToDescription(role));
-            Color color = Player.roleToColor(role);
+            Label roleLabel = new Label(role.roleToDescription());
+            Color color = role.roleToColor();
             roleLabel.setTextFill(color.brighter().brighter());
             roleLabel.setBackground(new Background(new BackgroundFill(color.deriveColor(0,1,.5,.5), new CornerRadii(5), new Insets(0))));
             gridPane.add(roleLabel, i, j);
@@ -151,7 +151,7 @@ public class MainMenu extends Scene {
         LinkedList<Role> roles = new LinkedList<>();
         for (ChoiceBox<String> roleBox : rolesBoxes) {
             if (!roleBox.isDisable()) {
-                roles.add(nameToRole(roleBox.getValue()));
+                roles.add(Role.nameToRole(roleBox.getValue()));
             }
         }
         return roles;
@@ -175,24 +175,5 @@ public class MainMenu extends Scene {
         return UVNames;
     }
 
-    private static Role nameToRole(String name) {
-        switch (name) {
-            case "Adepte de Trello":
-                return Role.TRELLO_ADEPT;
-            case "Leader":
-                return Role.GROUP_LEADER;
-            case "Mentor":
-                return Role.MENTOR;
-            case "Installer":
-                return Role.INSTALLER;
-            case "Addict au Café":
-                return Role.COFFEE_MAKER;
-            case "Daouid":
-                return Role.DAOUID;
-            case "Hacker":
-                return Role.HACKER;
-            default:
-                return null;
-        }
-    }
+
 }

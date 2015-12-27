@@ -9,10 +9,10 @@ import javafx.scene.layout.Pane;
 public class RoomCard extends Card {
     /**
      * Simplified Constructor of Card
-     * @param scene parent scene
+     * @param pane parent Pane
      * @param room corresponding room
      */
-    public RoomCard(Pane scene, Room room) {
-        super(scene, room.getUV(), room.getName(), room.getColor());
+    public RoomCard(Pane pane, Room room) {
+        super(pane, room.getUV(), room.getName(), room.getColor());
     }
 }
