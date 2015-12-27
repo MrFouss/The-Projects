@@ -128,11 +128,9 @@ public class Board extends Scene {
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
         //Creation of the rooms and corridors
-        setRooms("the_projects/resources/rooms.csv");
-        setCorridors("the_projects/resources/corridors.csv");
+        setRooms("/src/the_projects/resources/rooms.csv");
+        setCorridors("/src/the_projects/resources/corridors.csv");
 
-        //TODO remove line ?
-        rooms.get("B402").setLab();
 
         //Creating the pawns
         pawns = new ArrayList<>();
@@ -170,81 +168,6 @@ public class Board extends Scene {
         scale.yProperty().bind(heightProperty().divide(getHeight()));
         pane.getTransforms().add(scale);
 
-        //TODO remove these test lines
-
-        rooms.get("P101").setLab();
-        rooms.get("A201").setLab();
-        rooms.get("H010").setLab();
-
-        addProjectToRoom("B402", 0);
-        addProjectToRoom("B402", 1);
-        addProjectToRoom("B402", 2);
-        addProjectToRoom("B402", 3);
-        addProjectToRoom("B402", 0);
-        addProjectToRoom("B402", 1);
-        addProjectToRoom("B402", 2);
-        addProjectToRoom("B402", 3);
-        addProjectToRoom("B402", 0);
-        addProjectToRoom("B402", 1);
-        addProjectToRoom("B402", 2);
-        addProjectToRoom("B402", 3);
-
-
-        addProjectToRoom("B401", 0);
-        addProjectToRoom("B403", 1);
-        addProjectToRoom("B403", 2);
-        addProjectToRoom("B406", 3);
-        addProjectToRoom("B406", 3);
-        addProjectToRoom("B406", 3);
-
-        addProjectToRoom("A208", 0);
-        addProjectToRoom("A208", 0);
-        addProjectToRoom("A208", 0);
-        addProjectToRoom("A206", 0);
-        addProjectToRoom("A206", 0);
-        addProjectToRoom("A207", 0);
-
-        addProjectToRoom("H010", 1);
-        addProjectToRoom("H010", 1);
-        addProjectToRoom("H010", 1);
-        addProjectToRoom("H011", 1);
-        addProjectToRoom("H011", 1);
-        addProjectToRoom("H012", 1);
-
-        addProjectToRoom("P108", 2);
-        addProjectToRoom("P108", 2);
-        addProjectToRoom("P108", 2);
-        addProjectToRoom("P106", 2);
-        addProjectToRoom("P106", 2);
-        addProjectToRoom("P107", 2);
-
-        addProjectToRoom("B404", 3);
-        addProjectToRoom("B404", 3);
-        addProjectToRoom("B404", 3);
-        removeProjectFromRoom("B404", 3);
-        removeProjectFromRoom("B404", 3);
-        removeProjectFromRoom("B404", 3);
-
-
-        decks[2].setOnMouseClicked(e -> drawPlayerCards(new RoomCard(pane, rooms.get("B402")),new RoomCard(pane, rooms.get("P108"))));
-        decks[0].setOnMouseClicked(e -> drawProjectCards(
-                new RoomCard(pane, rooms.get("H010")),
-                new RoomCard(pane, rooms.get("A200")),
-                new RoomCard(pane, rooms.get("B402")),
-                new RoomCard(pane, rooms.get("A200")),
-                new RoomCard(pane, rooms.get("B402")),
-                new RoomCard(pane, rooms.get("A200")),
-                new RoomCard(pane, rooms.get("B402")),
-                new RoomCard(pane, rooms.get("A200")),
-                new RoomCard(pane, rooms.get("P101"))
-        ));
-
-        pawns.get(0).setClickable(true, view);
-
-        rooms.get("A200").setClickable(true, view);
-        rooms.get("A200").setClickable(true, view);
-        movePawn(Role.DAOUID,"B404", "B402", "A204", "H210", "H211", "H212", "P108", "P110", "P106", "P102", "P100", "P101", "P104", "P109", "P111", "B411", "B409", "B405", "B406", "B402");
-
     }
 
 
@@ -275,7 +198,7 @@ public class Board extends Scene {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             //noinspection ConstantConditions
-            List<String> newRoomsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             rooms = new HashMap<>();
             Room newRoom;
             for (String s : newRoomsList) {
@@ -287,9 +210,11 @@ public class Board extends Scene {
         }
         catch (NullPointerException e) {
             System.out.println("Room file not found(pointer)");
+            rooms = new HashMap<>();
         }
         catch (IOException e) {
             System.out.println("Room file not found");
+            rooms = new HashMap<>();
         }
     }
 
@@ -301,7 +226,7 @@ public class Board extends Scene {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             //noinspection ConstantConditions
-            List<String> newCorridorsList = Files.readAllLines(Paths.get(classLoader.getResource(path).getPath()));
+            List<String> newCorridorsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
             Corridor newCorridor;
             for (String s : newCorridorsList) {
                 String[] vars = s.split(",");
@@ -540,7 +465,6 @@ public class Board extends Scene {
      */
     public void increasePropagationGauge() {
         propagationGauge.increase();
-        putInFront(true, rooms.get("B402"));
     }
 
     /**
