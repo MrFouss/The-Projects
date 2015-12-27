@@ -3,7 +3,6 @@ package the_projects.view;
 
 import javafx.scene.Group;
 import javafx.stage.Stage;
-import the_projects.controller.Controller;
 import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
 import the_projects.model.Course;
@@ -37,10 +36,10 @@ public class View extends Stage {
      */
     public void displayGameBoard(Model model){
         this.model = model;
-        Course[] courses = model.getCourses();
-        Player[] players = new Player[model.getPlayers().size()];
+        Course[] courses = this.model.getCourses();
+        Player[] players = new Player[this.model.getPlayers().size()];
         int i = 0;
-        for (PhDStudent phDStudent : model.getPlayers())
+        for (PhDStudent phDStudent : this.model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
         setBoard(courses[0].getName(), courses[0].getName(), courses[0].getName(), courses[0].getName(), players);
     }
@@ -403,6 +402,6 @@ public class View extends Stage {
     }
 
     public void fireSettingValidationButtonClicked() {
-        listeners.forEach(listener -> listener.settingValidationButtonClicked());
+        listeners.forEach(ViewListener::settingValidationButtonClicked);
     }
 }
