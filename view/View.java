@@ -324,27 +324,18 @@ public class View extends Stage {
 
     public void fireMoveButtonClicked() {
         listeners.forEach(ViewListener::moveButtonClicked);
-        //TODO erase this test line
-        displayIncreasePropagationGauge();
     }
 
     public void fireRemoveProjectButtonClicked() {
         listeners.forEach(ViewListener::removeProjectButtonClicked);
-        //TODO erase this test line
-        displayIncreaseBurnOutGauge();
     }
 
     public void fireShareKnowledgeButtonCLicked() {
         listeners.forEach(ViewListener::shareKnowledgeButtonClicked);
-        //TODO erase these test lines
-        displayToMastered(0);
-        displayToMastered(1);
     }
 
     public void fireUseCardButtonClicked() {
         listeners.forEach(ViewListener::useCardButtonClicked);
-        //TODO erase this test line
-        displayToEradicated(0);
     }
 
     public void fireMasterButtonClicked() {
