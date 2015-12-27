@@ -5,19 +5,22 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import the_projects.model.Role;
 
 import java.util.LinkedList;
 
 /**
- * TODO implement
+ * TODO complete
  */
 public class MainMenu extends Scene {
 
@@ -36,7 +39,6 @@ public class MainMenu extends Scene {
         setFill(Color.GRAY);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        gridPane.setAlignment(Pos.CENTER);
         gridPane.setPadding(new Insets(10));
 
         gridPane.add(new Text("Nom des UVs :"), 0, 0);
@@ -127,7 +129,22 @@ public class MainMenu extends Scene {
 
         MyButton confirmButton = new MyButton("Confirmer");
         confirmButton.setOnMouseClicked(event -> view.fireSettingValidationButtonCLicked());
-        gridPane.add(confirmButton, 3, 9);
+        gridPane.add(confirmButton, 4, 9);
+
+        gridPane.add(new Text("Decription des rôles :"), 0, 6);
+        int i = 1, j = 6;
+        for (Role role : Role.values()) {
+            Label roleLabel = new Label(Player.roleToDescription(role));
+            Color color = Player.roleToColor(role);
+            roleLabel.setTextFill(color.brighter().brighter());
+            roleLabel.setBackground(new Background(new BackgroundFill(color.deriveColor(0,1,.5,.5), new CornerRadii(5), new Insets(0))));
+            gridPane.add(roleLabel, i, j);
+            ++i;
+            if (i > 4) {
+                i = 1;
+                ++j;
+            }
+        }
     }
 
     public int getDifficulty() {
