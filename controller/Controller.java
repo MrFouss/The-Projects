@@ -316,9 +316,8 @@ public class Controller extends Thread implements ViewListener {
 		
 		//TODO use shortest path
 		//String[] sp = (String[])model.shortestPath(selectedPlayer.getPosition().getName(), name).toArray();
-		String[] sp = new String[2];
-		sp[0] = selectedPlayer.getPosition().getName();
-		sp[1] = name;
+		String[] sp = new String[1];
+		sp[0] = name;
 		Platform.runLater(() -> {view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();});
 		selectedPlayer.setPosition(room);
 		action = ActionType.NONE;
@@ -354,20 +353,24 @@ public class Controller extends Thread implements ViewListener {
 		
 		Room room = model.getCurrentPlayer().getPosition();
 		Boolean projectRemoved = false;
-		for (Integer i : index) {
+		int i = 0;
+		for (i = 0; i < index.size(); i++) {
 			Project proj = room.getProject(model.getCourses()[i]);
 			if (proj.getProjectAmount() > 0) {
+				actionPoints--;
 				proj.setProjectAmount(proj.getProjectAmount()-1);
 				projectRemoved = true;
 				break;
 			}
 		}
-		
+
 		if (!projectRemoved) {
-			view.displayMessage("Il n'y a aucun bouton dans cette salle.");
+			Platform.runLater(() -> view.displayMessage("Il n'y a aucun projet dans cette salle."));
 		} else {
-			//TODO update view
+			final int j = i;
+			Platform.runLater(() -> view.displayRemoveProjectFromRoom(room.getName(), j));
 		}
+			
 	}
 
 
