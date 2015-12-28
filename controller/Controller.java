@@ -314,7 +314,7 @@ public class Controller extends Thread implements ViewListener {
 			}
 		}
 		
-		//TODO use shortest path
+		
 		//String[] sp = (String[])model.shortestPath(selectedPlayer.getPosition().getName(), name).toArray();
 		String[] sp = new String[1];
 		sp[0] = name;
