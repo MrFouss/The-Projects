@@ -59,7 +59,7 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Rôle du Joueur 1 :"), 3, 1);
         rolesBoxes[0] = new ChoiceBox<>();
         rolesBoxes[0].getItems().addAll(roleNames);
-        rolesBoxes[0].setValue(roleNames[1]);
+        rolesBoxes[0].setValue(roleNames[7]);
         gridPane.add(rolesBoxes[0],4,1);
 
         gridPane.add(new Text("Nom du Joueur 2 :"), 1, 2);
@@ -68,7 +68,7 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Rôle du Joueur 1 :"), 3, 2);
         rolesBoxes[1] = new ChoiceBox<>();
         rolesBoxes[1].getItems().addAll(roleNames);
-        rolesBoxes[1].setValue(roleNames[2]);
+        rolesBoxes[1].setValue(roleNames[7]);
         gridPane.add(rolesBoxes[1],4,2);
 
         gridPane.add(new Text("Nom du Joueur 3 :"), 1, 3);
@@ -77,7 +77,7 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Rôle du Joueur 3 :"), 3, 3);
         rolesBoxes[2] = new ChoiceBox<>();
         rolesBoxes[2].getItems().addAll(roleNames);
-        rolesBoxes[2].setValue(roleNames[3]);
+        rolesBoxes[2].setValue(roleNames[7]);
         gridPane.add(rolesBoxes[2],4,3);
 
         gridPane.add(new Text("Nom du Joueur 4 :"), 1, 4);
@@ -86,7 +86,7 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Rôle du Joueur 4 :"), 3, 4);
         rolesBoxes[3] = new ChoiceBox<>();
         rolesBoxes[3].getItems().addAll(roleNames);
-        rolesBoxes[3].setValue(roleNames[4]);
+        rolesBoxes[3].setValue(roleNames[7]);
         gridPane.add(rolesBoxes[3],4,4);
 
         CheckBox checkBox2 = new CheckBox("Activer ?");
