@@ -107,14 +107,15 @@ public class Model {
 
         // Adds the neighbours to each room
         try {
-            List<String> neighboursList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/rooms_neighbours.csv"));
-            i = 0;
+            List<String> neighboursList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/corridors.csv"));
+            HashMap<String, Room> mapRooms = new HashMap<>();
+            for(Room room : roomTab) {
+                mapRooms.put(room.getName(), room);
+            }
             for (String line : neighboursList) {
                 String[] vars = line.split(",");
-                for(String neighbourName : vars) {
-                    roomTab[i].getNeighbours().add(roomTab[Integer.parseInt(neighbourName)]);
-                }
-                ++i;
+                mapRooms.get(vars[0]).getNeighbours().add(mapRooms.get(vars[1]));
+                mapRooms.get(vars[1]).getNeighbours().add(mapRooms.get(vars[0]));
             }
         }
         catch (NullPointerException e) {
@@ -141,7 +142,7 @@ public class Model {
 
         int deckSize = this.playerDeck.getSize();
         CardDeck<PlayerCard> finalDeck = new CardDeck<>();
-        for(i = 0 ; i < 4+difficulty ; ++i) {
+        for(i = 0 ; i < 3+difficulty ; ++i) {
             CardDeck<PlayerCard> tmpDeck = new CardDeck<>();
             for(int j = 0 ; j <= deckSize/(4+difficulty) ; ++j) {
                 tmpDeck.addCard(this.playerDeck.drawFirst());
@@ -150,6 +151,9 @@ public class Model {
             tmpDeck.shuffle();
             finalDeck.addCardsOnTop(tmpDeck);
         }
+        this.playerDeck.addCard(new PartyCard());
+        this.playerDeck.shuffle();
+        finalDeck.addCardsOnTop(this.playerDeck);
         this.playerDeck = finalDeck;
 
         this.playerList = new LinkedList<>();
