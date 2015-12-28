@@ -76,17 +76,17 @@ public class Controller extends Thread implements ViewListener {
 								PlayerCard card = (PlayerCard)model.getPlayerDeck().drawFirst();
 								
 								if (card.getClass() == RoomCard.class) {
-									Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
+									//Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else if (card.getClass() == EventCard.class) {
-									Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
+									//Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else {
 									// résoudre épidémie
 
 									// exams
 
-									/*
+									
 									model.increaseEmergencyGauge();
 
 									// stress
@@ -107,12 +107,10 @@ public class Controller extends Thread implements ViewListener {
 
 									model.getProjectDiscard().shuffle();
 									model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
-									*/
+									
 									System.out.println("solve epidemy");
 								}
 							}
-							
-							this.wait();
 							
 							//discard
 							
@@ -132,7 +130,7 @@ public class Controller extends Thread implements ViewListener {
 								view.displayInfoMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
 								/*view.displayEventCards(eventCards);
 								view.displayRoomCards(roomCards);*/
-								view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
+								//view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
 							}
 
 							phase = GamePhase.PROPAGATION;
@@ -141,7 +139,7 @@ public class Controller extends Thread implements ViewListener {
 							if (status == GameStatus.VALID) {
 								for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
 									ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
-									view.displayDrawProjectCards(card.getRoom().getName());
+									//view.displayDrawProjectCards(card.getRoom().getName());
 
 									int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
 									if (projAmount < 3) {
@@ -343,40 +341,32 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void removeProjectButtonClicked() {
-		if (phase == GamePhase.ACTION && actionPoints > 0) {
-			if (action != ActionType.NONE) {
-				// view.clean();
-				action = ActionType.NONE;
-			}
-			
-			LinkedList<Integer> index = new LinkedList<Integer>();
-			for (int i = 0; i < 4; i++) {
-				while (index.size() == i) {
-					int rand = ThreadLocalRandom.current().nextInt(0, 4);
-					if (!index.contains(rand)) {
-						index.add(rand);
-					}
+	public void removeProjectButtonClicked() {		
+		LinkedList<Integer> index = new LinkedList<Integer>();
+		for (int i = 0; i < 4; i++) {
+			while (index.size() == i) {
+				int rand = ThreadLocalRandom.current().nextInt(0, 4);
+				if (!index.contains(rand)) {
+					index.add(rand);
 				}
 			}
-			
-			Room room = model.getCurrentPlayer().getPosition();
-			Boolean projectRemoved = false;
-			for (Integer i : index) {
-				Project proj = room.getProject(model.getCourses()[i]);
-				if (proj.getProjectAmount() > 0) {
-					proj.setProjectAmount(proj.getProjectAmount()-1);
-					projectRemoved = true;
-					break;
-				}
+		}
+		
+		Room room = model.getCurrentPlayer().getPosition();
+		Boolean projectRemoved = false;
+		for (Integer i : index) {
+			Project proj = room.getProject(model.getCourses()[i]);
+			if (proj.getProjectAmount() > 0) {
+				proj.setProjectAmount(proj.getProjectAmount()-1);
+				projectRemoved = true;
+				break;
 			}
-			
-			if (!projectRemoved) {
-				actionPoints--;
-				//view.displayMessage("There is no projects on this room");
-			} else {
-				//update view about projects
-			}
+		}
+		
+		if (!projectRemoved) {
+			view.displayMessage("Il n'y a aucun bouton dans cette salle.");
+		} else {
+			//TODO update view
 		}
 	}
 
