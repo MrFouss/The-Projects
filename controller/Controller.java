@@ -56,7 +56,7 @@ public class Controller extends Thread implements ViewListener {
 					phase = GamePhase.ACTION;
 					// action phase
 
-					/*
+					
 					actionPoints = 4;
 						//view.clean();
 						//update doable actions
@@ -64,7 +64,7 @@ public class Controller extends Thread implements ViewListener {
 					}
 					actionPoints = 0;
 					//clean
-					*/
+					
 					
 					if (status == GameStatus.VALID) {
 
@@ -177,7 +177,7 @@ public class Controller extends Thread implements ViewListener {
 				default:
 					break;
 				}
-			}
+			
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -277,7 +277,7 @@ public class Controller extends Thread implements ViewListener {
 			mapPlayers.put(players.get(i), roles.get(i));
 		}
 
-		//model = new Model(mapPlayers, uvs, diff);
+		model = new Model(mapPlayers, uvs, diff);
 		this.notify();
 	}
 	
