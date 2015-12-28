@@ -123,9 +123,11 @@ public class Board extends Scene {
         decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
         decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.);
         //hackerDeck
-        decks[4] = new Deck(this, "", Color.TRANSPARENT, 65/100., 75/100.);
+        decks[4] = new Deck(this, "", Color.TRANSPARENT, 53/100., 80/100.);
+        decks[4].setScaleX(0.1);
+        decks[4].setScaleY(0.1);
 
-        Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
+        pane.getChildren().addAll(decks);
 
         //Creation of the rooms and corridors
         setRooms("/src/the_projects/resources/rooms.csv");
@@ -175,7 +177,6 @@ public class Board extends Scene {
         scale.xProperty().bind(widthProperty().divide(getWidth()));
         scale.yProperty().bind(heightProperty().divide(getHeight()));
         pane.getTransforms().add(scale);
-
     }
 
 
@@ -422,7 +423,7 @@ public class Board extends Scene {
         pawns.forEach(pawn -> pawn.getShape().toFront());
     }
 
-    public StackPane OwnerToDeck(Owner owner) {
+    public StackPane ownerToDeck(Owner owner) {
         switch (owner) {
             case PLAYER1:
                 return players[0].getHandDeck();
@@ -452,7 +453,7 @@ public class Board extends Scene {
      * @param deck the deck from where the cards come
      * @param cards the cards to move
      */
-    public void moveFromDeck(boolean clickable, Deck deck, Card... cards) {
+    public void moveFromDeck(boolean clickable, StackPane deck, boolean horizontal, Card... cards) {
         double i = (6 - cards.length)/2., j = 1;
         if (cards.length > 6) {
             i = (6 - cards.length/2)/2.;
@@ -476,7 +477,7 @@ public class Board extends Scene {
             scaleTransition.setToY(decks[2].getScaleY());
             scaleTransition.play();
 
-            if (deck.isHorizontal()) {
+            if (horizontal) {
                 card.setRotate(-90);
                 RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
                 rotateTransition.setByAngle(90);
@@ -514,8 +515,13 @@ public class Board extends Scene {
         return new PathTransition(Duration.seconds(.5),path,card);
     }
 
-    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
-        //TODO implement
+    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
+        ArrayList<Card> cards = new ArrayList<>();
+        roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
+        eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
+        for (int i = 0; i < numberOfPartyCards; ++i)
+            cards.add(new PartyCard(pane, newOwner));
+        moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, (Card[])(cards.toArray()));
     }
     void discardCards() {
         //TODO implement
@@ -525,5 +531,13 @@ public class Board extends Scene {
     }
     void discardCard(Owner newOwner, Event eventOfEventCard) {
         //TODO implement
+    }
+
+
+    public void titleToFireCardClicked(String title) {
+        if (rooms.containsKey(title))
+            view.fireRoomCardClicked(title);
+        else if (Event.nameToEvent(title) == null)
+            view.fireEventCardClicked(Event.nameToEvent(title));
     }
 }

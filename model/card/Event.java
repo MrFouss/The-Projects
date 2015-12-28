@@ -32,6 +32,21 @@ public enum Event {
     }
 
     /**
+     * Method to associate a name to its event.
+     *
+     * @param name the name to associate
+     * @return the associated event
+     */
+    public static Event nameToEvent(String name) {
+        for (Event event : Event.values()) {
+            if (event.eventToName().equals(name))
+                return event;
+        }
+        return null;
+    }
+
+
+    /**
      * Method to associate an Event to its description
      * @return its description
      */

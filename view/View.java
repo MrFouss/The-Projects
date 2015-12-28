@@ -217,7 +217,7 @@ public class View extends Stage {
     }
 
     public void fireCardClicked(String title) {
-        //TODO implement
+        board.titleToFireCardClicked(title);
     }
 
     public void fireRoomCardClicked(String roomName) {
@@ -288,7 +288,7 @@ public class View extends Stage {
         listeners.forEach(ViewListener::settingValidationButtonClicked);
     }
 
-    void displayDrawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
+    void displayDrawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
         board.drawCards(actualOwner, newOwner, clickable, roomNamesOfRoomCards, eventsOfEventCards, numberOfPartyCards);
     }
     void displayDiscardCards() {
