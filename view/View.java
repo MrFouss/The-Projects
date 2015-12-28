@@ -288,16 +288,16 @@ public class View extends Stage {
         listeners.forEach(ViewListener::settingValidationButtonClicked);
     }
 
-    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
+    void displayDrawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
         board.drawCards(actualOwner, newOwner, clickable, roomNamesOfRoomCards, eventsOfEventCards, numberOfPartyCards);
     }
-    void discardCards() {
+    void displayDiscardCards() {
         board.discardCards();
     }
-    void discardCard(Owner newOwner, String roomNameOfRoomCard) {
+    void displayDiscardCard(Owner newOwner, String roomNameOfRoomCard) {
         board.discardCard(newOwner, roomNameOfRoomCard);
     }
-    void discardCard(Owner newOwner, Event eventOfEventCard) {
+    void displayDiscardCard(Owner newOwner, Event eventOfEventCard) {
         board.discardCard(newOwner, eventOfEventCard);
     }
 
