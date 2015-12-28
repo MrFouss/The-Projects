@@ -143,7 +143,13 @@ public class Model {
 
         this.playerList = new LinkedList<>();
         for(Role role : players.keySet()) {
-            PhDStudent tmpStudent = new PhDStudent(players.get(role), role);
+            PhDStudent tmpStudent;
+            if(role == Role.RANDOM) {
+                tmpStudent = new PhDStudent(players.get(role), Role.random());
+            } else {
+                tmpStudent = new PhDStudent(players.get(role), role);
+            }
+
             this.playerList.add(tmpStudent);
         }
 
