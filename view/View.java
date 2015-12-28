@@ -1,6 +1,7 @@
 package the_projects.view;
 
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -45,7 +46,7 @@ public class View extends Stage {
         int i = 0;
         for (PhDStudent phDStudent : this.model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
-        setBoard(courses[0].getName(), courses[0].getName(), courses[0].getName(), courses[0].getName(), players);
+        Platform.runLater(() -> setBoard(courses[0].getName(), courses[0].getName(), courses[0].getName(), courses[0].getName(), players));
     }
 
     /**
@@ -75,7 +76,7 @@ public class View extends Stage {
      * Method to display a new settings menu
      */
     public void displaySetting() {
-        setScene(mainMenu);
+        Platform.runLater(() -> setScene(mainMenu));
     }
 
 
@@ -416,7 +417,7 @@ public class View extends Stage {
     }
 
     public void displayMessage(String s) {
-        Alert message = new Alert(Alert.AlertType.NONE);
+        Alert message = new Alert(Alert.AlertType.ERROR);
         message.setTitle("The-Projects");
         message.setContentText(s);
         message.show();
