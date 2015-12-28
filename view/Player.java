@@ -8,6 +8,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import the_projects.model.Role;
+import the_projects.view.Cards.Card;
 
 import java.util.HashSet;
 

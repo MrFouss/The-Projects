@@ -1,8 +1,9 @@
-package the_projects.view;
+package the_projects.view.Cards;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import the_projects.model.card.Event;
+import the_projects.view.Cards.Card;
 
 /**
  * Event version of the cards

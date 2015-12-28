@@ -1,7 +1,9 @@
-package the_projects.view;
+package the_projects.view.Cards;
 
 
 import javafx.scene.layout.Pane;
+import the_projects.view.Cards.Card;
+import the_projects.view.Room;
 
 /**
  * Room version of the cards

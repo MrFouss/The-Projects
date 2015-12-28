@@ -1,4 +1,4 @@
-package the_projects.view;
+package the_projects.view.Cards;
 
 
 import javafx.beans.value.ChangeListener;
@@ -10,6 +10,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import the_projects.view.Board;
+import the_projects.view.Clickable;
+import the_projects.view.View;
 
 /**
  * TODO make fancier

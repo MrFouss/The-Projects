@@ -21,6 +21,10 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
+import the_projects.view.Cards.Card;
+import the_projects.view.Cards.EventCard;
+import the_projects.view.Cards.PartyCard;
+import the_projects.view.Cards.RoomCard;
 
 import java.io.IOException;
 import java.nio.file.Files;
