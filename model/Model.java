@@ -74,7 +74,7 @@ public class Model {
      * @param courseNames the names of the courses.
      * @param difficulty the level of difficulty.
      */
-    public Model(HashMap<Role, String> players, LinkedList<String> courseNames, int difficulty) {
+    public Model(HashMap<String, Role> players, LinkedList<String> courseNames, int difficulty) {
 
         this.emergencyGauge = 0;
         this.burnOutGauge = 0;
@@ -142,12 +142,23 @@ public class Model {
         this.playerDeck.shuffle();
 
         this.playerList = new LinkedList<>();
-        for(Role role : players.keySet()) {
+        for(String name : players.keySet()) {
             PhDStudent tmpStudent;
-            if(role == Role.RANDOM) {
-                tmpStudent = new PhDStudent(players.get(role), Role.random());
+            if(players.get(name) == Role.RANDOM) {
+                Role tmpRole;
+                Boolean isInside;
+                do {
+                    tmpRole = Role.random();
+                    isInside = false;
+                    for(PhDStudent student : this.playerList) {
+                        if (student.getRole() == tmpRole) {
+                            isInside = true;
+                        }
+                    }
+                } while(isInside);
+                tmpStudent = new PhDStudent(name, tmpRole);
             } else {
-                tmpStudent = new PhDStudent(players.get(role), role);
+                tmpStudent = new PhDStudent(name, players.get(name));
             }
 
             this.playerList.add(tmpStudent);
