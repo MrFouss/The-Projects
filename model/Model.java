@@ -243,7 +243,7 @@ public class Model {
      * @return the project deck.
      */
     // TODO update the class diagram
-    public CardDeck getProjectDeck() {
+    public CardDeck<ProjectCard> getProjectDeck() {
         return this.projectDeck;
     }
 
@@ -253,7 +253,7 @@ public class Model {
      * @return the discard pile of the project deck.
      */
     // TODO update the class diagram
-    public CardDeck getProjectDiscard() {
+    public CardDeck<ProjectCard> getProjectDiscard() {
         return this.projectDiscard;
     }
 
@@ -263,7 +263,7 @@ public class Model {
      * @return the player deck.
      */
     // TODO update the class diagram
-    public CardDeck getPlayerDeck() {
+    public CardDeck<PlayerCard> getPlayerDeck() {
         return this.playerDeck;
     }
 
@@ -273,7 +273,7 @@ public class Model {
      * @return the discard pile of the player deck.
      */
     // TODO update the class diagram
-    public CardDeck getPlayerDiscard() {
+    public CardDeck<PlayerCard> getPlayerDiscard() {
         return this.playerDiscard;
     }
 
