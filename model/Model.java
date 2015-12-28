@@ -131,15 +131,26 @@ public class Model {
             this.projectDeck.addCard(new ProjectCard(roomTab[i]));
             this.playerDeck.addCard(new RoomCard(roomTab[i]));
         }
+
         for(Event event : Event.values()) {
             this.playerDeck.addCard(new EventCard(event));
-        }
-        for(i = 0 ; i < 4+difficulty ; ++i) {
-            this.playerDeck.addCard(new PartyCard());
         }
 
         this.projectDeck.shuffle();
         this.playerDeck.shuffle();
+
+        int deckSize = this.playerDeck.getSize();
+        CardDeck<PlayerCard> finalDeck = new CardDeck<>();
+        for(i = 0 ; i < 4+difficulty ; ++i) {
+            CardDeck<PlayerCard> tmpDeck = new CardDeck<>();
+            for(int j = 0 ; j <= deckSize/(4+difficulty) ; ++j) {
+                tmpDeck.addCard(this.playerDeck.drawFirst());
+            }
+            tmpDeck.addCard(new PartyCard());
+            tmpDeck.shuffle();
+            finalDeck.addCardsOnTop(tmpDeck);
+        }
+        this.playerDeck = finalDeck;
 
         this.playerList = new LinkedList<>();
         for(String name : players.keySet()) {
