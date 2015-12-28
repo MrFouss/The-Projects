@@ -1,13 +1,17 @@
 package the_projects.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import com.sun.javafx.tk.Toolkit.Task;
 
 import javafx.application.Platform;
 import the_projects.model.*;
 import the_projects.model.card.*;
 import the_projects.view.View;
+import the_projects.view.Cards.Owner;
 
 /**
  *
@@ -43,148 +47,164 @@ public class Controller extends Thread implements ViewListener {
 				while (status == GameStatus.VALID) {
 					
 				
-				phase = GamePhase.SETTING;
-				// setting phase
-
-				Platform.runLater(() -> view.displaySetting());
-				this.wait(); // waiting for the user to enter and validate his settings
-
-				// game loop
-
-				Platform.runLater(() -> view.displayGameBoard(model));
-				
-
-				while (status == GameStatus.VALID) {
+					phase = GamePhase.SETTING;
+					// setting phase
+	
+					Platform.runLater(() -> view.displaySetting());
+					this.wait(); // waiting for the user to enter and validate his settings
+	
+					Platform.runLater(() -> view.displayGameBoard(model));
 					
+					//display initial stuff
 					
-					phase = GamePhase.ACTION;
-					// action phase
-
-					actionPoints = 4;
-					this.wait(); // wait for actions to be chosen and executed
-					actionPoints = 0;		
-					
-					if (status == GameStatus.VALID) {
-
-						phase = GamePhase.CARD_DRAWING;
-						// card phase
-
-						if (model.getPlayerDeck().getSize() < 2) {
-							status = GameStatus.CARD_LACK;
-						} else {							
-							for (int i = 0; i < 2; i++) {
-								PlayerCard card = (PlayerCard)model.getPlayerDeck().drawFirst();
-								
-								if (card.getClass() == RoomCard.class) {
-									//Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
-									model.getCurrentPlayer().getCards().addCard(card);
-								} else if (card.getClass() == EventCard.class) {
-									//Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
-									model.getCurrentPlayer().getCards().addCard(card);
-								} else {
-									// résoudre épidémie
-
-									// exams
-
-									
-									model.increaseEmergencyGauge();
-
-									// stress
-
-									ProjectCard pCard = (ProjectCard) model.getProjectDeck().drawLast();
-									Course course = pCard.getRoom().getCourse();
-									if (!course.isCompleted()) {
-										if (pCard.getRoom().getProject(course).getProjectAmount() > 0) {
-											pCard.getRoom().getProject(course).setProjectAmount(3);
-											burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
-										} else {
-											pCard.getRoom().getProject(course).setProjectAmount(3);
-										}
-									}
-									model.getProjectDiscard().addCard(pCard);
-
-									// intensification
-
-									model.getProjectDiscard().shuffle();
-									model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
-									
-									System.out.println("solve epidemy");
-								}
-							}
-							
-							//discard
-							
-							if (model.getCurrentPlayer().getCards().getSize() > 7) {
-								phase = GamePhase.DISCARD;
-								LinkedList<String> roomCards = new LinkedList<>();
-								LinkedList<Event> eventCards = new LinkedList<>();
-								/*
-								for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
-									if (card.getClass() == RoomCard.class) {
-										roomCards.add(card.getRoom().getName());
-									} else {
-										eventCards.add(card.getEvent());
-									}
-								}*/
-								
-								view.displayInfoMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
-								/*view.displayEventCards(eventCards);
-								view.displayRoomCards(roomCards);*/
-								//view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
-							}
-
-							phase = GamePhase.PROPAGATION;
-							// infection phase
-
-							if (status == GameStatus.VALID) {
-								for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
-									ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
-									//view.displayDrawProjectCards(card.getRoom().getName());
-
-									int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
-									if (projAmount < 3) {
-										card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(projAmount + 1);
-									} else {
-										burnOut(new LinkedList<Room>(),card.getRoom(), card.getRoom().getCourse());
-									}
-
-									model.getProjectDiscard().addCard(card);
+					for (Room room : model.getRooms()) {
+						if (room.isLabRoom()) {
+							Platform.runLater(() -> view.displaySetRoomToLab(room.getName()));
+						}
+						for (int i = 0; i < 4; i++) {
+							Course course = model.getCourses()[i];
+							if (room.getProject(course).getProjectAmount() > 0) {
+								for (int j = 0; j < i; j++) {
+									final int k = i;
+									System.out.println(room);
+									Platform.runLater(() -> view.displayAddProjectToRoom(room.getName(), k));
 								}
 							}
 						}
 					}
 
-					model.nextPlayer();
+					// game loop
+					
+					while (status == GameStatus.VALID) {
+						
+						
+						phase = GamePhase.ACTION;
+						// action phase
+	
+						actionPoints = 4;
+						this.wait(); // wait for actions to be chosen and executed
+						actionPoints = 0;		
+						
+						if (status == GameStatus.VALID) {
+	
+							phase = GamePhase.CARD_DRAWING;
+							// card phase
+	
+							if (model.getPlayerDeck().getSize() < 2) {
+								status = GameStatus.CARD_LACK;
+							} else {							
+								for (int i = 0; i < 2; i++) {	
+									PlayerCard card = model.getPlayerDeck().drawFirst();
+									
+									if (card.getClass() == RoomCard.class) {
+										//Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
+										model.getCurrentPlayer().getCards().addCard(card);
+									} else if (card.getClass() == EventCard.class) {
+										//Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
+										model.getCurrentPlayer().getCards().addCard(card);
+									} else {
+										// résoudre épidémie
+	
+										// exams
+	
+										
+										model.increaseEmergencyGauge();
+	
+										// stress
+	
+										ProjectCard pCard = (ProjectCard) model.getProjectDeck().drawLast();
+										Course course = pCard.getRoom().getCourse();
+										if (!course.isCompleted()) {
+											if (pCard.getRoom().getProject(course).getProjectAmount() > 0) {
+												pCard.getRoom().getProject(course).setProjectAmount(3);
+												burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
+											} else {
+												pCard.getRoom().getProject(course).setProjectAmount(3);
+											}
+										}
+										model.getProjectDiscard().addCard(pCard);
+	
+										// intensification
+	
+										model.getProjectDiscard().shuffle();
+										model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
+										
+										System.out.println("solve epidemy");
+									}
+								}
+								
+								//discard
+								
+								if (model.getCurrentPlayer().getCards().getSize() > 7) {
+									phase = GamePhase.DISCARD;
+									LinkedList<String> roomCards = new LinkedList<>();
+									LinkedList<Event> eventCards = new LinkedList<>();
+									/*
+									for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
+										if (card.getClass() == RoomCard.class) {
+											roomCards.add(card.getRoom().getName());
+										} else {
+											eventCards.add(card.getEvent());
+										}
+									}*/
+									
+									view.displayInfoMessage("Please discard room cards or use event cards. You should not have more than 7 cards");
+									/*view.displayEventCards(eventCards);
+									view.displayRoomCards(roomCards);*/
+									//view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
+								}
+	
+								phase = GamePhase.PROPAGATION;
+								// infection phase
+	
+								if (status == GameStatus.VALID) {
+									for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
+										ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
+										//view.displayDrawProjectCards(card.getRoom().getName());
+	
+										int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
+										if (projAmount < 3) {
+											card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(projAmount + 1);
+										} else {
+											burnOut(new LinkedList<Room>(),card.getRoom(), card.getRoom().getCourse());
+										}
+	
+										model.getProjectDiscard().addCard(card);
+									}
+								}
+							}
+						}
+	
+						model.nextPlayer();
+					}
+	
+					phase = GamePhase.CONCLUSION;
+					
+					switch (status) {
+					case CARD_LACK:
+	
+						break;
+					case BURN_OUT:
+	
+						break;
+					case PROJECT_LACK:
+	
+						break;
+					case VALID:
+	
+						break;
+					case WIN:
+	
+						break;
+					case GIVE_UP:
+						Platform.runLater(() -> view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?")); 
+						this.wait();
+						break;
+					default:
+						break;
+					}
 				}
-
-				phase = GamePhase.CONCLUSION;
-				
-				switch (status) {
-				case CARD_LACK:
-
-					break;
-				case BURN_OUT:
-
-					break;
-				case PROJECT_LACK:
-
-					break;
-				case VALID:
-
-					break;
-				case WIN:
-
-					break;
-				case GIVE_UP:
-					Platform.runLater(() -> view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?")); 
-					this.wait();
-					break;
-				default:
-					break;
-				}
-			
-
-			}}
+			}	
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -315,9 +335,15 @@ public class Controller extends Thread implements ViewListener {
 		}
 		
 		
-		//String[] sp = (String[])model.shortestPath(selectedPlayer.getPosition().getName(), name).toArray();
-		String[] sp = new String[1];
-		sp[0] = name;
+		LinkedList<String> shortP = model.shortestPath(selectedPlayer.getPosition().getName(), name);
+		String[] sp = new String[shortP.size()];
+		int i = 0;
+		for (String string : shortP) {
+			sp[i] = string;
+			i++;
+		}
+		
+		
 		Platform.runLater(() -> {view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();});
 		selectedPlayer.setPosition(room);
 		action = ActionType.NONE;
@@ -369,8 +395,7 @@ public class Controller extends Thread implements ViewListener {
 		} else {
 			final int j = i;
 			Platform.runLater(() -> view.displayRemoveProjectFromRoom(room.getName(), j));
-		}
-			
+		}	
 	}
 
 
@@ -384,10 +409,21 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void useCardButtonClicked() {
-		if (action != ActionType.NONE) {
-			view.clean();
-			action = ActionType.NONE;
+		PhDStudent p = model.getPlayers().get(0);
+		ArrayList<String> rooms = new ArrayList<>();
+		ArrayList<Event> events = new ArrayList<Event>();
+		
+		for (PlayerCard pc : (LinkedList<PlayerCard>) p.getCards().getCardList()) {
+			if (pc.getClass() == RoomCard.class) {
+				rooms.add(((RoomCard)pc).getRoom().getName());
+			} else {
+				events.add(((EventCard)pc).getEvent());
+			}
 		}
+		
+		view.displayDrawCards(Owner.PLAYER1, Owner.PLAYER1, true, rooms, events, 0);
+		
+		
 		
 		LinkedList<PlayerCard> cards = model.getCurrentPlayer().getCards().getCardList();
 		if (actionPoints > 0) {
@@ -404,7 +440,7 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void masterButtonClicked() {
-
+		
 	}
 
 	@Override
@@ -475,13 +511,13 @@ public class Controller extends Thread implements ViewListener {
 				// notify that the card was removed from hand
 				if (card.getClass() == EventCard.class) {
 					resolveEventCard((EventCard) card);
-					model.getPlayerDiscard().addCard(card);
+					//model.getPlayerDiscard().addCard(card);
 					// notify that card was put on the player discard pile
 				}
 			} else if (action == ActionType.USE_CARD) {
 				if (card.getClass() == EventCard.class) {
 					resolveEventCard((EventCard) card);
-					model.getPlayerDiscard().addCard(card);
+					//model.getPlayerDiscard().addCard(card);
 					// notify that card was put on the player discard pile
 				} else {
 					RoomCard rCard = (RoomCard) card;
