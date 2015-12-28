@@ -392,8 +392,57 @@ public class Model {
     }
 
     // TODO javadoc
-    public LinkedList<String> shortestPath(String start, String end) {
-        return null;
+    public LinkedList<String> shortestPath(String startName, String endName) {
+        Room start = null, end = null;
+        HashMap<Room, Integer> distanceMap = new HashMap<>();
+        HashMap<Room, Room> previousMap = new HashMap<>();
+        LinkedList<Room> queue = new LinkedList<>();
+        LinkedList<Room> path = new LinkedList<>();
+
+        for(Room room : this.roomTab) {
+            if(room.getName().equals(startName)) {
+                start = room;
+            }
+            if(room.getName().equals(endName)) {
+                end = room;
+            }
+            distanceMap.put(room, Integer.MAX_VALUE);
+            previousMap.put(room, null);
+            queue.offer(room);
+        }
+
+        distanceMap.put(start, 0);
+
+        while(queue.size() > 0) {
+            Room u = null;
+            Integer minDist = Integer.MAX_VALUE;
+            for(Room room : distanceMap.keySet()) {
+                if(distanceMap.get(room) < minDist) {
+                    u = room;
+                    minDist = distanceMap.get(room);
+                }
+            }
+            queue.remove(u);
+            for(Room v : u.getNeighbours()) {
+                if(distanceMap.get(u) + 1 < distanceMap.get(v)) {
+                    distanceMap.put(v, distanceMap.get(u) + 1);
+                    previousMap.put(v, u);
+                }
+            }
+        }
+
+        path.addFirst(end);
+        while(path.get(0) != start) {
+            path.addFirst(previousMap.get(path.get(0)));
+        }
+
+        LinkedList<String> pathName = new LinkedList<>();
+
+        for(Room room : path) {
+            pathName.add(room.getName());
+        }
+
+        return pathName;
     }
 
     /**
