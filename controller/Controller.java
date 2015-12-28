@@ -56,14 +56,14 @@ public class Controller extends Thread implements ViewListener {
 
 				while (status == GameStatus.VALID) {
 					
-					/*
+					
 					phase = GamePhase.ACTION;
 					// action phase
 
 					actionPoints = 4;
 					this.wait(); // wait for actions to be chosen and executed
 					actionPoints = 0;		
-					*/
+					
 					if (status == GameStatus.VALID) {
 
 						phase = GamePhase.CARD_DRAWING;
@@ -76,16 +76,17 @@ public class Controller extends Thread implements ViewListener {
 								PlayerCard card = (PlayerCard)model.getPlayerDeck().drawFirst();
 								
 								if (card.getClass() == RoomCard.class) {
-									view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName());
+									Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else if (card.getClass() == EventCard.class) {
-									view.displayDrawPlayerCards(((EventCard)card).getEvent());
+									Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
 									model.getCurrentPlayer().getCards().addCard(card);
 								} else {
 									// résoudre épidémie
 
 									// exams
 
+									/*
 									model.increaseEmergencyGauge();
 
 									// stress
@@ -106,8 +107,12 @@ public class Controller extends Thread implements ViewListener {
 
 									model.getProjectDiscard().shuffle();
 									model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
+									*/
+									System.out.println("solve epidemy");
 								}
 							}
+							
+							this.wait();
 							
 							//discard
 							
@@ -232,7 +237,7 @@ public class Controller extends Thread implements ViewListener {
 		for (String uv : uvs) {
 			if (uv.equals("")) {
 				validSetting = false;
-				view.displayInfoMessage("Course names cannot be empty.");
+				view.displayInfoMessage("Le nom d'une UV ne peu pas être vide.");
 				return;
 			} else {
 				if (testedStrings.contains(uv)) {
@@ -293,16 +298,32 @@ public class Controller extends Thread implements ViewListener {
 		view.displayValidationMessage("Do you realy want to give up ?");
 	}
 	
+
+	@Override
+	public void moveButtonClicked() {
+		pawnClicked(model.getCurrentPlayer().getRole());
+	}
 	
 	
 	@Override
 	synchronized public void placeClicked(String name) {
-		if (selectedReachableRooms.containsKey(name)) {
-			actionPoints -= selectedReachableRooms.get(name);
-		//TODO	selectedPlayer.setPosition(model.getRooms().get(name));
-		//TODO	view.displayMovePawn(selectedPlayer.getRole(), model.shortestPath(selectedPlayer.getPosition().getName(), name));
-			view.clean();
+		actionPoints -= selectedReachableRooms.get(name);
+		Room room = null;
+		for (Room r : model.getRooms()) {
+			if (r.getName().equals(name)) {
+				room = r;
+				break;
+			}
 		}
+		
+		//TODO use shortest path
+		//String[] sp = (String[])model.shortestPath(selectedPlayer.getPosition().getName(), name).toArray();
+		String[] sp = new String[2];
+		sp[0] = selectedPlayer.getPosition().getName();
+		sp[1] = name;
+		Platform.runLater(() -> {view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();});
+		selectedPlayer.setPosition(room);
+		action = ActionType.NONE;
 	}
 
 	@Override
@@ -314,7 +335,11 @@ public class Controller extends Thread implements ViewListener {
 			}
 		}
 		
-		Platform.runLater(() -> view.displayReachableRooms(model.reachableRooms(player, actionPoints)));
+		synchronized (selectedPlayer) {
+			selectedReachableRooms = model.reachableRooms(player, actionPoints);
+		}
+		
+		Platform.runLater(() -> view.displayReachableRooms(selectedReachableRooms));
 	}
 
 	@Override
@@ -355,10 +380,6 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
-	@Override
-	public void moveButtonClicked() {
-		pawnClicked(model.getCurrentPlayer().getRole());
-	}
 
 	@Override
 	public void shareKnowledgeButtonClicked() {
@@ -508,7 +529,8 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void endOfStageButtonClicked() {
-
+		action = ActionType.NONE;
+		this.notify();
 	}
 
 

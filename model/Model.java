@@ -353,6 +353,7 @@ public class Model {
 
         for(PhDStudent student : this.getPlayers()) {
             if(student.getRole().equals(playerRole)) {
+            	
                 sourceName = student.getPosition().getName();
 
                 map.put(sourceName, 0);
