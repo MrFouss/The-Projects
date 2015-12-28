@@ -61,4 +61,9 @@ public class Card extends StackPane implements Clickable {
             rectangle.setOnMouseClicked(null);
         }
     }
+
+    @Override
+    public void resetFill() {
+        rectangle.setFill(color);
+    }
 }

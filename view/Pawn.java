@@ -73,4 +73,9 @@ public class Pawn implements Clickable{
             shape.setOnMouseClicked(null);
         }
     }
+
+    @Override
+    public void resetFill() {
+        shape.setFill(player.getRole().roleToColor());
+    }
 }

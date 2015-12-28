@@ -586,7 +586,12 @@ public class Board extends Scene {
      * @param rooms the name of the reachable rooms with the number of actions needed to reach them
      */
     public void reachableRooms(HashMap<String, Integer> rooms) {
-        //TODO implement
+        ArrayList<Room> roomTab = new ArrayList<>();
+        rooms.forEach((name, dist) -> roomTab.add(this.rooms.get(name)));
+        putInFront(true, roomTab.toArray(new Room[roomTab.size()]));
+        rooms.forEach((name, dist) -> {
+            this.rooms.get(name).setFill(Color.GREEN.deriveColor(0,1,1./dist,1));
+        });
     }
 
     /**
@@ -648,7 +653,8 @@ public class Board extends Scene {
             node.toFront();
             if (node.getClass() == Room.class) {
                 for ( Pawn pawn : ((Room)node).getPawns()) {
-                    pawn.getShape().toFront();
+                    if(pawn != null)
+                        pawn.getShape().toFront();
                 }
             }
             if (clickable) {
@@ -664,6 +670,7 @@ public class Board extends Scene {
                 if (clickable) {
                     try {
                         ((Clickable)node).setClickable(false,view);
+                        ((Clickable)node).resetFill();
                     }catch (Exception ignore) {}
                 }
             }

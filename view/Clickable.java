@@ -5,4 +5,5 @@ package the_projects.view;
  */
 public interface Clickable {
     void setClickable(boolean clickable, View view);
+    void resetFill();
 }
