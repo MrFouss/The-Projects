@@ -2,6 +2,8 @@ package the_projects.model;
 
 import javafx.scene.paint.Color;
 
+import java.util.Random;
+
 /**
  * The enumeration containing all PhD Student's roles.
  */
@@ -12,10 +14,12 @@ public enum Role {
     INSTALLER,
     COFFEE_MAKER,
     DAOUID,
-    HACKER;
+    HACKER,
+    RANDOM;
 
     /**
-     * Method associating a role to a color
+     * Method associating a role to a color.
+     *
      * @return the color associated
      */
     public Color roleToColor() {
@@ -40,7 +44,8 @@ public enum Role {
     }
 
     /**
-     * Method associating a role its a description
+     * Method associating a role its a description.
+     *
      * @return the description associated
      */
     public String roleToDescription() {
@@ -84,7 +89,8 @@ public enum Role {
     }
 
     /**
-     * Method to associate a name to its role
+     * Method to associate a name to its role.
+     *
      * @param name the name to associate
      * @return the associated role
      */
@@ -97,7 +103,36 @@ public enum Role {
     }
 
     /**
-     * Method to associate a role to its name
+     * Gets a random role.
+     *
+     * @return the randomly chosen role.
+     */
+    public static Role random() {
+        Random random = new Random();
+        int tmp = random.nextInt(7);
+        switch(tmp) {
+            case 0:
+                return TRELLO_ADEPT;
+            case 1:
+                return GROUP_LEADER;
+            case 2:
+                return MENTOR;
+            case 3:
+                return INSTALLER;
+            case 4:
+                return COFFEE_MAKER;
+            case 5:
+                return DAOUID;
+            case 6:
+                return HACKER;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Method to associate a role to its name.
+     *
      * @return the associated name
      */
     public String roleToName() {
