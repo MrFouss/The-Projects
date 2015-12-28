@@ -46,22 +46,24 @@ public class Controller extends Thread implements ViewListener {
 				phase = GamePhase.SETTING;
 				// setting phase
 
-				view.displaySetting();
+				Platform.runLater(() -> view.displaySetting());
 				this.wait(); // waiting for the user to enter and validate his settings
 
 				// game loop
 
-				view.displayGameBoard(model);
+				Platform.runLater(() -> view.displayGameBoard(model));
+				
 
 				while (status == GameStatus.VALID) {
-
+					
+					/*
 					phase = GamePhase.ACTION;
 					// action phase
 
 					actionPoints = 4;
 					this.wait(); // wait for actions to be chosen and executed
 					actionPoints = 0;		
-					
+					*/
 					if (status == GameStatus.VALID) {
 
 						phase = GamePhase.CARD_DRAWING;
@@ -153,7 +155,6 @@ public class Controller extends Thread implements ViewListener {
 				}
 
 				phase = GamePhase.CONCLUSION;
-				System.out.println("conclusion");
 				
 				switch (status) {
 				case CARD_LACK:
@@ -172,7 +173,7 @@ public class Controller extends Thread implements ViewListener {
 
 					break;
 				case GIVE_UP:
-					view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?");
+					Platform.runLater(() -> view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?")); 
 					this.wait();
 					break;
 				default:
@@ -184,8 +185,7 @@ public class Controller extends Thread implements ViewListener {
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("thread terminated");
+		Platform.runLater(() -> view.close());
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {
@@ -307,8 +307,14 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	synchronized public void pawnClicked(Role player) {
-		selectedReachableRooms = model.reachableRooms(player, actionPoints);
-		view.displayReachableRooms(selectedReachableRooms);
+		for (PhDStudent p : model.getPlayers()) {
+			if (p.getRole() == player) {
+				selectedPlayer = p;
+				break;
+			}
+		}
+		
+		Platform.runLater(() -> view.displayReachableRooms(model.reachableRooms(player, actionPoints)));
 	}
 
 	@Override
@@ -351,7 +357,7 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void moveButtonClicked() {
-
+		pawnClicked(model.getCurrentPlayer().getRole());
 	}
 
 	@Override

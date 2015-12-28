@@ -95,7 +95,11 @@ public class Model {
             i = 0;
             for (String line : newRoomsList) {
                 String[] vars = line.split(",");
-                roomTab[i++] = new Room(vars[1], courseTab[Integer.parseInt(vars[0])], courseTab);
+                roomTab[i] = new Room(vars[1], courseTab[Integer.parseInt(vars[0])], courseTab);
+                if(vars[1].equals("B402")) {
+                    roomTab[i].toggleLabRoom();
+                }
+                ++i;
             }
         }
         catch (NullPointerException e) {
@@ -174,6 +178,12 @@ public class Model {
                 tmpStudent = new PhDStudent(name, tmpRole);
             } else {
                 tmpStudent = new PhDStudent(name, players.get(name));
+            }
+
+            for(Room room : roomTab) {
+                if(room.getName().equals("B402")) {
+                    tmpStudent.setPosition(room);
+                }
             }
 
             this.playerList.add(tmpStudent);
