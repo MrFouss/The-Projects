@@ -1,5 +1,7 @@
 package the_projects.view.Cards;
 
+import the_projects.view.Deck;
+
 /**
  * The different entity that can have cards
  */
@@ -14,3 +16,5 @@ public enum Owner {
     PLAYER4,
     HACKER
 }
+
+

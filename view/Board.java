@@ -41,14 +41,13 @@ public class Board extends Scene {
     private Pane pane;
     private ArrayList<Pawn> pawns;
     private Deck[] decks;
-    private StackPane playerDiscard;
-    private StackPane projectDiscard;
     private PropagationGauge propagationGauge;
     private OutbreaksGauge outbreaksGauge;
     private MasteredCoursesDisplay masteredCoursesDisplay;
     private MyButton giveUp;
     private ArrayList<Card> displayedCards;
     private Rectangle hidingRectangle;
+    private Player[] players;
 
     /**
      * TODO doc when finished
@@ -118,14 +117,14 @@ public class Board extends Scene {
         }
 
         //Creation of the decks
-        decks = new Deck[4];
+        decks = new Deck[5];
         decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
         decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
         decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
         decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.);
+        //hackerDeck
+        decks[4] = new Deck(this, "", Color.TRANSPARENT, 65/100., 75/100.);
 
-        projectDiscard = decks[1];
-        playerDiscard = decks[3];
         Arrays.asList(decks).stream().forEach(pane.getChildren()::add);
 
         //Creation of the rooms and corridors
@@ -134,6 +133,8 @@ public class Board extends Scene {
 
 
         //Creating the pawns
+        this.players = players;
+
         pawns = new ArrayList<>();
         Arrays.asList(players).stream().forEach(player -> pawns.add(new Pawn(player)));
 
@@ -330,74 +331,6 @@ public class Board extends Scene {
     }
 
     /**
-     * Method to display the movement of a card to a Deck
-     * @param card the card to move
-     * @param deck the destination deck
-     */
-    public PathTransition moveToDeck(Card card, Deck deck) {
-        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(deck.getLayoutX() + deck.getWidth()/2, deck.getLayoutY() + deck.getHeight()/2));
-
-        card.toFront();
-        if (deck.isHorizontal()) {
-            RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
-            rotateTransition.setByAngle(-90);
-            rotateTransition.play();
-        }
-
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
-        scaleTransition.setToX(deck.isHorizontal()? deck.getScaleY() : deck.getScaleX());
-        scaleTransition.setToY(deck.isHorizontal()? deck.getScaleX() : deck.getScaleY());
-        scaleTransition.play();
-
-        card.setOnMouseClicked(null);
-        card.setClickable(false, view);
-
-        return new PathTransition(Duration.seconds(.5),path,card);
-    }
-
-    /**
-     * Method to display the movement of some cards from a Deck
-     * @param deck the deck from where the cards come
-     * @param cards the cards to move
-     */
-    public void moveFromDeck(boolean clickable, Deck deck, Card... cards) {
-        double i = (6 - cards.length)/2., j = 1;
-        if (cards.length > 6) {
-            i = (6 - cards.length/2)/2.;
-        }
-        for (Card card : cards) {
-            Path path;
-            if (cards.length < 6) {
-                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight() / 2));
-            }else{
-                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight()* j / 3));
-                if (i == (6 - cards.length/2)/2. + 5) {
-                    ++j;
-                    i = (6 - cards.length/2)/2.;
-                }
-            }
-            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
-            pathTransition.play();
-
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
-            scaleTransition.setToX(decks[2].getScaleX());
-            scaleTransition.setToY(decks[2].getScaleY());
-            scaleTransition.play();
-
-            if (deck.isHorizontal()) {
-                card.setRotate(-90);
-                RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
-                rotateTransition.setByAngle(90);
-                rotateTransition.play();
-            }
-
-            displayedCards.add(card);
-        }
-        putInFront(clickable, (Card[])displayedCards.toArray());
-    }
-
-
-    /**
      * Method to transform a room to a Lab room
      * @param roomName the name of the room
      */
@@ -489,6 +422,97 @@ public class Board extends Scene {
         pawns.forEach(pawn -> pawn.getShape().toFront());
     }
 
+    public StackPane OwnerToDeck(Owner owner) {
+        switch (owner) {
+            case PLAYER1:
+                return players[0].getHandDeck();
+            case PLAYER2:
+                return players[1].getHandDeck();
+            case PLAYER3:
+                return players[2].getHandDeck();
+            case PLAYER4:
+                return players[3].getHandDeck();
+            case PLAYER_DECK:
+                return decks[2];
+            case PLAYER_DISCARD:
+                return decks[3];
+            case PROJECT_DECK:
+                return decks[0];
+            case PROJECT_DISCARD:
+                return decks[1];
+            case HACKER:
+                return decks[4];
+            default:
+                return new Deck(this,"",Color.TRANSPARENT,0,0);
+        }
+    }
+
+    /**
+     * Method to display the movement of some cards from a Deck
+     * @param deck the deck from where the cards come
+     * @param cards the cards to move
+     */
+    public void moveFromDeck(boolean clickable, Deck deck, Card... cards) {
+        double i = (6 - cards.length)/2., j = 1;
+        if (cards.length > 6) {
+            i = (6 - cards.length/2)/2.;
+        }
+        for (Card card : cards) {
+            Path path;
+            if (cards.length < 6) {
+                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight() / 2));
+            }else{
+                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight()* j / 3));
+                if (i == (6 - cards.length/2)/2. + 5) {
+                    ++j;
+                    i = (6 - cards.length/2)/2.;
+                }
+            }
+            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
+            pathTransition.play();
+
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
+            scaleTransition.setToX(decks[2].getScaleX());
+            scaleTransition.setToY(decks[2].getScaleY());
+            scaleTransition.play();
+
+            if (deck.isHorizontal()) {
+                card.setRotate(-90);
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
+                rotateTransition.setByAngle(90);
+                rotateTransition.play();
+            }
+
+            displayedCards.add(card);
+        }
+        putInFront(clickable, (Card[])displayedCards.toArray());
+    }
+
+    /**
+     * Method to display the movement of a card to a Deck
+     * @param card the card to move
+     * @param deck the destination deck
+     */
+    public PathTransition moveToDeck(Card card, Deck deck) {
+        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(deck.getLayoutX() + deck.getWidth()/2, deck.getLayoutY() + deck.getHeight()/2));
+
+        card.toFront();
+        if (deck.isHorizontal()) {
+            RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
+            rotateTransition.setByAngle(-90);
+            rotateTransition.play();
+        }
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
+        scaleTransition.setToX(deck.isHorizontal()? deck.getScaleY() : deck.getScaleX());
+        scaleTransition.setToY(deck.isHorizontal()? deck.getScaleX() : deck.getScaleY());
+        scaleTransition.play();
+
+        card.setOnMouseClicked(null);
+        card.setClickable(false, view);
+
+        return new PathTransition(Duration.seconds(.5),path,card);
+    }
 
     void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
         //TODO implement
