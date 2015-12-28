@@ -417,7 +417,7 @@ public class Model {
             Room u = null;
             Integer minDist = Integer.MAX_VALUE;
             for(Room room : distanceMap.keySet()) {
-                if(distanceMap.get(room) < minDist) {
+                if(distanceMap.get(room) < minDist && queue.contains(room)) {
                     u = room;
                     minDist = distanceMap.get(room);
                 }
