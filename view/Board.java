@@ -47,7 +47,7 @@ public class Board extends Scene {
     private MasteredCoursesDisplay masteredCoursesDisplay;
     private MyButton giveUp;
     private ArrayList<Card> displayedCards;
-    private LinkedList<Clickable> clickables;
+    private Rectangle hidingRectangle;
 
     /**
      * TODO doc when finished
@@ -161,6 +161,11 @@ public class Board extends Scene {
         pane.getChildren().add(giveUp);
 
         displayedCards = new ArrayList<>();
+
+        hidingRectangle = new Rectangle();
+        rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
+        rectangle.heightProperty().bind(pane.heightProperty());
+        rectangle.widthProperty().bind(pane.widthProperty());
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -645,11 +650,11 @@ public class Board extends Scene {
      * @param nodes the list of elements to put in front
      */
     public void putInFront(boolean clickable, Node... nodes) {
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.6));
-        rectangle.setWidth(pane.getWidth());
-        rectangle.setHeight(pane.getHeight());
-        pane.getChildren().add(rectangle);
+        hidingRectangle = new Rectangle();
+        hidingRectangle.setFill(Color.BLACK.deriveColor(0,1,1,.6));
+        hidingRectangle.setWidth(pane.getWidth());
+        hidingRectangle.setHeight(pane.getHeight());
+        pane.getChildren().add(hidingRectangle);
         for (Node node : nodes) {
             node.toFront();
             if (node.getClass() == Room.class) {
@@ -665,17 +670,7 @@ public class Board extends Scene {
             }
         }
 
-        rectangle.setOnMouseClicked(e -> {
-            pane.getChildren().remove(rectangle);
-            for (Node node : nodes) {
-                if (clickable) {
-                    try {
-                        ((Clickable)node).setClickable(false,view);
-                        ((Clickable)node).resetFill();
-                    }catch (Exception ignore) {}
-                }
-            }
-        });
+        hidingRectangle.setOnMouseClicked(e -> clean());
     }
 
     public void displayCardsOfPlayer(Role role) {
@@ -683,5 +678,13 @@ public class Board extends Scene {
     }
 
     public void clean() {
+
+        pane.getChildren().remove(hidingRectangle);
+        pane.getChildren().stream().filter(node -> node instanceof Clickable).forEach(node -> {
+            try {
+                ((Clickable) node).setClickable(false, view);
+                ((Clickable) node).resetFill();
+            } catch (Exception ignore) {}
+        });
     }
 }
