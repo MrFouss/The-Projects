@@ -83,6 +83,8 @@ public enum Role {
                         "carte Évènement dans la défausse. Il la met de côté \n" +
                         "(1 à la fois) et peut la jouer quand il veut, avant \n" +
                         "de la retirer du jeu.";
+            case RANDOM:
+                return "Prennez un rôle au hasard, c'est bien plus fun !";
             default :
                 return "You shouldn't see this, please make a bug report(non-existent role description)";
         }
@@ -151,6 +153,8 @@ public enum Role {
                 return "Daouid";
             case HACKER:
                 return "Hacker";
+            case RANDOM:
+                return "Aléatoire";
             default:
                 return "";
         }

@@ -44,7 +44,7 @@ public class Controller extends Thread implements ViewListener {
 				phase = GamePhase.SETTING;
 				// setting phase
 
-				Platform.runLater(() -> view.displaySetting());
+				view.displaySetting();
 				this.wait(); // waiting for the user to enter and validate his settings
 
 				// game loop
