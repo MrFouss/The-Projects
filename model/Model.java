@@ -1,12 +1,11 @@
 package the_projects.model;
 
-import the_projects.model.card.CardDeck;
-import the_projects.model.card.PlayerCard;
-import the_projects.model.card.ProjectCard;
+import the_projects.model.card.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * The class managing the whole game board.
@@ -15,11 +14,13 @@ public class Model {
 
     /**
      * The scale used to compute the emergency level.
+     * Can go from 0 to 6 (0-2 -> 2 ; 3-4 -> 3 ; 5-6 -> 4).
      */
     private int emergencyGauge;
 
     /**
      * The scale used to compute the burn-out level.
+     * Can go from 0 to 8, if there are 8 burn-outs, the game is over.
      */
     private int burnOutGauge;
 
@@ -70,12 +71,83 @@ public class Model {
      * Constructor with the list of the players' names and of the courses' names.
      *
      * @param players the names of the players.
-     * @param roles the roles of the players.
-     * @param courses the names of the courses.
+     * @param courseNames the names of the courses.
      * @param difficulty the level of difficulty.
      */
-    public Model(LinkedList<String> players, LinkedList<Role> roles, LinkedList<String> courses, int difficulty) {
-        // TODO implement here
+    public Model(HashMap<Role, String> players, LinkedList<String> courseNames, int difficulty) {
+
+        this.emergencyGauge = 0;
+        this.burnOutGauge = 0;
+
+        this.projectDiscard = new CardDeck<>();
+        this.playerDiscard = new CardDeck<>();
+
+        this.courseTab = new Course[4];
+        int i = 0;
+        for(String courseName : courseNames) {
+            courseTab[i++] = new Course(courseName);
+        }
+
+        // Adds each room to roomTab
+        this.roomTab = new Room[48];
+        try {
+            List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/rooms.csv"));
+            i = 0;
+            for (String line : newRoomsList) {
+                String[] vars = line.split(",");
+                roomTab[i++] = new Room(vars[1], courseTab[Integer.parseInt(vars[0])], courseTab);
+            }
+        }
+        catch (NullPointerException e) {
+            System.out.println("rooms.csv file not found (pointer)");
+        }
+        catch (IOException e) {
+            System.out.println("rooms.csv file not found");
+        }
+
+        // Adds the neighbours to each room
+        try {
+            List<String> neighboursList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/rooms_neighbours.csv"));
+            i = 0;
+            for (String line : neighboursList) {
+                String[] vars = line.split(",");
+                for(String neighbourName : vars) {
+                    roomTab[i].getNeighbours().add(roomTab[Integer.parseInt(neighbourName)]);
+                }
+                ++i;
+            }
+        }
+        catch (NullPointerException e) {
+            System.out.println("rooms.csv file not found (pointer)");
+        }
+        catch (IOException e) {
+            System.out.println("rooms.csv file not found");
+        }
+
+        this.projectDeck = new CardDeck<>();
+        this.playerDeck = new CardDeck<>();
+
+        for(i = 0 ; i < 48 ; ++i) {
+            this.projectDeck.addCard(new ProjectCard(roomTab[i]));
+            this.playerDeck.addCard(new RoomCard(roomTab[i]));
+        }
+        for(Event event : Event.values()) {
+            this.playerDeck.addCard(new EventCard(event));
+        }
+        for(i = 0 ; i < 4+difficulty ; ++i) {
+            this.playerDeck.addCard(new PartyCard());
+        }
+
+        this.projectDeck.shuffle();
+        this.playerDeck.shuffle();
+
+        this.playerList = new LinkedList<>();
+        for(Role role : players.keySet()) {
+            PhDStudent tmpStudent = new PhDStudent(players.get(role), role);
+            this.playerList.add(tmpStudent);
+        }
+
+        this.currentPlayer = this.playerList.listIterator();
     }
 
     /**

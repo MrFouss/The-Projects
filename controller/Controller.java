@@ -2,27 +2,12 @@ package the_projects.controller;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.sun.swing.internal.plaf.synth.resources.synth;
 
 import javafx.application.Platform;
-import sun.awt.DisplayChangedListener;
-import the_projects.model.Course;
-import the_projects.model.Model;
-import the_projects.model.PhDStudent;
-import the_projects.model.Project;
-import the_projects.model.Role;
-import the_projects.model.Room;
-import the_projects.model.card.Card;
-import the_projects.model.card.Event;
-import the_projects.model.card.EventCard;
-import the_projects.model.card.PartyCard;
-import the_projects.model.card.PlayerCard;
-import the_projects.model.card.ProjectCard;
-import the_projects.model.card.RoomCard;
+import the_projects.model.*;
+import the_projects.model.card.*;
 import the_projects.view.View;
 
 /**
@@ -250,7 +235,24 @@ public class Controller extends Thread implements ViewListener {
 		}
 
 		if (validSetting == true) {
-			model = new Model(players, testedRoles, uvs, diff);
+            // turning players and roles into a HashMap
+            HashMap<Role, String> mapPlayers = new HashMap<>();
+
+            Role[] roleTab = new Role[roles.size()];
+            String[] playerTab = new String[players.size()];
+            int i = 0;
+            for(Role role : roles) {
+                roleTab[i++] = role;
+            }
+            i = 0;
+            for(String player : players) {
+                playerTab[i++] = player;
+            }
+            for(i = 0 ; i < players.size() ; ++i) {
+                mapPlayers.put(roleTab[i], playerTab[i]);
+            }
+
+			model = new Model(mapPlayers, uvs, diff);
 			this.notify();
 		} else {
 			view.displayInfoMessage("Invalid settings");
