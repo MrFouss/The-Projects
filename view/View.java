@@ -13,11 +13,9 @@ import the_projects.model.Model;
 import the_projects.model.PhDStudent;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
+import the_projects.view.Cards.Owner;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 
 /**
  *  TODO complete
@@ -178,148 +176,6 @@ public class View extends Stage {
         board.toEradicated(courseIndex);
     }
 
-    /**
-     * Method to draw two room cards from the player deck
-     *
-     * @param roomCard1 the name of the room of the first room card to draw
-     * @param roomCard2 the name of the room of the second room card to draw
-     */
-    public void displayDrawPlayerCards(String roomCard1, String roomCard2) {
-        board.drawPlayerCards(roomCard1, roomCard2);
-    }
-
-    /**
-     * Method to draw a room card and an event card from the player deck
-     *
-     * @param roomCard  the name of the room of the room card to draw
-     * @param eventCard the event of the event card to draw
-     */
-    public void displayDrawPlayerCards(String roomCard, Event eventCard) {
-        board.drawPlayerCards(roomCard, eventCard);
-    }
-
-    /**
-     * Method to draw two event cards from the player deck
-     *
-     * @param eventCard1 the event of the first event card to draw
-     * @param eventCard2 the event of the second event card to draw
-     */
-    public void displayDrawPlayerCards(Event eventCard1, Event eventCard2) {
-        board.drawPlayerCards(eventCard1, eventCard2);
-    }
-
-    /**
-     * Method to draw a room card and a student party card from the player deck
-     *
-     * @param roomCard the name of the room of the room card to draw
-     */
-    public void displayDrawPlayerCards(String roomCard) {
-        board.drawPlayerCards(roomCard);
-    }
-
-    /**
-     * Method to draw an event card and a student party card from the player deck
-     *
-     * @param eventCard the event of the event card to draw
-     */
-    public void displayDrawPlayerCards(Event eventCard) {
-        board.drawPlayerCards(eventCard);
-    }
-
-    /**
-     * Method to draw two student party cards from the player deck
-     */
-    public void displayDrawPlayerCards() {
-        board.drawPlayerCards();
-    }
-    /**
-     * Method to discard a room card to the player discard
-     * @param roomCard the name of the room of the room card
-     */
-    public void displayDiscardPlayerCard(String roomCard) {
-        board.discardPlayerCard(roomCard);
-    }
-
-    /**
-     * Method to discard an event card to the player discard
-     * @param eventCard the event of the event card
-     */
-    public void displayDiscardPlayerCard(Event eventCard) {
-        board.discardPlayerCard(eventCard);
-    }
-
-    /**
-     * Method to make a partyCard disappear
-     */
-    public void displayDiscardPartyCard() {
-        board.discardPartyCard();
-    }
-
-    /**
-     * Method to draw project cards from the projects deck
-     * @param roomNames the names of the projects to draw
-     */
-    public void displayDrawProjectCards(String... roomNames) {
-        board.drawProjectCards(roomNames);
-    }
-
-    /**
-     * Method to discard a project card to the project discard
-     * @param roomName the name of the room of the project
-     */
-    public void displayDiscardProjectCard(String roomName) {
-        board.discardProjectCard(roomName);
-    }
-
-    /**
-     * Method to give a room card to a player
-     * @param roomName the name of the room of the room card
-     * @param role the role of the player
-     */
-    public void displayGiveCardToPlayer(String roomName, Role role) {
-        board.giveCardToPlayer(roomName, role);
-    }
-
-    /**
-     * Method to give an event card to a player
-     * @param event the event of the event card
-     * @param role the role of the player
-     */
-    public void displayGiveCardToPlayer(Event event, Role role) {
-        board.giveCardToPlayer(event, role);
-    }
-
-    /**
-     * Method to take a room card from a player
-     * @param roomName the name of the room of the room card
-     * @param role the role of the player
-     */
-    public void displayDiscardCardFromPlayer(String roomName, Role role) {
-        board.discardCardFromPlayer(roomName, role);
-    }
-
-    /**
-     * Method to take an event card from a player
-     * @param event the event of the event card
-     * @param role the role of the player
-     */
-    public void displayDiscardCardFromPlayer(Event event, Role role) {
-        board.discardCardFromPlayer(event, role);
-    }
-
-    /**
-     * Method to draw event cards from the player discard
-     * @param events the events of the event cards to draw
-     */
-    public void displayEventCardsFromDiscard(Event... events) {
-        board.drawEventCardsFromDiscard(events);
-    }
-
-    public void displayCardsOfPlayer(Role role) {
-        board.displayCardsOfPlayer(role);
-    }
-
-
     public void fireRoomClicked(String name) {
         listeners.forEach(listener -> listener.placeClicked(name));
     }
@@ -361,6 +217,7 @@ public class View extends Stage {
     }
 
     public void fireCardClicked(String title) {
+        //TODO implement
     }
 
     public void fireRoomCardClicked(String roomName) {
@@ -429,6 +286,19 @@ public class View extends Stage {
 
     public void fireSettingValidationButtonClicked() {
         listeners.forEach(ViewListener::settingValidationButtonClicked);
+    }
+
+    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
+        board.drawCards(actualOwner, newOwner, clickable, roomNamesOfRoomCards, eventsOfEventCards, numberOfPartyCards);
+    }
+    void discardCards() {
+        board.discardCards();
+    }
+    void discardCard(Owner newOwner, String roomNameOfRoomCard) {
+        board.discardCard(newOwner, roomNameOfRoomCard);
+    }
+    void discardCard(Owner newOwner, Event eventOfEventCard) {
+        board.discardCard(newOwner, eventOfEventCard);
     }
 
 

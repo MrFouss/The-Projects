@@ -22,8 +22,9 @@ public class Card extends StackPane implements Clickable {
     private Color color;
     private String title;
     private ChangeListener hoverListener;
+    private Owner owner;
 
-    public Card(Pane pane, String title, String text, Color color) {
+    public Card(Pane pane, String title, String text, Color color, Owner owner) {
         this.color = color;
         this.title = title;
 
@@ -51,6 +52,7 @@ public class Card extends StackPane implements Clickable {
         label.setMouseTransparent(true);
         getChildren().add(label);
 
+        this.owner = owner;
     }
 
     @Override
@@ -68,5 +70,13 @@ public class Card extends StackPane implements Clickable {
     @Override
     public void resetFill() {
         rectangle.setFill(color);
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 }

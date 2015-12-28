@@ -21,10 +21,7 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
-import the_projects.view.Cards.Card;
-import the_projects.view.Cards.EventCard;
-import the_projects.view.Cards.PartyCard;
-import the_projects.view.Cards.RoomCard;
+import the_projects.view.Cards.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -399,63 +396,6 @@ public class Board extends Scene {
         putInFront(clickable, (Card[])displayedCards.toArray());
     }
 
-    /**
-     * Method to display the drawing of two cards from the player deck
-     * @param card1 first card to draw
-     * @param card2 second card to draw
-     */
-    public void drawPlayerCards(Card card1, Card card2) {
-
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
-        rectangle.setWidth(pane.getWidth());
-        rectangle.setHeight(pane.getHeight());
-        pane.getChildren().addAll(rectangle, card1, card2);
-
-        rectangle.setOnMouseClicked(e -> {
-            discardPlayerCard(card1);
-            discardPlayerCard(card2);
-            pane.getChildren().remove(rectangle);
-        });
-        moveFromDeck(false, decks[2], card1, card2);
-    }
-
-    /**
-     * Method to discard a card to the player discard
-     * @param card the card to display
-     */
-    public void discardPlayerCard(Card card) {
-
-        PathTransition pathTransition = moveToDeck(card, decks[3]);
-        pathTransition.setOnFinished(e -> {
-            pane.getChildren().remove(playerDiscard);
-            playerDiscard = card;
-        });
-        pathTransition.play();
-    }
-
-    /**
-     *  Method to display the drawing of cards from the project deck
-     * @param cards the cards to draw
-     */
-    public void drawProjectCards(Card... cards) {
-        pane.getChildren().addAll(cards);
-        moveFromDeck(false, decks[0], cards);
-    }
-
-    /**
-     * Method to discard a card to the project discard
-     * @param card the card to display
-     */
-    public void discardProjectCard(Card card) {
-
-        PathTransition pathTransition = moveToDeck(card, decks[1]);
-        pathTransition.setOnFinished(e -> {
-            pane.getChildren().remove(projectDiscard);
-            projectDiscard = card;
-        });
-        pathTransition.play();
-    }
 
     /**
      * Method to transform a room to a Lab room
@@ -495,102 +435,6 @@ public class Board extends Scene {
         masteredCoursesDisplay.toEradicated(projectIndex);
     }
 
-
-    /**
-     * Method to draw two room cards from the player deck
-     *
-     * @param roomCard1 the name of the room of the first room card to draw
-     * @param roomCard2 the name of the room of the second room card to draw
-     */
-    public void drawPlayerCards(String roomCard1, String roomCard2) {
-        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard1)), new RoomCard(pane, rooms.get(roomCard2)));
-    }
-
-    /**
-     * Method to draw a room card and an event card from the player deck
-     *
-     * @param roomCard  the name of the room of the room card to draw
-     * @param eventCard the event of the event card to draw
-     */
-    public void drawPlayerCards(String roomCard, Event eventCard) {
-        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard)), new EventCard(pane, eventCard));
-    }
-
-    /**
-     * Method to draw two event cards from the player deck
-     *
-     * @param eventCard1 the event of the first event card to draw
-     * @param eventCard2 the event of the second event card to draw
-     */
-    public void drawPlayerCards(Event eventCard1, Event eventCard2) {
-        drawPlayerCards(new EventCard(pane, eventCard1), new EventCard(pane, eventCard2));
-
-    }
-
-    /**
-     * Method to draw a room card and a student party card from the player deck
-     *
-     * @param roomCard the name of the room of the room card to draw
-     */
-    public void drawPlayerCards(String roomCard) {
-        drawPlayerCards(new RoomCard(pane, rooms.get(roomCard)), new PartyCard(pane));
-    }
-
-    /**
-     * Method to draw an event card and a student party card from the player deck
-     *
-     * @param eventCard the event of the event card to draw
-     */
-    public void drawPlayerCards(Event eventCard) {
-        drawPlayerCards(new EventCard(pane, eventCard), new PartyCard(pane));
-    }
-
-    /**
-     * Method to draw two student party cards from the player deck
-     */
-    public void drawPlayerCards() {
-        drawPlayerCards(new PartyCard(pane), new PartyCard(pane));
-    }
-
-    /**
-     * Method to discard a room card to the player discard
-     * @param roomCard the name of the room of the room card
-     */
-    public void discardPlayerCard(String roomCard) {
-        //TODO implement
-    }
-
-    /**
-     * Method to discard an event card to the player discard
-     * @param eventCard the event of the event card
-     */
-    public void discardPlayerCard(Event eventCard) {
-        //TODO implement
-    }
-
-    /**
-     * Method to make a partyCard disappear
-     */
-    public void discardPartyCard() {
-        //TODO implement
-    }
-
-    /**
-     * Method to draw project cards from the projects deck
-     * @param roomNames the names of the projects to draw
-     */
-    public void drawProjectCards(String... roomNames) {
-        //TODO implement
-    }
-
-    /**
-     * Method to discard a project card to the project discard
-     * @param roomName the name of the room of the project
-     */
-    public void discardProjectCard(String roomName) {
-        //TODO implement
-    }
-
     /**
      * Method to display the reachable rooms
      * @param rooms the name of the reachable rooms with the number of actions needed to reach them
@@ -599,54 +443,9 @@ public class Board extends Scene {
         ArrayList<Room> roomTab = new ArrayList<>();
         rooms.forEach((name, dist) -> roomTab.add(this.rooms.get(name)));
         putInFront(true, roomTab.toArray(new Room[roomTab.size()]));
-        rooms.forEach((name, dist) -> {
-            this.rooms.get(name).setFill(Color.GREEN.deriveColor(0,1,1./dist,1));
-        });
+        rooms.forEach((name, dist) -> this.rooms.get(name).setFill(Color.GREEN.deriveColor(0,1,1./dist,1)));
     }
 
-    /**
-     * Method to give a room card to a player
-     * @param roomName the name of the room of the room card
-     * @param role the role of the player
-     */
-    public void giveCardToPlayer(String roomName, Role role) {
-        //TODO implement
-    }
-
-    /**
-     * Method to give an event card to a player
-     * @param event the event of the event card
-     * @param role the role of the player
-     */
-    public void giveCardToPlayer(Event event, Role role) {
-        //TODO implement
-    }
-
-    /**
-     * Method to take a room card from a player
-     * @param roomName the name of the room of the room card
-     * @param role the role of the player
-     */
-    public void discardCardFromPlayer(String roomName, Role role) {
-        //TODO implement
-    }
-
-    /**
-     * Method to take an event card from a player
-     * @param event the event of the event card
-     * @param role the role of the player
-     */
-    public void discardCardFromPlayer(Event event, Role role) {
-        //TODO implement
-    }
-
-    /**
-     * Method to draw event cards from the player discard
-     * @param events the events of the event cards to draw
-     */
-    public void drawEventCardsFromDiscard(Event... events) {
-        //TODO implement
-    }
 
     /**
      * Method to put elements in front and make only them clickable
@@ -677,9 +476,6 @@ public class Board extends Scene {
         hidingRectangle.setOnMouseClicked(e -> clean());
     }
 
-    public void displayCardsOfPlayer(Role role) {
-        //TODO implement
-    }
 
     public void clean() {
 
@@ -690,5 +486,20 @@ public class Board extends Scene {
                 ((Clickable) node).resetFill();
             } catch (Exception ignore) {}
         });
+        pawns.forEach(pawn -> pawn.getShape().toFront());
+    }
+
+
+    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList roomNamesOfRoomCards, ArrayList eventsOfEventCards, int numberOfPartyCards) {
+        //TODO implement
+    }
+    void discardCards() {
+        //TODO implement
+    }
+    void discardCard(Owner newOwner, String roomNameOfRoomCard) {
+        //TODO implement
+    }
+    void discardCard(Owner newOwner, Event eventOfEventCard) {
+        //TODO implement
     }
 }

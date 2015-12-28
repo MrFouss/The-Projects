@@ -2,7 +2,6 @@ package the_projects.view.Cards;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import the_projects.view.Cards.Card;
 
 /**
  * Party version of the cards
@@ -12,7 +11,7 @@ public class PartyCard extends Card {
      * Simplified Constructor of Card
      * @param pane parent Pane
      */
-    public PartyCard(Pane pane) {
+    public PartyCard(Pane pane, Owner owner) {
         super(pane, "Soirée Étudiante",
                 "1) Examens : \n" +
                         "la jauge d’urgence\n" +
@@ -28,6 +27,6 @@ public class PartyCard extends Card {
                         "projet sont mélangées \n" +
                         "et placées sur le dessus\n" +
                         "du paquet projets.",
-                Color.GREEN);
+                Color.GREEN, owner);
     }
 }
