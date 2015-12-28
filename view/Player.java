@@ -11,6 +11,7 @@ import the_projects.model.Role;
 import the_projects.view.Cards.Card;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * The representation of a player
@@ -19,7 +20,7 @@ public class Player {
     private String name;
     private Role role;
     private Pawn pawn;
-    private HashSet<Card> hand;
+    private LinkedList<Card> hand;
     private StackPane handDeck;
     private Pane pane;
     private Color color;
@@ -33,7 +34,7 @@ public class Player {
         this.name = name;
         this.role = role;
         color = role.roleToColor();
-        hand = new HashSet<>();
+        hand = new LinkedList<>();
         handDeck = null;
         pane = new Pane();
         pane.setBackground(new Background(new BackgroundFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color.deriveColor(0,1,1,.25)), new Stop(1, color.deriveColor(0,1,.5,.25))), new CornerRadii(5), new Insets(0))));
@@ -71,10 +72,17 @@ public class Player {
      * Getter for the hand
      * @return the cards of the player in a HashSet
      */
-    public HashSet<Card> getHand() {
+    public LinkedList<Card> getHand() {
         return hand;
     }
 
+    /**
+     * Setter for the hand
+     * @param hand the new hand
+     */
+    public void setHand(LinkedList<Card> hand) {
+        this.hand = hand;
+    }
 
     /**
      * Method to give a card to a player
@@ -104,8 +112,10 @@ public class Player {
      * Setter for the Deck of the player
      * @param handDeck the new Deck of the player
      */
-    public void setHandDeck(StackPane handDeck) {
+    public void setHandDeck(StackPane handDeck, View view) {
         this.handDeck = handDeck;
+        if (handDeck instanceof Clickable)
+            ((Clickable)handDeck).setClickable(true, view);
     }
 
     /**

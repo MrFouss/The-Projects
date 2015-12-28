@@ -21,12 +21,14 @@ public class Card extends StackPane implements Clickable {
     private Rectangle rectangle;
     private Color color;
     private String title;
+    private String text;
     private ChangeListener hoverListener;
     private Owner owner;
 
     public Card(Pane pane, String title, String text, Color color, Owner owner) {
         this.color = color;
         this.title = title;
+        this.text = text;
 
         rectangle = new Rectangle();
         rectangle.setFill(color);
@@ -59,7 +61,7 @@ public class Card extends StackPane implements Clickable {
     public void setClickable(boolean clickable, View view) {
         if (clickable) {
             hoverListener = Board.setHoverStrokeChange(rectangle, color);
-            rectangle.setOnMouseClicked(event -> view.fireCardClicked(title));
+            rectangle.setOnMouseClicked(event -> view.fireCardClicked(title, text));
         }else {
             rectangle.hoverProperty().removeListener(hoverListener);
             rectangle.setStrokeWidth(0);

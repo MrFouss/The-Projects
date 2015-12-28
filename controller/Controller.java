@@ -208,7 +208,7 @@ public class Controller extends Thread implements ViewListener {
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		view.close();
+		Platform.runLater(() -> view.close());
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {

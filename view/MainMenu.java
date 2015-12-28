@@ -40,7 +40,7 @@ public class MainMenu extends Scene {
         gridPane.add(new Text("Nom des UVs :"), 0, 0);
         courses = new TextField[4];
         for (int i = 0; i < 4; ++i) {
-            courses[i] = new TextField("UV" + Integer.toString(i));
+            courses[i] = new TextField("UV" + Integer.toString(i+1));
             gridPane.add(courses[i], i+1, 0);
         }
 

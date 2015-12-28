@@ -40,12 +40,12 @@ public class Board extends Scene {
     private HashMap<String, Room> rooms;
     private Pane pane;
     private ArrayList<Pawn> pawns;
-    private Deck[] decks;
+    private StackPane[] decks;
     private PropagationGauge propagationGauge;
     private OutbreaksGauge outbreaksGauge;
     private MasteredCoursesDisplay masteredCoursesDisplay;
     private MyButton giveUp;
-    private ArrayList<Card> displayedCards;
+    private LinkedList<Card> displayedCards;
     private Rectangle hidingRectangle;
     private Player[] players;
 
@@ -164,7 +164,7 @@ public class Board extends Scene {
         giveUp.setOnMouseClicked(event -> view.fireGiveUpButtonClicked());
         pane.getChildren().add(giveUp);
 
-        displayedCards = new ArrayList<>();
+        displayedCards = new LinkedList<>();
 
         hidingRectangle = new Rectangle();
         rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
@@ -412,9 +412,9 @@ public class Board extends Scene {
 
 
     public void clean() {
-
+        discardCards();
         pane.getChildren().remove(hidingRectangle);
-        pane.getChildren().stream().filter(node -> node instanceof Clickable).forEach(node -> {
+        pane.getChildren().stream().filter(node -> node instanceof Clickable && !(node instanceof Card)).forEach(node -> {
             try {
                 ((Clickable) node).setClickable(false, view);
                 ((Clickable) node).resetFill();
@@ -486,57 +486,146 @@ public class Board extends Scene {
 
             displayedCards.add(card);
         }
-        putInFront(clickable, (Card[])displayedCards.toArray());
+        putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()]));
     }
 
     /**
      * Method to display the movement of a card to a Deck
      * @param card the card to move
-     * @param deck the destination deck
      */
-    public PathTransition moveToDeck(Card card, Deck deck) {
+    public void moveToDeck(Card card) {
+        StackPane deck = ownerToDeck(card.getOwner());
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(deck.getLayoutX() + deck.getWidth()/2, deck.getLayoutY() + deck.getHeight()/2));
 
+        boolean horizontal = card.getOwner() == Owner.PROJECT_DECK || card.getOwner() == Owner.PROJECT_DISCARD;
+
         card.toFront();
-        if (deck.isHorizontal()) {
+        if (horizontal) {
             RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), card);
             rotateTransition.setByAngle(-90);
             rotateTransition.play();
         }
 
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
-        scaleTransition.setToX(deck.isHorizontal()? deck.getScaleY() : deck.getScaleX());
-        scaleTransition.setToY(deck.isHorizontal()? deck.getScaleX() : deck.getScaleY());
+        scaleTransition.setToX(horizontal ? deck.getScaleY() : deck.getScaleX());
+        scaleTransition.setToY(horizontal ? deck.getScaleX() : deck.getScaleY());
         scaleTransition.play();
 
-        card.setOnMouseClicked(null);
         card.setClickable(false, view);
 
-        return new PathTransition(Duration.seconds(.5),path,card);
+        (new PathTransition(Duration.seconds(.5),path,card)).play();
     }
 
+    /**
+     * Method to draw some cards
+     * @param actualOwner from where the cards are drawn
+     * @param newOwner to where the cards will be discarded
+     * @param clickable true if the cards have to be clickable when displayed
+     * @param roomNamesOfRoomCards the list of names of the room cards to draw
+     * @param eventsOfEventCards the list of events of the event cards to draw
+     * @param numberOfPartyCards the number of party cards to draw
+     */
     void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
-        ArrayList<Card> cards = new ArrayList<>();
+        ArrayList<Card> cards = new ArrayList<Card>();
         roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
         eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
         for (int i = 0; i < numberOfPartyCards; ++i)
             cards.add(new PartyCard(pane, newOwner));
-        moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, (Card[])(cards.toArray()));
+        moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
     }
+
+    /**
+     * Method to give all displayed cards to their owners
+     */
     void discardCards() {
-        //TODO implement
+        if (displayedCards.size() > 0) {
+            displayedCards.forEach(card -> {
+                if (card.getClass() == PartyCard.class)
+                    card.setOwner(Owner.PLAYER_DISCARD);
+                moveToDeck(card);
+            });
+            Card last = displayedCards.pollLast();
+            displayedCards.stream().filter(card ->
+                    card.getOwner() != Owner.PLAYER1 && card.getOwner() != Owner.PLAYER2 && card.getOwner() != Owner.PLAYER3 && card.getOwner() != Owner.PLAYER4
+            ).forEach(card1 -> {
+                pane.getChildren().remove(card1);
+                displayedCards.remove(card1);
+            });
+            if (last.getOwner() == Owner.HACKER) {
+                last.toBack();
+            }else {
+                last.toFront();
+            }
+            switch (last.getOwner()) {
+                case PLAYER1:
+                    players[0].setHandDeck(last, view);
+                    players[0].setHand(displayedCards);
+                    break;
+                case PLAYER2:
+                    players[1].setHandDeck(last, view);
+                    players[1].setHand(displayedCards);
+                    break;
+                case PLAYER3:
+                    players[2].setHandDeck(last, view);
+                    players[2].setHand(displayedCards);
+                    break;
+                case PLAYER4:
+                    players[3].setHandDeck(last, view);
+                    players[3].setHand(displayedCards);
+                    break;
+                case PLAYER_DECK:
+                    pane.getChildren().remove(decks[2]);
+                    decks[2] = last;
+                    break;
+                case PLAYER_DISCARD:
+                    pane.getChildren().remove(decks[3]);
+                    decks[3] = last;
+                    break;
+                case PROJECT_DECK:
+                    pane.getChildren().remove(decks[0]);
+                    decks[0] = last;
+                    break;
+                case PROJECT_DISCARD:
+                    pane.getChildren().remove(decks[1]);
+                    decks[1] = last;
+                    break;
+                case HACKER:
+                    pane.getChildren().remove(decks[4]);
+                    decks[4] = last;
+                    break;
+
+            }
+
+            //TODO complete ?
+        }
     }
+
+    /**
+     * Method to give a particular displayed room card to a particular owner
+     * @param newOwner the new owner of the displayed card
+     * @param roomNameOfRoomCard the name of the room card
+     */
     void discardCard(Owner newOwner, String roomNameOfRoomCard) {
         //TODO implement
     }
+
+    /**
+     * Method to give a particular displayed event card to a particular owner
+     * @param newOwner the new owner of the displayed card
+     * @param eventOfEventCard the name of the event card
+     */
     void discardCard(Owner newOwner, Event eventOfEventCard) {
         //TODO implement
     }
 
-
-    public void titleToFireCardClicked(String title) {
-        if (rooms.containsKey(title))
-            view.fireRoomCardClicked(title);
+    /**
+     * Method to notify a card has been clicked from its name
+     * @param title the title of the clicked card
+     */
+    public void titleToFireCardClicked(String title, String text) {
+        //TODO test players
+        if (rooms.containsKey(text))
+            view.fireRoomCardClicked(text);
         else if (Event.nameToEvent(title) == null)
             view.fireEventCardClicked(Event.nameToEvent(title));
     }
