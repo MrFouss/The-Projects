@@ -232,14 +232,6 @@ public class View extends Stage {
         listeners.forEach(ViewListener::giveUpButtonClicked);
     }
 
-    public void displayInfoMessage(String s) {
-        Alert popup = new Alert(Alert.AlertType.INFORMATION);
-        popup.setTitle("The-Projects");
-        popup.setHeaderText(null);
-        popup.setContentText(s);
-
-        popup.showAndWait();
-    }
 
 
     public LinkedList<String> getPlayerNames() {
@@ -262,26 +254,40 @@ public class View extends Stage {
         Platform.runLater(() -> board.clean());
     }
 
+    public void displayInfoMessage(String s) {
+        Platform.runLater(() -> {
+            Alert popup = new Alert(Alert.AlertType.INFORMATION);
+            popup.setTitle("The-Projects");
+            popup.setHeaderText(null);
+            popup.setContentText(s);
+
+            popup.showAndWait();
+        });
+    }
 
     public void displayValidationMessage(String s) {
-        Alert message = new Alert(Alert.AlertType.CONFIRMATION);
-        message.setTitle("The-Projects");
-        message.setHeaderText(null);
-        message.setContentText(s);
-        Optional<ButtonType> choice = message.showAndWait();
-        if (choice.get() == ButtonType.OK) {
-            listeners.forEach(ViewListener::YesButtonClicked);
-        }else {
-            listeners.forEach(ViewListener::NoButtonClicked);
-        }
+        Platform.runLater(() -> {
+            Alert message = new Alert(Alert.AlertType.CONFIRMATION);
+            message.setTitle("The-Projects");
+            message.setHeaderText(null);
+            message.setContentText(s);
+            Optional<ButtonType> choice = message.showAndWait();
+            if (choice.get() == ButtonType.OK) {
+                listeners.forEach(ViewListener::YesButtonClicked);
+            } else {
+                listeners.forEach(ViewListener::NoButtonClicked);
+            }
+        });
     }
 
     public void displayMessage(String s) {
-        Alert message = new Alert(Alert.AlertType.ERROR);
-        message.setTitle("The-Projects");
-        message.setHeaderText(null);
-        message.setContentText(s);
-        message.show();
+        Platform.runLater(() -> {
+            Alert message = new Alert(Alert.AlertType.ERROR);
+            message.setTitle("The-Projects");
+            message.setHeaderText(null);
+            message.setContentText(s);
+            message.show();
+        });
     }
 
     public void fireSettingValidationButtonClicked() {

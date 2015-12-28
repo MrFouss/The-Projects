@@ -459,7 +459,7 @@ public class Model {
         for(Room room : path) {
             pathName.add(room.getName());
         }
-
+        pathName.remove(startName);
         return pathName;
     }
 
