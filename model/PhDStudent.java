@@ -71,7 +71,7 @@ public class PhDStudent {
      *
      * @return the hand of cards.
      */
-    public CardDeck getCards() {
+    public CardDeck<PlayerCard> getCards() {
         return this.cardHand;
     }
 

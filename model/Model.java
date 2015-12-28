@@ -144,22 +144,6 @@ public class Model {
         this.projectDeck.shuffle();
         this.playerDeck.shuffle();
 
-        int deckSize = this.playerDeck.getSize();
-        CardDeck<PlayerCard> finalDeck = new CardDeck<>();
-        for(i = 0 ; i < 3+difficulty ; ++i) {
-            CardDeck<PlayerCard> tmpDeck = new CardDeck<>();
-            for(int j = 0 ; j <= deckSize/(4+difficulty) ; ++j) {
-                tmpDeck.addCard(this.playerDeck.drawFirst());
-            }
-            tmpDeck.addCard(new PartyCard());
-            tmpDeck.shuffle();
-            finalDeck.addCardsOnTop(tmpDeck);
-        }
-        this.playerDeck.addCard(new PartyCard());
-        this.playerDeck.shuffle();
-        finalDeck.addCardsOnTop(this.playerDeck);
-        this.playerDeck = finalDeck;
-
         this.playerList = new LinkedList<>();
         for(String name : players.keySet()) {
             PhDStudent tmpStudent;
@@ -190,6 +174,38 @@ public class Model {
         }
 
         this.currentPlayer = this.playerList.listIterator();
+
+        int nbCards = 6 - this.playerList.size();
+        for(PhDStudent student : this.playerList) {
+            for(i = 0 ; i < nbCards ; ++i) {
+                student.getCards().addCard(this.playerDeck.drawFirst());
+            }
+        }
+
+        int deckSize = this.playerDeck.getSize();
+        CardDeck<PlayerCard> finalDeck = new CardDeck<>();
+        for(i = 0 ; i < 3+difficulty ; ++i) {
+            CardDeck<PlayerCard> tmpDeck = new CardDeck<>();
+            for(int j = 0 ; j <= deckSize/(4+difficulty) ; ++j) {
+                tmpDeck.addCard(this.playerDeck.drawFirst());
+            }
+            tmpDeck.addCard(new PartyCard());
+            tmpDeck.shuffle();
+            finalDeck.addCardsOnTop(tmpDeck);
+        }
+        this.playerDeck.addCard(new PartyCard());
+        this.playerDeck.shuffle();
+        finalDeck.addCardsOnTop(this.playerDeck);
+        this.playerDeck = finalDeck;
+
+        for(i = 0 ; i < 3 ; ++i) {
+            for(int j = 0 ; j < 3 ; ++j) {
+                ProjectCard card = projectDeck.drawFirst();
+                card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(i+1);
+                card.getRoom().getCourse().setRemainingProjectAmount(card.getRoom().getCourse().getRemainingProjectAmount()-i+1);
+                projectDeck.addCard(card);
+            }
+        }
     }
 
     /**
@@ -349,7 +365,7 @@ public class Model {
         LinkedList<Room> stack = new LinkedList<>();
         HashMap<String, Integer> map = new HashMap<>();
 
-        String sourceName;
+        String sourceName = null;
 
         for(PhDStudent student : this.getPlayers()) {
             if(student.getRole().equals(playerRole)) {
@@ -387,6 +403,8 @@ public class Model {
                 }
             }
         }
+
+        map.remove(sourceName);
 
         return map;
     }
