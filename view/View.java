@@ -409,6 +409,7 @@ public class View extends Stage {
     public void displayValidationMessage(String s) {
         Alert message = new Alert(Alert.AlertType.CONFIRMATION);
         message.setTitle("The-Projects");
+        message.setHeaderText(null);
         message.setContentText(s);
         Optional<ButtonType> choice = message.showAndWait();
         if (choice.get() == ButtonType.OK) {
@@ -421,6 +422,7 @@ public class View extends Stage {
     public void displayMessage(String s) {
         Alert message = new Alert(Alert.AlertType.ERROR);
         message.setTitle("The-Projects");
+        message.setHeaderText(null);
         message.setContentText(s);
         message.show();
     }
