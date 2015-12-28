@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 import javafx.application.Platform;
 import the_projects.model.*;
 import the_projects.model.card.*;
@@ -41,6 +40,9 @@ public class Controller extends Thread implements ViewListener {
 	public void run() {
 		try {
 			synchronized (this) {
+				while (status == GameStatus.VALID) {
+					
+				
 				phase = GamePhase.SETTING;
 				// setting phase
 
@@ -151,7 +153,8 @@ public class Controller extends Thread implements ViewListener {
 				}
 
 				phase = GamePhase.CONCLUSION;
-
+				System.out.println("conclusion");
+				
 				switch (status) {
 				case CARD_LACK:
 
@@ -177,11 +180,12 @@ public class Controller extends Thread implements ViewListener {
 				}
 			
 
-			}
+			}}
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
+		System.out.println("thread terminated");
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {
@@ -483,12 +487,17 @@ public class Controller extends Thread implements ViewListener {
 			status = GameStatus.GIVE_UP;
 			this.notify();
 		}
+		if (phase == GamePhase.CONCLUSION) {
+			status = GameStatus.VALID;
+			this.notify();
+		}
 	}
 
 	@Override
-	public void NoButtonClicked() {
-		// TODO Auto-generated method stub
-		
+	synchronized public void NoButtonClicked() {
+		if (phase == GamePhase.CONCLUSION) {
+			this.notify();
+		}
 	}
 
 	@Override
