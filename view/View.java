@@ -46,7 +46,7 @@ public class View extends Stage {
         int i = 0;
         for (PhDStudent phDStudent : this.model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
-        Platform.runLater(() -> setBoard(courses[0].getName(), courses[0].getName(), courses[0].getName(), courses[0].getName(), players));
+        Platform.runLater(() -> setBoard(courses[0].getName(), courses[1].getName(), courses[2].getName(), courses[3].getName(), players));
     }
 
     /**
