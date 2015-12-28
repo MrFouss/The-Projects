@@ -59,7 +59,7 @@ public class View extends Stage {
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
     public void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
-        setMaximized(true);
+        setHeight(getWidth()*9/16);
         board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players);
         setScene(board);
     }
@@ -76,7 +76,12 @@ public class View extends Stage {
      * Method to display a new settings menu
      */
     public void displaySetting() {
-        Platform.runLater(() -> setScene(mainMenu));
+        Platform.runLater(() -> setSettings());
+    }
+
+    private void setSettings() {
+        setScene(mainMenu);
+        setHeight(50);
     }
 
 
@@ -397,12 +402,9 @@ public class View extends Stage {
     }
 
     public void clean() {
-        //TODO implement
+        board.clean();
     }
 
-    public void disableAll() {
-        //TODO implement
-    }
 
     public void displayValidationMessage(String s) {
         Alert message = new Alert(Alert.AlertType.CONFIRMATION);

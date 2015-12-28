@@ -47,6 +47,7 @@ public class Board extends Scene {
     private MasteredCoursesDisplay masteredCoursesDisplay;
     private MyButton giveUp;
     private ArrayList<Card> displayedCards;
+    private LinkedList<Clickable> clickables;
 
     /**
      * TODO doc when finished
@@ -679,5 +680,8 @@ public class Board extends Scene {
 
     public void displayCardsOfPlayer(Role role) {
         //TODO implement
+    }
+
+    public void clean() {
     }
 }
