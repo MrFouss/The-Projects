@@ -44,7 +44,7 @@ public class View extends Stage {
         int i = 0;
         for (PhDStudent phDStudent : this.model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
-        Platform.runLater(() -> setBoard(courses[0].getName(), courses[1].getName(), courses[2].getName(), courses[3].getName(), players));
+        setBoard(courses[0].getName(), courses[1].getName(), courses[2].getName(), courses[3].getName(), players);
     }
 
     /**
@@ -58,8 +58,8 @@ public class View extends Stage {
      */
     public void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
         setHeight(getWidth()*9/16);
-        board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players);
-        setScene(board);
+        Platform.runLater(() -> board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players));
+        Platform.runLater(() -> setScene(board));
     }
 
     /**
@@ -78,7 +78,7 @@ public class View extends Stage {
     }
 
     private void setSettings() {
-        setScene(mainMenu);
+        Platform.runLater(() -> setScene(mainMenu));
         setHeight(50);
     }
 
@@ -88,7 +88,7 @@ public class View extends Stage {
      * @param rooms the name of the reachable rooms with the number of actions needed to reach them
      */
     public void displayReachableRooms(HashMap<String,Integer> rooms) {
-        board.reachableRooms(rooms);
+        Platform.runLater(() -> board.reachableRooms(rooms));
     }
 
     /**
@@ -98,7 +98,7 @@ public class View extends Stage {
      * @param rooms the names of the rooms on the pawns way
      */
     public void displayMovePawn(Role role, String... rooms) {
-        board.movePawn(role, rooms);
+        Platform.runLater(() -> board.movePawn(role, rooms));
     }
 
     /**
@@ -107,7 +107,7 @@ public class View extends Stage {
      * @param roomName the name of the room
      */
     public void displaySetRoomToLab(String roomName) {
-        board.setRoomToLab(roomName);
+        Platform.runLater(() -> board.setRoomToLab(roomName));
     }
 
     /**
@@ -117,7 +117,7 @@ public class View extends Stage {
      * @param projectIndex the index of the project [0-3]
      */
     public void displayAddProjectToRoom(String roomName, int projectIndex) {
-        board.addProjectToRoom(roomName, projectIndex);
+        Platform.runLater(() -> board.addProjectToRoom(roomName, projectIndex));
     }
 
     /**
@@ -127,21 +127,21 @@ public class View extends Stage {
      * @param projectIndex the index of the project
      */
     public void displayRemoveProjectFromRoom(String roomName, int projectIndex) {
-        board.removeProjectFromRoom(roomName, projectIndex);
+        Platform.runLater(() -> board.removeProjectFromRoom(roomName, projectIndex));
     }
 
     /**
      * Method to increase the propagation gauge
      */
     public void displayIncreasePropagationGauge() {
-        board.increasePropagationGauge();
+        Platform.runLater(() -> board.increasePropagationGauge());
     }
 
     /**
      * Method to increase the burn-out gauge
      */
     public void displayIncreaseBurnOutGauge() {
-        board.increaseBurnOutGauge();
+        Platform.runLater(() -> board.increaseBurnOutGauge());
     }
 
     /**
@@ -149,7 +149,7 @@ public class View extends Stage {
      * @param projectIndex the index of the course
      */
     public void displayToMastered(int projectIndex) {
-        board.toMastered(projectIndex);
+        Platform.runLater(() -> board.toMastered(projectIndex));
     }
 
     /**
@@ -157,7 +157,7 @@ public class View extends Stage {
      * @param projectIndex the index of the course
      */
     public void displayToEradicated(int projectIndex) {
-        board.toEradicated(projectIndex);
+        Platform.runLater(() -> board.toEradicated(projectIndex));
     }
 
     /**
@@ -165,7 +165,7 @@ public class View extends Stage {
      * @param courseIndex the index of the course
      */
     public void displayCourseMastered(int courseIndex) {
-        board.toMastered(courseIndex);
+        Platform.runLater(() -> board.toMastered(courseIndex));
     }
 
     /**
@@ -173,7 +173,7 @@ public class View extends Stage {
      * @param courseIndex the index of the course
      */
     public void displayCourseEradicated(int courseIndex) {
-        board.toEradicated(courseIndex);
+        Platform.runLater(() -> board.toEradicated(courseIndex));
     }
 
     public void fireRoomClicked(String name) {
@@ -216,8 +216,8 @@ public class View extends Stage {
         listeners.forEach(ViewListener::endOfStageButtonClicked);
     }
 
-    public void fireCardClicked(String title) {
-        board.titleToFireCardClicked(title);
+    public void fireCardClicked(String title, String text) {
+        Platform.runLater(() -> board.titleToFireCardClicked(title, text));
     }
 
     public void fireRoomCardClicked(String roomName) {
@@ -259,7 +259,7 @@ public class View extends Stage {
     }
 
     public void clean() {
-        board.clean();
+        Platform.runLater(() -> board.clean());
     }
 
 
@@ -289,16 +289,19 @@ public class View extends Stage {
     }
 
     public void displayDrawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
-        board.drawCards(actualOwner, newOwner, clickable, roomNamesOfRoomCards, eventsOfEventCards, numberOfPartyCards);
+        Platform.runLater(() -> board.drawCards(actualOwner, newOwner, clickable, roomNamesOfRoomCards, eventsOfEventCards, numberOfPartyCards));
     }
+
     public void displayDiscardCards() {
-        board.discardCards();
+        Platform.runLater(() -> board.discardCards());
     }
+
     public void displayDiscardCard(Owner newOwner, String roomNameOfRoomCard) {
-        board.discardCard(newOwner, roomNameOfRoomCard);
+        Platform.runLater(() -> board.discardCard(newOwner, roomNameOfRoomCard));
     }
+
     public void displayDiscardCard(Owner newOwner, Event eventOfEventCard) {
-        board.discardCard(newOwner, eventOfEventCard);
+        Platform.runLater(() -> board.discardCard(newOwner, eventOfEventCard));
     }
 
 

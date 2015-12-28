@@ -50,16 +50,16 @@ public class Controller extends Thread implements ViewListener {
 					phase = GamePhase.SETTING;
 					// setting phase
 	
-					Platform.runLater(() -> view.displaySetting());
+					view.displaySetting();
 					this.wait(); // waiting for the user to enter and validate his settings
 	
-					Platform.runLater(() -> view.displayGameBoard(model));
+					view.displayGameBoard(model);
 					
 					//display initial stuff
 					
 					for (Room room : model.getRooms()) {
 						if (room.isLabRoom()) {
-							Platform.runLater(() -> view.displaySetRoomToLab(room.getName()));
+							view.displaySetRoomToLab(room.getName());
 						}
 						for (int i = 0; i < 4; i++) {
 							Course course = model.getCourses()[i];
@@ -67,7 +67,7 @@ public class Controller extends Thread implements ViewListener {
 								for (int j = 0; j < i; j++) {
 									final int k = i;
 									System.out.println(room);
-									Platform.runLater(() -> view.displayAddProjectToRoom(room.getName(), k));
+									view.displayAddProjectToRoom(room.getName(), k);
 								}
 							}
 						}
@@ -97,10 +97,10 @@ public class Controller extends Thread implements ViewListener {
 									PlayerCard card = model.getPlayerDeck().drawFirst();
 									
 									if (card.getClass() == RoomCard.class) {
-										//Platform.runLater(() -> view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
+										//view.displayDrawPlayerCards(((RoomCard)card).getRoom().getName()));
 										model.getCurrentPlayer().getCards().addCard(card);
 									} else if (card.getClass() == EventCard.class) {
-										//Platform.runLater(() -> view.displayDrawPlayerCards(((EventCard)card).getEvent()));
+										//view.displayDrawPlayerCards(((EventCard)card).getEvent()));
 										model.getCurrentPlayer().getCards().addCard(card);
 									} else {
 										// résoudre épidémie
@@ -197,7 +197,7 @@ public class Controller extends Thread implements ViewListener {
 	
 						break;
 					case GIVE_UP:
-						Platform.runLater(() -> view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?")); 
+						view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?");
 						this.wait();
 						break;
 					default:
@@ -208,7 +208,7 @@ public class Controller extends Thread implements ViewListener {
 		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Platform.runLater(() -> view.close());
+		view.close();
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {
@@ -344,7 +344,7 @@ public class Controller extends Thread implements ViewListener {
 		}
 		
 		
-		Platform.runLater(() -> {view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();});
+		{view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();};
 		selectedPlayer.setPosition(room);
 		action = ActionType.NONE;
 	}
@@ -362,7 +362,7 @@ public class Controller extends Thread implements ViewListener {
 			selectedReachableRooms = model.reachableRooms(player, actionPoints);
 		}
 		
-		Platform.runLater(() -> view.displayReachableRooms(selectedReachableRooms));
+		view.displayReachableRooms(selectedReachableRooms);
 	}
 
 	@Override
@@ -391,10 +391,10 @@ public class Controller extends Thread implements ViewListener {
 		}
 
 		if (!projectRemoved) {
-			Platform.runLater(() -> view.displayMessage("Il n'y a aucun projet dans cette salle."));
+			view.displayMessage("Il n'y a aucun projet dans cette salle.");
 		} else {
 			final int j = i;
-			Platform.runLater(() -> view.displayRemoveProjectFromRoom(room.getName(), j));
+			view.displayRemoveProjectFromRoom(room.getName(), j);
 		}	
 	}
 
