@@ -56,15 +56,9 @@ public class Controller extends Thread implements ViewListener {
 					phase = GamePhase.ACTION;
 					// action phase
 
-					
 					actionPoints = 4;
-						//view.clean();
-						//update doable actions
-						this.wait(); // wait for an action to be chosen and executed
-					}
-					actionPoints = 0;
-					//clean
-					
+					this.wait(); // wait for actions to be chosen and executed
+					actionPoints = 0;		
 					
 					if (status == GameStatus.VALID) {
 
@@ -174,12 +168,17 @@ public class Controller extends Thread implements ViewListener {
 				case WIN:
 
 					break;
+				case GIVE_UP:
+					view.displayValidationMessage("YOU LOST\nYou gave up.\nDo you want to start a new party ?");
+					this.wait();
+					break;
 				default:
 					break;
 				}
 			
 
-		} catch (InterruptedException e) {
+			}
+		}catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
@@ -286,9 +285,8 @@ public class Controller extends Thread implements ViewListener {
 	@Override
 	public void giveUpButtonClicked() {
 		view.clean();
-		view.disableAll();
-		status = GameStatus.GIVE_UP;
-		this.notify();
+		action = ActionType.GIVE_UP;
+		view.displayValidationMessage("Do you realy want to give up ?");
 	}
 	
 	
@@ -480,9 +478,11 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void YesButtonClicked() {
-		// TODO Auto-generated method stub
-		
+	synchronized public void YesButtonClicked() {
+		if (action == ActionType.GIVE_UP) {
+			status = GameStatus.GIVE_UP;
+			this.notify();
+		}
 	}
 
 	@Override
