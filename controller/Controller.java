@@ -221,42 +221,64 @@ public class Controller extends Thread implements ViewListener {
 		int diff = view.getDifficulty();
 		LinkedList<Role> roles = view.getRoles();
 		LinkedList<Role> testedRoles = new LinkedList<Role>();
+		LinkedList<String> testedStrings = new LinkedList<String>();
 		
 		Boolean validSetting = true;
 
-		//TODO add random Management
-		for (Role role : roles) {
-			if (testedRoles.contains(role)) {
+		//testing uniqueness and non empty course names
+		for (String uv : uvs) {
+			if (uv.equals("")) {
 				validSetting = false;
-				break;
+				view.displayInfoMessage("Course names cannot be empty.");
+				return;
+			} else {
+				if (testedStrings.contains(uv)) {
+					validSetting = false;
+					view.displayInfoMessage("Course names should be unique.");
+					return;
+				} else {
+					testedStrings.add(uv);
+				}
+			}
+		}
+		
+		//testing uniqueness and non empty player names
+		for (String p : players) {
+			if (p.equals("")) {
+				validSetting = false;
+				view.displayInfoMessage("Player names cannot be empty.");
+				return;
+			} else {
+				if (testedStrings.contains(p)) {
+					validSetting = false;
+					view.displayInfoMessage("Player names should be unique.");
+					return;
+				} else {
+					testedStrings.add(p);
+				}
+			}
+		}
+		
+		//testing uniqueness roles
+		for (Role role : roles) {
+			if (testedRoles.contains(role) && role != Role.RANDOM) {
+				validSetting = false;
+				view.displayInfoMessage("Roles should be unique (excepte for RANDOM).");
+				return;
 			} else {
 				testedRoles.add(role);
 			}
 		}
 
-		if (validSetting == true) {
-            // turning players and roles into a HashMap
-            HashMap<Role, String> mapPlayers = new HashMap<>();
+        // turning players and roles into a HashMap
+        HashMap<String, Role> mapPlayers = new HashMap<>();
 
-            Role[] roleTab = new Role[roles.size()];
-            String[] playerTab = new String[players.size()];
-            int i = 0;
-            for(Role role : roles) {
-                roleTab[i++] = role;
-            }
-            i = 0;
-            for(String player : players) {
-                playerTab[i++] = player;
-            }
-            for(i = 0 ; i < players.size() ; ++i) {
-                mapPlayers.put(roleTab[i], playerTab[i]);
-            }
-
-			model = new Model(mapPlayers, uvs, diff);
-			this.notify();
-		} else {
-			view.displayInfoMessage("Invalid settings");
+        for (int i = 0; i < players.size() ; i++) {
+			mapPlayers.put(players.get(i), roles.get(i));
 		}
+
+		//model = new Model(mapPlayers, uvs, diff);
+		this.notify();
 	}
 	
 	
