@@ -462,9 +462,9 @@ public class Board extends Scene {
         for (Card card : cards) {
             Path path;
             if (cards.length < 6) {
-                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight() / 2));
+                path = new Path(new MoveTo(deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getX(), deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getY()), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight() / 2));
             }else{
-                path = new Path(new MoveTo(deck.getLayoutX() + deck.getWidth() / 2, deck.getLayoutY() + deck.getHeight() / 2), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight()* j / 3));
+                path = new Path(new MoveTo(deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getX(), deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getY()), new LineTo(pane.getWidth() * (++i) / 8, pane.getHeight()* j / 3));
                 if (i == (6 - cards.length/2)/2. + 5) {
                     ++j;
                     i = (6 - cards.length/2)/2.;
@@ -535,6 +535,10 @@ public class Board extends Scene {
             eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
         for (int i = 0; i < numberOfPartyCards; ++i)
             cards.add(new PartyCard(pane, newOwner));
+        cards.forEach(card -> {
+            card.setScaleX(ownerToDeck(card.getOwner()).getScaleX());
+            card.setScaleY(ownerToDeck(card.getOwner()).getScaleY());
+        });
         pane.getChildren().addAll(cards);
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
     }
