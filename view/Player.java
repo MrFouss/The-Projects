@@ -170,6 +170,7 @@ public class Player {
     public Card take(String roomName) {
         for (Card card : hand) {
             if (card.getText().equals(roomName)) {
+                hand.remove(card);
                 return card;
             }
         }
@@ -179,6 +180,7 @@ public class Player {
     public Card take(Event event) {
         for (Card card : hand) {
             if (card.getTitle().equals(event.eventToName())) {
+                hand.remove(card);
                 return card;
             }
         }

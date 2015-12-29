@@ -401,9 +401,9 @@ public class Board extends Scene {
                         pawn.getShape().toFront();
                 }
             }
-            if (clickable) {
+            if (node instanceof Clickable) {
                 try {
-                    ((Clickable)node).setClickable(true,view);
+                    ((Clickable)node).setClickable(clickable,view);
                 }catch (Exception ignore) {}
             }
         }
@@ -671,7 +671,9 @@ public class Board extends Scene {
                 }
             });
             lastPathTransition.play();
-            //TODO complete ?
+            if (last.getOwner() == Owner.PLAYER1 || last.getOwner() == Owner.PLAYER2 || last.getOwner() == Owner.PLAYER3 || last.getOwner() == Owner.PLAYER4) {
+                last.setClickable(true, view);
+            }
         }
     }
 
@@ -698,19 +700,26 @@ public class Board extends Scene {
      * @param title the title of the clicked card
      */
     public void titleToFireCardClicked(String title, String text) {
-        if (rooms.containsKey(text)) {
+        if (rooms.containsKey(text) || Event.nameToEvent(title) != null) {
             for (Player player : players) {
-                if (player != null && player.have(text))
+                if (player != null && player.have(text)) {
+                    ArrayList<String> rooms = new ArrayList<>();
+                    ArrayList<Event> events = new ArrayList<>();
+                    Owner owner = player.getHand().peek().getOwner();
+                    player.getHand().forEach(card -> {
+                        if (this.rooms.containsKey(card.getText()))
+                            rooms.add(card.getText());
+                        else if (Event.nameToEvent(card.getTitle()) != null)
+                            events.add(Event.nameToEvent(card.getTitle()));
+                    });
+                    drawCards(owner, owner, false, rooms, events, 0);
                     return;
+                }
             }
-            view.fireRoomCardClicked(text);
-        }
-        else if (Event.nameToEvent(title) != null) {
-            for (Player player : players) {
-                if (player != null && player.have(Event.nameToEvent(title)))
-                    return;
-            }
-            view.fireEventCardClicked(Event.nameToEvent(title));
+            if (rooms.containsKey(text))
+                view.fireRoomCardClicked(text);
+            else
+                view.fireEventCardClicked(Event.nameToEvent(title));
         }
     }
 
