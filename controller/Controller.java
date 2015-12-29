@@ -63,10 +63,8 @@ public class Controller extends Thread implements ViewListener {
 						}
 						for (int i = 0; i < 4; i++) {
 							Course course = model.getCourses()[i];
-							if (room.getProject(course).getProjectAmount() > 0) {
-								for (int j = 0; j < i; j++) {
-									view.displayAddProjectToRoom(room.getName(), i);
-								}
+							for (int j = 0; j < room.getProject(course).getProjectAmount(); j++) {
+								view.displayAddProjectToRoom(room.getName(),i);
 							}
 						}
 					}
