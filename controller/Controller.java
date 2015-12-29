@@ -72,7 +72,7 @@ public class Controller extends Thread implements ViewListener {
 					// game loop
 					
 					while (status == GameStatus.VALID) {
-						
+						view.displayInfoMessage("NOUVEAU TOUR\n" + model.getCurrentPlayer().getName());
 						
 						phase = GamePhase.ACTION;
 						// action phase
@@ -228,6 +228,24 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
+	private PhDStudent playerRoleToPlayer(Role role) {
+		for (PhDStudent p : model.getPlayers()) {
+			if (p.getRole() == role) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	private Room roomNameToRoom(String name) {
+		for (Room r : model.getRooms()) {
+			if (r.getName().equals(name)) {
+				return r;
+			}
+		}
+		return null;
+	}
+	
 	private Owner playerToOwner(PhDStudent player) {
 		int i = 1;
 		for (PhDStudent p : model.getPlayers()) {
@@ -267,7 +285,7 @@ public class Controller extends Thread implements ViewListener {
 		LinkedList<RoomCard> rooms = new LinkedList<>();
 		
 		for (PlayerCard c : cards) {
-			if (c.getClass() == EventCard.class) {
+			if (c.getClass() == RoomCard.class) {
 				rooms.add((RoomCard)c);
 			}
 		}
@@ -279,7 +297,7 @@ public class Controller extends Thread implements ViewListener {
 		LinkedList<RoomCard> rooms = new LinkedList<>();
 		
 		for (PlayerCard c : cards) {
-			if (c.getClass() == EventCard.class && ((RoomCard)c).getRoom().getCourse() == course) {
+			if (c.getClass() == RoomCard.class && ((RoomCard)c).getRoom().getCourse() == course) {
 				rooms.add((RoomCard)c);
 			}
 		}
@@ -391,28 +409,38 @@ public class Controller extends Thread implements ViewListener {
 		action = ActionType.GIVE_UP;
 		view.displayValidationMessage("Voulez-vous vraiment abandonner la partie ?");
 	}
-	
 
 	@Override
 	public void moveButtonClicked() {
 		action = ActionType.NONE;
-		pawnClicked(model.getCurrentPlayer().getRole());
+		
+		if (actionPoints == 0) {
+			view.displayMessage("Vous n'avez pas assez de points d'action.");
+		} else {
+			action = ActionType.RUN;
+			
+			if (model.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
+				//TODO activate player clickable
+			} else {
+				pawnClicked(model.getCurrentPlayer().getRole());
+			}
+		}
 	}
 	
-	
+	@Override
+	synchronized public void pawnClicked(Role player) {
+		selectedPlayer = playerRoleToPlayer(player);
+		selectedReachableRooms = model.reachableRooms(player, actionPoints);
+		view.displayReachableRooms(selectedReachableRooms);
+	}
+
 	@Override
 	synchronized public void placeClicked(String name) {
 		actionPoints -= selectedReachableRooms.get(name);
-		Room room = null;
-		for (Room r : model.getRooms()) {
-			if (r.getName().equals(name)) {
-				room = r;
-				break;
-			}
-		}
-		
 		
 		LinkedList<String> shortP = model.shortestPath(selectedPlayer.getPosition().getName(), name);
+		
+		//TODO remove
 		String[] sp = new String[shortP.size()];
 		int i = 0;
 		for (String string : shortP) {
@@ -420,26 +448,9 @@ public class Controller extends Thread implements ViewListener {
 			i++;
 		}
 		
-		
-		{view.displayMovePawn(selectedPlayer.getRole(), sp); view.clean();};
-		selectedPlayer.setPosition(room);
-		action = ActionType.NONE;
-	}
-
-	@Override
-	synchronized public void pawnClicked(Role player) {
-		for (PhDStudent p : model.getPlayers()) {
-			if (p.getRole() == player) {
-				selectedPlayer = p;
-				break;
-			}
-		}
-		
-		synchronized (selectedPlayer) {
-			selectedReachableRooms = model.reachableRooms(player, actionPoints);
-		}
-		
-		view.displayReachableRooms(selectedReachableRooms);
+		view.displayMovePawn(selectedPlayer.getRole(), sp);
+		selectedPlayer.setPosition(roomNameToRoom(name));
+		pawnClicked(selectedPlayer.getRole()); //TODO remove
 	}
 
 	@Override
@@ -496,12 +507,14 @@ public class Controller extends Thread implements ViewListener {
 	public void useCardButtonClicked() {
 		action = ActionType.NONE;
 		
-		if (actionPoints < 0) {
+		if (actionPoints > 0) {
 			if (model.getCurrentPlayer().getCards().getSize() > 0) {
 				LinkedList<String> rooms = roomCardsToStrings(getRoomCards(model.getCurrentPlayer().getCards().getCardList()));
 				LinkedList<Event> events = eventCardsToEvents(getEventCards(model.getCurrentPlayer().getCards().getCardList()));
 				Owner owner = playerToOwner(model.getCurrentPlayer());
 				
+				rooms.stream().forEach(System.out::printf);
+				events.stream().forEach((x) -> System.out.println(x));
 				action = ActionType.USE_CARD;
 				view.displayDrawCards(owner, owner, true, new ArrayList<String>(rooms), new ArrayList<Event>(events), 0);
 			} else {
