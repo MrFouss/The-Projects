@@ -8,9 +8,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import the_projects.model.Role;
-import the_projects.view.Cards.Card;
+import the_projects.model.card.Event;
+import the_projects.view.cards.Card;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -144,4 +144,26 @@ public class Player {
         return color;
     }
 
+    /**
+     * Method to check if a player have a roomCard
+     * @param roomName the name of the room corresponding to the room card
+     * @return true if the player have the card in his hand
+     */
+    public boolean have(String roomName) {
+        for (Card card : hand) {
+            if (card.getText().equals(roomName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean have(Event event) {
+        for (Card card : hand) {
+            if (card.getTitle().equals(event.eventToName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

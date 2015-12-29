@@ -1,4 +1,4 @@
-package the_projects.view.Cards;
+package the_projects.view.cards;
 
 
 import javafx.beans.value.ChangeListener;
@@ -80,5 +80,13 @@ public class Card extends StackPane implements Clickable {
 
     public void setOwner(Owner owner) {
         this.owner = owner;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

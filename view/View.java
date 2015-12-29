@@ -6,14 +6,13 @@ import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import the_projects.controller.ErrorEvent;
 import the_projects.controller.ViewListener;
 import the_projects.model.Course;
 import the_projects.model.Model;
 import the_projects.model.PhDStudent;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
-import the_projects.view.Cards.Owner;
+import the_projects.view.cards.Owner;
 
 import java.util.*;
 

@@ -21,7 +21,7 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import the_projects.model.Role;
 import the_projects.model.card.Event;
-import the_projects.view.Cards.*;
+import the_projects.view.cards.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -550,24 +550,37 @@ public class Board extends Scene {
      */
     public void discardCards() {
         if (displayedCards.size() > 0) {
+            Card last;
+            PathTransition pathToPlay = new PathTransition();
+            PathTransition tmpPath = pathToPlay;
+            while ((last = displayedCards.peekLast()) instanceof PartyCard) {
+                last.setOwner(Owner.PLAYER_DISCARD);
+                PathTransition thisPath = moveToDeck(last);
+                final Card tmpLast = last;
+                tmpPath.setOnFinished(e -> {
+                    thisPath.play();
+                    decks.set(3, tmpLast);
+                });
+                tmpPath = thisPath;
+                displayedCards.pollLast();
+            }
+            pathToPlay.play();
+        }
+        if (displayedCards.size() > 0) {
             Card last = displayedCards.peekLast();
-            displayedCards.forEach(card -> {
-                if (card.getClass() == PartyCard.class)
-                    card.setOwner(Owner.PLAYER_DISCARD);
-                moveToDeck(card).play();
-            });
+            displayedCards.forEach((card2) -> moveToDeck(card2).play());
             switch (last.getOwner()) {
                 case PLAYER1:
-                    players[0].setHand(displayedCards);
+                    displayedCards.forEach(card -> players[0].addCard(card));
                     break;
                 case PLAYER2:
-                    players[1].setHand(displayedCards);
+                    displayedCards.forEach(card -> players[1].addCard(card));
                     break;
                 case PLAYER3:
-                    players[2].setHand(displayedCards);
+                    displayedCards.forEach(card -> players[2].addCard(card));
                     break;
                 case PLAYER4:
-                    players[3].setHand(displayedCards);
+                    displayedCards.forEach(card -> players[3].addCard(card));
                     break;
                 default:
                     break;
@@ -636,11 +649,20 @@ public class Board extends Scene {
      * @param title the title of the clicked card
      */
     public void titleToFireCardClicked(String title, String text) {
-        //TODO test players
-        if (rooms.containsKey(text))
+        if (rooms.containsKey(text)) {
+            for (Player player : players) {
+                if (player != null && player.have(text))
+                    return;
+            }
             view.fireRoomCardClicked(text);
-        else if (Event.nameToEvent(title) != null)
+        }
+        else if (Event.nameToEvent(title) != null) {
+            for (Player player : players) {
+                if (player != null && player.have(Event.nameToEvent(title)))
+                    return;
+            }
             view.fireEventCardClicked(Event.nameToEvent(title));
+        }
     }
 
     public void setMovesButtonDisabled(boolean disabled) {

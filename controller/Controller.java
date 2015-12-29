@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.sun.javafx.tk.Toolkit.Task;
-
 import javafx.application.Platform;
-import javafx.scene.control.SelectionMode;
 import the_projects.model.*;
 import the_projects.model.card.*;
 import the_projects.view.View;
-import the_projects.view.Cards.Owner;
+import the_projects.view.cards.Owner;
 
 /**
  *
@@ -442,15 +439,7 @@ public class Controller extends Thread implements ViewListener {
 		
 		LinkedList<String> shortP = model.shortestPath(selectedPlayer.getPosition().getName(), name);
 		
-		//TODO remove
-		String[] sp = new String[shortP.size()];
-		int i = 0;
-		for (String string : shortP) {
-			sp[i] = string;
-			i++;
-		}
-		
-		view.displayMovePawn(selectedPlayer.getRole(), sp);
+		view.displayMovePawn(selectedPlayer.getRole(), shortP.toArray(new String[shortP.size()]));
 		view.clean();
 		selectedPlayer.setPosition(roomNameToRoom(name));
 		if (actionPoints > 0) {

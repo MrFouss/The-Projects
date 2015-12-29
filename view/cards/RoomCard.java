@@ -1,4 +1,4 @@
-package the_projects.view.Cards;
+package the_projects.view.cards;
 
 
 import javafx.scene.layout.Pane;
