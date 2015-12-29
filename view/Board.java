@@ -528,6 +528,8 @@ public class Board extends Scene {
      * @param numberOfPartyCards the number of party cards to draw
      */
     public void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
+
+
         ArrayList<Card> cards = new ArrayList<>();
         if (roomNamesOfRoomCards != null)
             roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
@@ -637,7 +639,7 @@ public class Board extends Scene {
         //TODO test players
         if (rooms.containsKey(text))
             view.fireRoomCardClicked(text);
-        else if (Event.nameToEvent(title) == null)
+        else if (Event.nameToEvent(title) != null)
             view.fireEventCardClicked(Event.nameToEvent(title));
     }
 
