@@ -2,6 +2,7 @@ package the_projects.view.Cards;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import the_projects.model.card.Event;
 
 /**
@@ -14,7 +15,9 @@ public class EventCard extends Card {
      * @param event corresponding event
      */
     public EventCard(Pane pane, Event event, Owner owner) {
-        super(pane, event.eventToName(), event.eventToDescription(), Color.YELLOWGREEN, owner);
+        super(pane, event.eventToName(), event.eventToDescription(), Color.DARKORANGE.darker(), owner);
+
+        textLabel.setFont(new Font(13));
     }
 
 

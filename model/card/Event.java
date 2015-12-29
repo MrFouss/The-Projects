@@ -19,11 +19,11 @@ public enum Event {
             case TIMEOUT:
                 return "Temps mort";
             case GRANT_IN_AID:
-                return "Subvention de l'état";
+                return "Subvention \nde l'état";
             case ON_DEMAND_TELEPORTATION:
-                return "Téléportation à la demande";
+                return "Téléportation \nà la demande";
             case ENERGY_DRINK:
-                return "Boisson énérgisante";
+                return "Boisson \nénérgisante";
             case HOLIDAYS:
                 return "Vacances";
             default:

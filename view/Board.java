@@ -582,18 +582,6 @@ public class Board extends Scene {
                     last.toFront();
                 }
                 switch (last.getOwner()) {
-                    case PLAYER1:
-                        pane.getChildren().remove(players[0].setHandDeck(last, view));
-                        break;
-                    case PLAYER2:
-                        pane.getChildren().remove(players[1].setHandDeck(last, view));
-                        break;
-                    case PLAYER3:
-                        pane.getChildren().remove(players[2].setHandDeck(last, view));
-                        break;
-                    case PLAYER4:
-                        pane.getChildren().remove(players[3].setHandDeck(last, view));
-                        break;
                     case PLAYER_DECK:
                         pane.getChildren().remove(decks.get(2));
                         decks.set(2, deck);
@@ -613,6 +601,8 @@ public class Board extends Scene {
                     case HACKER:
                         pane.getChildren().remove(decks.get(4));
                         decks.set(4, deck);
+                        break;
+                    default:
                         break;
                 }
             });
