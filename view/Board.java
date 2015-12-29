@@ -528,20 +528,69 @@ public class Board extends Scene {
      * @param numberOfPartyCards the number of party cards to draw
      */
     public void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
+        if (roomNamesOfRoomCards == null)
+            roomNamesOfRoomCards = new ArrayList<>();
+        if (eventsOfEventCards == null)
+            eventsOfEventCards = new ArrayList<>();
 
 
         ArrayList<Card> cards = new ArrayList<>();
-        if (roomNamesOfRoomCards != null)
+        if (actualOwner == Owner.PLAYER1 ) {
+            roomNamesOfRoomCards.forEach(roomName -> {
+                if (players[0].have(roomName)) {
+                    cards.add(players[0].take(roomName));
+                }
+            });
+            eventsOfEventCards.forEach(event -> {
+                if (players[0].have(event)) {
+                    cards.add(players[0].take(event));
+                }
+            });
+        } else if (actualOwner == Owner.PLAYER2) {
+            roomNamesOfRoomCards.forEach(roomName -> {
+                if (players[1].have(roomName)) {
+                    cards.add(players[1].take(roomName));
+                }
+            });
+            eventsOfEventCards.forEach(event -> {
+                if (players[1].have(event)) {
+                    cards.add(players[1].take(event));
+                }
+            });
+        } else if (actualOwner == Owner.PLAYER3) {
+            roomNamesOfRoomCards.forEach(roomName -> {
+                if (players[2].have(roomName)) {
+                    cards.add(players[2].take(roomName));
+                }
+            });
+            eventsOfEventCards.forEach(event -> {
+                if (players[2].have(event)) {
+                    cards.add(players[2].take(event));
+                }
+            });
+        } else if (actualOwner == Owner.PLAYER4) {
+            roomNamesOfRoomCards.forEach(roomName -> {
+                if (players[3].have(roomName)) {
+                    cards.add(players[3].take(roomName));
+                }
+            });
+            eventsOfEventCards.forEach(event -> {
+                if (players[3].have(event)) {
+                    cards.add(players[3].take(event));
+                }
+            });
+        }else {
             roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
-        if (eventsOfEventCards != null)
             eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
-        for (int i = 0; i < numberOfPartyCards; ++i)
-            cards.add(new PartyCard(pane, newOwner));
+            for (int i = 0; i < numberOfPartyCards; ++i)
+                cards.add(new PartyCard(pane, newOwner));
+            pane.getChildren().addAll(cards);
+        }
         cards.forEach(card -> {
             card.setScaleX(ownerToDeck(card.getOwner()).getScaleX());
             card.setScaleY(ownerToDeck(card.getOwner()).getScaleY());
         });
-        pane.getChildren().addAll(cards);
+
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
     }
 
@@ -588,7 +637,7 @@ public class Board extends Scene {
             StackPane deck = displayedCards.pollLast();
             PathTransition lastPathTransition = moveToDeck(last);
             lastPathTransition.setOnFinished(event -> {
-                displayedCards.stream().forEach(card1 -> pane.getChildren().remove(card1));
+                displayedCards.stream().filter(card -> card.getOwner() == Owner.PLAYER1 && card.getOwner() == Owner.PLAYER2 && card.getOwner() == Owner.PLAYER3 && card.getOwner() == Owner.PLAYER4).forEach(card1 -> pane.getChildren().remove(card1));
                 displayedCards = new LinkedList<>() ;
 
                 if (last.getOwner() == Owner.HACKER) {

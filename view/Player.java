@@ -166,4 +166,22 @@ public class Player {
         }
         return false;
     }
+
+    public Card take(String roomName) {
+        for (Card card : hand) {
+            if (card.getText().equals(roomName)) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public Card take(Event event) {
+        for (Card card : hand) {
+            if (card.getTitle().equals(event.eventToName())) {
+                return card;
+            }
+        }
+        return null;
+    }
 }
