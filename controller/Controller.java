@@ -29,6 +29,7 @@ public class Controller extends Thread implements ViewListener {
 	Card selectedCard;
 	HashMap<String, Integer> selectedReachableRooms;
 	PhDStudent selectedPlayer;
+	LinkedList<PhDStudent> selectedPlayers;
 
 	public Controller(View view) {
 		this.view = view;
@@ -451,8 +452,10 @@ public class Controller extends Thread implements ViewListener {
 		
 		view.displayMovePawn(selectedPlayer.getRole(), sp);
 		view.clean();
-		pawnClicked(selectedPlayer.getRole());
 		selectedPlayer.setPosition(roomNameToRoom(name));
+		if (actionPoints > 0) {
+			pawnClicked(selectedPlayer.getRole());
+		}
 	}
 
 	@Override
@@ -499,12 +502,29 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
-
+	//TODO
 	@Override
 	public void shareKnowledgeButtonClicked() {
-
+		if (actionPoints == 0) {
+			view.displayMessage("Vous n'avez pas assez de points d'action.");
+		} else {
+			//init clickable players
+			selectedPlayers = new LinkedList<PhDStudent>();
+			for (PhDStudent student : model.getPlayers()) {
+				if (model.getCurrentPlayer().getPosition() == student.getPosition() && student != model.getCurrentPlayer()) {
+					selectedPlayers.add(student);
+				}
+			}
+			
+			if (selectedPlayers.isEmpty()) {
+				view.displayMessage("Il n'y a personne avec vous dans la salle.");
+			} else {
+				//TODO set selected players clickable
+			}
+		}
 	}
 	
+	//TODO
 	@Override
 	public void useCardButtonClicked() {
 		action = ActionType.NONE;
@@ -514,9 +534,7 @@ public class Controller extends Thread implements ViewListener {
 				LinkedList<String> rooms = roomCardsToStrings(getRoomCards(model.getCurrentPlayer().getCards().getCardList()));
 				LinkedList<Event> events = eventCardsToEvents(getEventCards(model.getCurrentPlayer().getCards().getCardList()));
 				Owner owner = playerToOwner(model.getCurrentPlayer());
-				
-				rooms.stream().forEach(System.out::printf);
-				events.stream().forEach((x) -> System.out.println(x));
+
 				action = ActionType.USE_CARD;
 				view.displayDrawCards(owner, owner, true, new ArrayList<String>(rooms), new ArrayList<Event>(events), 0);
 			} else {
@@ -632,47 +650,6 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
-
-	@Override
-	public void cardClicked(Card card) {
-		if (phase == GamePhase.ACTION) {
-			if (action == ActionType.HACK) {
-				model.getCurrentPlayer().setExtraEventCard((EventCard) card);
-				model.getPlayerDiscard().getCardList().remove(card);
-				// view.extraEventCardChanged((EventCard)card);
-				action = ActionType.NONE;
-				// view.clean();
-			} else if (action == ActionType.DISCARD) {
-				model.getCurrentPlayer().getCards().getCardList().remove(card);
-				// notify that the card was removed from hand
-				if (card.getClass() == EventCard.class) {
-					resolveEventCard((EventCard) card);
-					//model.getPlayerDiscard().addCard(card);
-					// notify that card was put on the player discard pile
-				}
-			} else if (action == ActionType.USE_CARD) {
-				if (card.getClass() == EventCard.class) {
-					resolveEventCard((EventCard) card);
-					//model.getPlayerDiscard().addCard(card);
-					// notify that card was put on the player discard pile
-				} else {
-					RoomCard rCard = (RoomCard) card;
-					HashMap<String, Integer> reach = new HashMap<String, Integer>();
-					if (rCard.getRoom() == model.getCurrentPlayer().getPosition()) {
-						for (Room r : model.getRooms()) {
-							reach.put(r.getName(), 1);
-						}
-						reach.remove(model.getCurrentPlayer().getPosition().getName());
-					} else {
-						reach.put(rCard.getRoom().getName(), 1);
-					}
-					//TODO reachablePlaces = reach;
-					//TODO view.displayReachablePlaces(reach);
-				}
-			}
-		}
-	}
-
 	@Override
 	synchronized public void YesButtonClicked() {
 		if (action == ActionType.GIVE_UP) {
@@ -701,13 +678,11 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	public void eventCardClicked(Event card) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("event");
 	}
 
 	@Override
 	public void roomCardClicked(String room) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("room");	
 	}
 }

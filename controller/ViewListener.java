@@ -25,6 +25,4 @@ public interface ViewListener {
 	void ConfirmationButtonClicked();
 	
 	void endOfStageButtonClicked();
-
-	void cardClicked(Card card);
 }
