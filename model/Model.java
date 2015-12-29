@@ -198,12 +198,13 @@ public class Model {
         finalDeck.addCardsOnTop(this.playerDeck);
         this.playerDeck = finalDeck;
 
-        for(i = 0 ; i < 3 ; ++i) {
+        for(i = 3 ; i > 0 ; --i) {
             for(int j = 0 ; j < 3 ; ++j) {
                 ProjectCard card = projectDeck.drawFirst();
-                card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(i+1);
-                card.getRoom().getCourse().setRemainingProjectAmount(card.getRoom().getCourse().getRemainingProjectAmount()-(i+1));
-                projectDeck.addCard(card);
+                card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(i);
+                card.getRoom().getCourse().setRemainingProjectAmount(card.getRoom().getCourse().getRemainingProjectAmount()-i);
+                System.out.println(card.getRoom().getName() + " : " + card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount());
+                projectDiscard.addCard(card);
             }
         }
     }
