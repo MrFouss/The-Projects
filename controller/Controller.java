@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.sun.javafx.tk.Toolkit.Task;
 
 import javafx.application.Platform;
+import javafx.scene.control.SelectionMode;
 import the_projects.model.*;
 import the_projects.model.card.*;
 import the_projects.view.View;
@@ -449,8 +450,9 @@ public class Controller extends Thread implements ViewListener {
 		}
 		
 		view.displayMovePawn(selectedPlayer.getRole(), sp);
+		view.clean();
+		pawnClicked(selectedPlayer.getRole());
 		selectedPlayer.setPosition(roomNameToRoom(name));
-		pawnClicked(selectedPlayer.getRole()); //TODO remove
 	}
 
 	@Override
