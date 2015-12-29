@@ -11,7 +11,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.transform.Scale;
 
 /**
- * TODO complete + javadoc
+ * TODO complete : add selected player + javadoc
  */
 public class Actions extends BorderPane {
     private MyButton moves;
@@ -108,10 +108,9 @@ public class Actions extends BorderPane {
         int i = 0;
         for (Player player : players) {
             right.getChildren().add(player.getPane());
-            Deck playerDeck = new Deck(board, "", Color.TRANSPARENT, 94/100., (66.5 + (i++)*31./players.length)/100.);
-            Scale scale = new Scale(.3,.3,0,0);
-            playerDeck.getTransforms().add(scale);
-
+            Deck playerDeck = new Deck(board, "", Color.BLACK, 91/100., (58.5 + (i++)*31./players.length)/100.);
+            playerDeck.setScaleX(.3);
+            playerDeck.setScaleY(.3);
 
             pane.getChildren().add(playerDeck);
 

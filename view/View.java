@@ -310,5 +310,36 @@ public class View extends Stage {
         Platform.runLater(() -> board.discardCard(newOwner, eventOfEventCard));
     }
 
+    public void setMovesButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setMovesButtonDisabled(disabled));
+    }
+
+    public void setProjectsButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setProjectsButtonDisabled(disabled));
+    }
+
+    public void setShareButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setShareButtonDisabled(disabled) );
+    }
+
+    public void setCardButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setCardButtonDisabled(disabled) );
+    }
+
+    public void setMasterButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setMasterButtonDisabled(disabled) );
+    }
+
+    public void setLabRoomButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setLabRoomButtonDisabled(disabled) );
+    }
+
+    public void setHackerButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setHackerButtonDisabled(disabled) );
+    }
+
+    public void setEndButtonButtonDisabled(boolean disabled) {
+        Platform.runLater(() -> board.setEndButtonButtonDisabled(disabled) );
+    }
 
 }

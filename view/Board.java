@@ -39,8 +39,9 @@ public class Board extends Scene {
     private Building[] batiments;
     private HashMap<String, Room> rooms;
     private Pane pane;
+    private Actions actions;
     private ArrayList<Pawn> pawns;
-    private StackPane[] decks;
+    private ArrayList<StackPane> decks;
     private PropagationGauge propagationGauge;
     private OutbreaksGauge outbreaksGauge;
     private MasteredCoursesDisplay masteredCoursesDisplay;
@@ -117,15 +118,15 @@ public class Board extends Scene {
         }
 
         //Creation of the decks
-        decks = new Deck[5];
-        decks[0] = new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true);
-        decks[1] = new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true);
-        decks[2] = new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.);
-        decks[3] = new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.);
+        decks = new ArrayList<>(5);
+        decks.add(0, new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true));
+        decks.add(1, new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true));
+        decks.add(2, new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.));
+        decks.add(3, new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.));
         //hackerDeck
-        decks[4] = new Deck(this, "", Color.TRANSPARENT, 53/100., 80/100.);
-        decks[4].setScaleX(0.1);
-        decks[4].setScaleY(0.1);
+        decks.add(4, new Deck(this, "", Color.TRANSPARENT, 53/100., 80/100.));
+        decks.get(4).setScaleX(0.1);
+        decks.get(4).setScaleY(0.1);
 
         pane.getChildren().addAll(decks);
 
@@ -145,7 +146,7 @@ public class Board extends Scene {
             movePawn(pawn.getPlayer().getRole(), "B402");
         }
 
-        Actions actions = new Actions(this, view,pane, players);
+        actions = new Actions(this, view,pane, players);
         pane.getChildren().add(actions);
 
 
@@ -434,15 +435,15 @@ public class Board extends Scene {
             case PLAYER4:
                 return players[3].getHandDeck();
             case PLAYER_DECK:
-                return decks[2];
+                return decks.get(2);
             case PLAYER_DISCARD:
-                return decks[3];
+                return decks.get(3);
             case PROJECT_DECK:
-                return decks[0];
+                return decks.get(0);
             case PROJECT_DISCARD:
-                return decks[1];
+                return decks.get(1);
             case HACKER:
-                return decks[4];
+                return decks.get(4);
             default:
                 return new Deck(this,"",Color.TRANSPARENT,0,0);
         }
@@ -473,8 +474,8 @@ public class Board extends Scene {
             pathTransition.play();
 
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
-            scaleTransition.setToX(decks[2].getScaleX());
-            scaleTransition.setToY(decks[2].getScaleY());
+            scaleTransition.setToX(decks.get(2).getScaleX());
+            scaleTransition.setToY(decks.get(2).getScaleY());
             scaleTransition.play();
 
             if (horizontal) {
@@ -493,9 +494,10 @@ public class Board extends Scene {
      * Method to display the movement of a card to a Deck
      * @param card the card to move
      */
-    public void moveToDeck(Card card) {
+    public PathTransition moveToDeck(Card card) {
         StackPane deck = ownerToDeck(card.getOwner());
-        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2), new LineTo(deck.getLayoutX() + deck.getWidth()/2, deck.getLayoutY() + deck.getHeight()/2));
+        Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2),
+                new LineTo(deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getX(), deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getY()));
 
         boolean horizontal = card.getOwner() == Owner.PROJECT_DECK || card.getOwner() == Owner.PROJECT_DISCARD;
 
@@ -513,7 +515,7 @@ public class Board extends Scene {
 
         card.setClickable(false, view);
 
-        (new PathTransition(Duration.seconds(.5),path,card)).play();
+        return new PathTransition(Duration.seconds(.5),path,card);
     }
 
     /**
@@ -525,77 +527,92 @@ public class Board extends Scene {
      * @param eventsOfEventCards the list of events of the event cards to draw
      * @param numberOfPartyCards the number of party cards to draw
      */
-    void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
-        ArrayList<Card> cards = new ArrayList<Card>();
-        roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
-        eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
+    public void drawCards(Owner actualOwner, Owner newOwner, boolean clickable, ArrayList<String> roomNamesOfRoomCards, ArrayList<Event> eventsOfEventCards, int numberOfPartyCards) {
+        ArrayList<Card> cards = new ArrayList<>();
+        if (roomNamesOfRoomCards != null)
+            roomNamesOfRoomCards.forEach(roomName -> cards.add(new RoomCard(pane, rooms.get(roomName), newOwner)));
+        if (eventsOfEventCards != null)
+            eventsOfEventCards.forEach(event -> cards.add(new EventCard(pane, event, newOwner)));
         for (int i = 0; i < numberOfPartyCards; ++i)
             cards.add(new PartyCard(pane, newOwner));
+        pane.getChildren().addAll(cards);
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
     }
 
     /**
      * Method to give all displayed cards to their owners
      */
-    void discardCards() {
+    public void discardCards() {
         if (displayedCards.size() > 0) {
+            Card last = displayedCards.peekLast();
             displayedCards.forEach(card -> {
                 if (card.getClass() == PartyCard.class)
                     card.setOwner(Owner.PLAYER_DISCARD);
-                moveToDeck(card);
+                moveToDeck(card).play();
             });
-            Card last = displayedCards.pollLast();
-            displayedCards.stream().filter(card ->
-                    card.getOwner() != Owner.PLAYER1 && card.getOwner() != Owner.PLAYER2 && card.getOwner() != Owner.PLAYER3 && card.getOwner() != Owner.PLAYER4
-            ).forEach(card1 -> {
-                pane.getChildren().remove(card1);
-                displayedCards.remove(card1);
-            });
-            if (last.getOwner() == Owner.HACKER) {
-                last.toBack();
-            }else {
-                last.toFront();
-            }
             switch (last.getOwner()) {
                 case PLAYER1:
-                    players[0].setHandDeck(last, view);
                     players[0].setHand(displayedCards);
                     break;
                 case PLAYER2:
-                    players[1].setHandDeck(last, view);
                     players[1].setHand(displayedCards);
                     break;
                 case PLAYER3:
-                    players[2].setHandDeck(last, view);
                     players[2].setHand(displayedCards);
                     break;
                 case PLAYER4:
-                    players[3].setHandDeck(last, view);
                     players[3].setHand(displayedCards);
                     break;
-                case PLAYER_DECK:
-                    pane.getChildren().remove(decks[2]);
-                    decks[2] = last;
+                default:
                     break;
-                case PLAYER_DISCARD:
-                    pane.getChildren().remove(decks[3]);
-                    decks[3] = last;
-                    break;
-                case PROJECT_DECK:
-                    pane.getChildren().remove(decks[0]);
-                    decks[0] = last;
-                    break;
-                case PROJECT_DISCARD:
-                    pane.getChildren().remove(decks[1]);
-                    decks[1] = last;
-                    break;
-                case HACKER:
-                    pane.getChildren().remove(decks[4]);
-                    decks[4] = last;
-                    break;
-
             }
+            StackPane deck = displayedCards.pollLast();
+            PathTransition lastPathTransition = moveToDeck(last);
+            lastPathTransition.setOnFinished(event -> {
+                displayedCards.stream().forEach(card1 -> pane.getChildren().remove(card1));
+                displayedCards = new LinkedList<>() ;
 
+                if (last.getOwner() == Owner.HACKER) {
+                    last.toBack();
+                } else {
+                    last.toFront();
+                }
+                switch (last.getOwner()) {
+                    case PLAYER1:
+                        pane.getChildren().remove(players[0].setHandDeck(last, view));
+                        break;
+                    case PLAYER2:
+                        pane.getChildren().remove(players[1].setHandDeck(last, view));
+                        break;
+                    case PLAYER3:
+                        pane.getChildren().remove(players[2].setHandDeck(last, view));
+                        break;
+                    case PLAYER4:
+                        pane.getChildren().remove(players[3].setHandDeck(last, view));
+                        break;
+                    case PLAYER_DECK:
+                        pane.getChildren().remove(decks.get(2));
+                        decks.set(2, deck);
+                        break;
+                    case PLAYER_DISCARD:
+                        pane.getChildren().remove(decks.get(3));
+                        decks.set(3, deck);
+                        break;
+                    case PROJECT_DECK:
+                        pane.getChildren().remove(decks.get(0));
+                        decks.set(0, deck);
+                        break;
+                    case PROJECT_DISCARD:
+                        pane.getChildren().remove(decks.get(1));
+                        decks.set(1, deck);
+                        break;
+                    case HACKER:
+                        pane.getChildren().remove(decks.get(4));
+                        decks.set(4, deck);
+                        break;
+                }
+            });
+            lastPathTransition.play();
             //TODO complete ?
         }
     }
@@ -605,7 +622,7 @@ public class Board extends Scene {
      * @param newOwner the new owner of the displayed card
      * @param roomNameOfRoomCard the name of the room card
      */
-    void discardCard(Owner newOwner, String roomNameOfRoomCard) {
+    public void discardCard(Owner newOwner, String roomNameOfRoomCard) {
         //TODO implement
     }
 
@@ -614,7 +631,7 @@ public class Board extends Scene {
      * @param newOwner the new owner of the displayed card
      * @param eventOfEventCard the name of the event card
      */
-    void discardCard(Owner newOwner, Event eventOfEventCard) {
+    public void discardCard(Owner newOwner, Event eventOfEventCard) {
         //TODO implement
     }
 
@@ -628,5 +645,37 @@ public class Board extends Scene {
             view.fireRoomCardClicked(text);
         else if (Event.nameToEvent(title) == null)
             view.fireEventCardClicked(Event.nameToEvent(title));
+    }
+
+    public void setMovesButtonDisabled(boolean disabled) {
+        actions.setMovesDisabled(disabled);
+    }
+
+    public void setProjectsButtonDisabled(boolean disabled) {
+        actions.setProjectsDisabled(disabled);
+    }
+
+    public void setShareButtonDisabled(boolean disabled) {
+        actions.setShareDisabled(disabled);
+    }
+
+    public void setCardButtonDisabled(boolean disabled) {
+        actions.setCardDisabled(disabled);
+    }
+
+    public void setMasterButtonDisabled(boolean disabled) {
+        actions.setMasterDisabled(disabled);
+    }
+
+    public void setLabRoomButtonDisabled(boolean disabled) {
+        actions.setLabRoomDisabled(disabled);
+    }
+
+    public void setHackerButtonDisabled(boolean disabled) {
+        actions.setHackerDisabled(disabled);
+    }
+
+    public void setEndButtonButtonDisabled(boolean disabled) {
+        actions.setEndButtonDisabled(disabled);
     }
 }

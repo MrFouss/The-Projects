@@ -112,10 +112,12 @@ public class Player {
      * Setter for the Deck of the player
      * @param handDeck the new Deck of the player
      */
-    public void setHandDeck(StackPane handDeck, View view) {
+    public StackPane setHandDeck(StackPane handDeck, View view) {
+        StackPane prev = this.handDeck;
         this.handDeck = handDeck;
         if (handDeck instanceof Clickable)
             ((Clickable)handDeck).setClickable(true, view);
+        return prev;
     }
 
     /**
