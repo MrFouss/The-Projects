@@ -63,7 +63,8 @@ public class Card extends StackPane implements Clickable {
             hoverListener = Board.setHoverStrokeChange(rectangle, color);
             rectangle.setOnMouseClicked(event -> view.fireCardClicked(title, text));
         }else {
-            rectangle.hoverProperty().removeListener(hoverListener);
+            if (hoverListener != null)
+                rectangle.hoverProperty().removeListener(hoverListener);
             rectangle.setStrokeWidth(0);
             rectangle.setOnMouseClicked(null);
         }
