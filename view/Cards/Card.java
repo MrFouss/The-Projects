@@ -24,6 +24,7 @@ public class Card extends StackPane implements Clickable {
     private String text;
     private ChangeListener hoverListener;
     private Owner owner;
+    protected Label textLabel;
 
     public Card(Pane pane, String title, String text, Color color, Owner owner) {
         this.color = color;
@@ -36,8 +37,6 @@ public class Card extends StackPane implements Clickable {
         rectangle.setWidth(pane.getWidth() * 9 / 100.);
         rectangle.setHeight(pane.getHeight() * 22 / 100.);
 
-        setLayoutX(0);
-        setLayoutY(0);
         getChildren().add(rectangle);
 
         Label label = new Label(title);
@@ -48,11 +47,11 @@ public class Card extends StackPane implements Clickable {
         setAlignment(label, Pos.TOP_CENTER);
         setMargin(label, new Insets(pane.getHeight()/100,0,0,0));
 
-        label = new Label(text);
-        label.setFont(new Font(15));
-        label.setTextFill(color.deriveColor(0, 1, 8, 1));
-        label.setMouseTransparent(true);
-        getChildren().add(label);
+        textLabel = new Label(text);
+        textLabel.setFont(new Font(15));
+        textLabel.setTextFill(color.deriveColor(0, 1, 8, 1));
+        textLabel.setMouseTransparent(true);
+        getChildren().add(textLabel);
 
         this.owner = owner;
     }

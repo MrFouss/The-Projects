@@ -2,6 +2,7 @@ package the_projects.view.Cards;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * Party version of the cards
@@ -13,20 +14,18 @@ public class PartyCard extends Card {
      */
     public PartyCard(Pane pane, Owner owner) {
         super(pane, "Soirée Étudiante",
-                "1) Examens : \n" +
-                        "la jauge d’urgence\n" +
-                        "augmente d’un cran .\n" +
-                        "2) Stress : \n" +
-                        "la carte du dessous\n" +
-                        "du paquet projet est\n" +
-                        "piochée, on met 3 \n" +
-                        "projets sur la salle\n" +
+                "1) Examens : la jauge\n " +
+                        "d’urgence augmente \n" +
+                        "d’un cran .\n" +
+                        "2) Stress : la carte du dessous\n" +
+                        "du paquet projet est piochée,\n" +
+                        " on met 3 projets sur la salle\n" +
                         "correspondante.\n" +
-                        "3) Intensification : \n" +
-                        "les cartes de la défausse\n" +
-                        "projet sont mélangées \n" +
-                        "et placées sur le dessus\n" +
-                        "du paquet projets.",
+                        "3) Intensification : les cartes\n" +
+                        " de la défausse projet sont\n" +
+                        " mélangées  et placées sur \n" +
+                        "le dessus du paquet projets.\n",
                 Color.GREEN, owner);
+        textLabel.setFont(new Font(9));
     }
 }
