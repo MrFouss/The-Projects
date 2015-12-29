@@ -203,7 +203,6 @@ public class Model {
                 ProjectCard card = projectDeck.drawFirst();
                 card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(i);
                 card.getRoom().getCourse().setRemainingProjectAmount(card.getRoom().getCourse().getRemainingProjectAmount()-i);
-                System.out.println(card.getRoom().getName() + " : " + card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount());
                 projectDiscard.addCard(card);
             }
         }
