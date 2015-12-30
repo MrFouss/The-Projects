@@ -612,11 +612,11 @@ public class Board extends Scene {
                 tmpPath.setOnFinished(e -> {
                     thisPath.play();
                     decks.set(3, tmpLast);
+                    view.fireAnimationFinished();
                 });
                 tmpPath = thisPath;
                 displayedCards.pollLast();
             }
-            pathToPlay.setOnFinished(event -> view.fireAnimationFinished());
             pathToPlay.play();
         }
         if (displayedCards.size() > 0) {
