@@ -316,7 +316,12 @@ public class Model {
      * @return the value of the emergency gauge.
      */
     public int getEmergencyValue() {
-        return this.emergencyGauge;
+    	if (emergencyGauge < 3) {
+			return 2;
+		} else if (emergencyGauge < 5) {
+			return 3;
+		}
+    	return 4;
     }
 
     /**
