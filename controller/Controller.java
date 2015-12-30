@@ -94,8 +94,10 @@ public class Controller extends Thread implements ViewListener {
 						// action phase
 	
 						actionPoints = 4;
+						view.displayActionsPoints(4);
 						this.wait(); // wait for actions to be chosen and executed
-						actionPoints = 0;		
+						actionPoints = 0;
+						view.displayActionsPoints(0);
 						
 						if (status == GameStatus.VALID) {
 	
@@ -203,27 +205,32 @@ public class Controller extends Thread implements ViewListener {
 									view.displayRoomCards(roomCards);
 									//view.displayCardsOfPlayer(model.getCurrentPlayer().getRole());
 								}*/
-	
-								phase = GamePhase.PROPAGATION;
-								// infection phase
-								
-								if (status == GameStatus.VALID) {
-									for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
-										ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
-										//view.displayDrawProjectCards(card.getRoom().getName());
-	
-										int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
-										if (projAmount < 3) {
-											card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(projAmount + 1);
-										} else {
-											burnOut(new LinkedList<Room>(),card.getRoom(), card.getRoom().getCourse());
-										}
-	
-										model.getProjectDiscard().addCard(card);
+							}
+							
+							phase = GamePhase.PROPAGATION;
+							// infection phase
+							
+							if (status == GameStatus.VALID) {
+								for (int i = 0; i < model.getEmergencyValue() && status == GameStatus.VALID; i++) {
+									ProjectCard card = (ProjectCard) model.getProjectDeck().drawFirst();
+									LinkedList<Card> cs = new LinkedList<Card>();
+									cs.add(card);
+									displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, cs);
+									
+									int projAmount = card.getRoom().getProject(card.getRoom().getCourse()).getProjectAmount();
+									if (projAmount < 3) {
+										card.getRoom().getProject(card.getRoom().getCourse()).setProjectAmount(projAmount + 1);
+										view.displayAddProjectToRoom(card.getRoom().getName(), courseToInteger(card.getRoom().getCourse()));
+									} else {
+										burnOut(new LinkedList<Room>(),card.getRoom(), card.getRoom().getCourse());
 									}
+
+									model.getProjectDiscard().addCard(card);
 								}
 							}
 						}
+						
+						
 
 						model.nextPlayer();
 					}
@@ -560,6 +567,7 @@ public class Controller extends Thread implements ViewListener {
 	@Override
 	synchronized public void placeClicked(String name) {
 		actionPoints -= selectedReachableRooms.get(name);
+		view.displayActionsPoints(actionPoints);
 		
 		LinkedList<String> shortP = model.shortestPath(selectedPlayer.getPosition().getName(), name);
 		
@@ -602,6 +610,7 @@ public class Controller extends Thread implements ViewListener {
 				Project proj = room.getProject(model.getCourses()[i]);
 				if (proj.getProjectAmount() > 0) {
 					actionPoints--;
+					view.displayActionsPoints(actionPoints);
 					proj.setProjectAmount(proj.getProjectAmount()-1);
 					break;
 				}
@@ -717,6 +726,7 @@ public class Controller extends Thread implements ViewListener {
 					view.displayMessage("Toutes les salles de TP ont déjà été posées.");
 				} else {
 					actionPoints--;
+					view.displayActionsPoints(actionPoints);
 					model.addLabRoom(room.getRoom().getName());
 					view.displaySetRoomToLab(room.getRoom().getName());
 				}
@@ -724,6 +734,7 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
+	//TODO
 	@Override
 	public void hackButtonClicked() {
 		action = ActionType.NONE;
@@ -814,7 +825,7 @@ public class Controller extends Thread implements ViewListener {
 		
 		public void run() {
 			if (action == ActionType.USE_CARD) {
-				view.displayChangeOwnerOfDisplayedCard(Owner.PLAYER_DISCARD, ((RoomCard)cards.get(0)).getRoom().getName());
+				//TODO change owner
 				view.clean();
 			}
 		}
