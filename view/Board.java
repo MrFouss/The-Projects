@@ -700,8 +700,8 @@ public class Board extends Scene {
      * @param newOwner the new owner of the displayed card
      * @param roomNameOfRoomCard the name of the room card
      */
-    public void discardCard(Owner newOwner, String roomNameOfRoomCard) {
-        displayedCards.stream().filter(card -> roomNameOfRoomCard.equals(card.getText())).forEach(card -> discardCard(newOwner, card));
+    public void changeOwnerOfDisplayedCard(Owner newOwner, String roomNameOfRoomCard) {
+        displayedCards.stream().filter(card -> roomNameOfRoomCard.equals(card.getText())).forEach(card -> card.setOwner(newOwner));
     }
 
     /**
@@ -709,16 +709,8 @@ public class Board extends Scene {
      * @param newOwner the new owner of the displayed card
      * @param eventOfEventCard the name of the event card
      */
-    public void discardCard(Owner newOwner, Event eventOfEventCard) {
-        displayedCards.stream().filter(card -> eventOfEventCard.equals(Event.nameToEvent(card.getTitle()))).forEach(card -> discardCard(newOwner, card));
-    }
-
-    private void discardCard(Owner newOwner, Card card) {
-        card.setOwner(newOwner);
-        Platform.runLater(() -> moveToDeck(card));
-        addCardPlayer(card);
-        displayedCards.remove(card);
-        discardLastCard(card);
+    public void changeOwnerOfDisplayedCard(Owner newOwner, Event eventOfEventCard) {
+        displayedCards.stream().filter(card -> eventOfEventCard.equals(Event.nameToEvent(card.getTitle()))).forEach(card -> card.setOwner(newOwner));
     }
 
     private void addCardPlayer(Card card) {
