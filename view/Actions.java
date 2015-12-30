@@ -115,7 +115,7 @@ class Actions extends BorderPane {
 
             player.getPane().setPrefHeight(getPrefHeight()/players.length);
             player.getPane().setPrefWidth(getPrefWidth()/1.5);
-            player.setHandDeck(playerDeck, view);
+            player.setHandDeck(playerDeck);
 
         }
     }

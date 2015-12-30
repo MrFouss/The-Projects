@@ -23,6 +23,7 @@ public class Player {
     private final Pawn pawn;
     private LinkedList<Card> hand;
     private StackPane handDeck;
+    private Card handCard;
     private final Pane pane;
     private final Color color;
 
@@ -113,10 +114,16 @@ public class Player {
      * Setter for the Deck of the player
      * @param handDeck the new Deck of the player
      */
-    public void setHandDeck(StackPane handDeck, View view) {
+    public void setHandDeck(StackPane handDeck) {
         this.handDeck = handDeck;
-        if (handDeck instanceof Clickable)
-            ((Clickable)handDeck).setClickable(true, view);
+    }
+
+    public void setHandCard(Card card, View view) {
+        if (handCard != null)
+            handCard.setClickable(false, view);
+        handCard = card;
+        if (handCard != null)
+            handCard.setClickable(true, view);
     }
 
     /**
