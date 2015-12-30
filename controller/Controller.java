@@ -171,11 +171,11 @@ public class Controller extends Thread implements ViewListener {
 										// intensification
 	
 										model.getProjectDiscard().shuffle();
-										view.displayDrawCards(Owner.PROJECT_DISCARD, Owner.PROJECT_DECK, false, new ArrayList<String>(projectCardsToStrings(model.getProjectDiscard().getCardList())), new ArrayList<Event>(), 0);
+										
+										displayCards(Owner.PROJECT_DISCARD, Owner.PROJECT_DECK, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
+			
 										model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
-										Thread.sleep(1500);
-										view.displayDiscardCards();
-										view.clean();
+										model.getProjectDiscard().getCardList().removeAll(model.getProjectDiscard().getCardList());
 									//}
 								}
 								
