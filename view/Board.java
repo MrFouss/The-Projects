@@ -502,10 +502,9 @@ public class Board extends Scene {
             displayedCards.add(card);
         }
 
-        lastTransition.setOnFinished(event -> {
-            putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()]));
-            view.fireCardToCenterFinished();
-        });
+        lastTransition.setOnFinished(event -> view.fireCardToCenterFinished());
+
+        putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()]));
     }
 
     /**
