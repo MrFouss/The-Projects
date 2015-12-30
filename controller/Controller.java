@@ -740,15 +740,6 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 
-	@Override
-	synchronized public void animationFinished() {
-		
-	}
-
-	@Override
-	public void cleaned() {
-
-	}
 
 	@Override
 	synchronized public void YesButtonClicked() {

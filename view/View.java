@@ -231,12 +231,6 @@ public class View extends Stage {
         listeners.forEach(ViewListener::giveUpButtonClicked);
     }
 
-    public void fireAnimationFinished() {
-        listeners.forEach(ViewListener::animationFinished);
-    }
-
-    public void fireCleaned() {listeners.forEach(ViewListener::cleaned);}
-
     public LinkedList<String> getPlayerNames() {
         return mainMenu.getPlayerNames();
     }
