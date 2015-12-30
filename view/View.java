@@ -24,6 +24,9 @@ public class View extends Stage {
     private Board board;
     private final HashSet<ViewListener> listeners = new HashSet<>();
 
+    /**
+     * Constructor of a new View
+     */
     public View() {
         setTitle("The Projects");
         setMinHeight(450);
@@ -297,12 +300,12 @@ public class View extends Stage {
         Platform.runLater(() -> board.discardCards());
     }
 
-    public void displayDiscardCard(Owner newOwner, String roomNameOfRoomCard) {
-        Platform.runLater(() -> board.discardCard(newOwner, roomNameOfRoomCard));
+    public void displayChangeOwnerOfDisplayedCard(Owner newOwner, String roomNameOfRoomCard) {
+        Platform.runLater(() -> board.changeOwnerOfDisplayedCard(newOwner, roomNameOfRoomCard));
     }
 
-    public void displayDiscardCard(Owner newOwner, Event eventOfEventCard) {
-        Platform.runLater(() -> board.discardCard(newOwner, eventOfEventCard));
+    public void displayChangeOwnerOfDisplayedCard(Owner newOwner, Event eventOfEventCard) {
+        Platform.runLater(() -> board.changeOwnerOfDisplayedCard(newOwner, eventOfEventCard));
     }
 
     public void setMovesButtonDisabled(boolean disabled) {

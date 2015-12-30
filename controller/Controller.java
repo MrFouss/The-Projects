@@ -814,7 +814,7 @@ public class Controller extends Thread implements ViewListener {
 		
 		public void run() {
 			if (action == ActionType.USE_CARD) {
-				view.displayDiscardCard(Owner.PLAYER_DISCARD, ((RoomCard)cards.get(0)).getRoom().getName());
+				view.displayChangeOwnerOfDisplayedCard(Owner.PLAYER_DISCARD, ((RoomCard)cards.get(0)).getRoom().getName());
 				view.clean();
 			}
 		}
