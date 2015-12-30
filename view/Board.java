@@ -50,6 +50,7 @@ public class Board extends Scene {
     private LinkedList<Card> displayedCards;
     private Rectangle hidingRectangle;
     private Player[] players;
+    private Player currentPlayer;
 
     /**
      * TODO doc when finished
@@ -808,6 +809,15 @@ public class Board extends Scene {
     }
 
     public void setCurrentPlayer(Role role) {
-        //TODO
+        if (currentPlayer != null) {
+            currentPlayer.setCurrent(false);
+        }
+        for (Player player : players) {
+            if (player.getRole() == role) {
+                currentPlayer = player;
+                currentPlayer.setCurrent(true);
+                return;
+            }
+        }
     }
 }

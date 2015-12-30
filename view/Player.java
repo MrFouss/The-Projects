@@ -17,6 +17,7 @@ import java.util.LinkedList;
  * The representation of a player
  */
 public class Player {
+    private Label nameLabel;
     private String name;
     private Role role;
     private Pawn pawn;
@@ -42,11 +43,11 @@ public class Player {
         Label description = new Label(role.roleToDescription());
         description.setTextFill(role.roleToColor().brighter());
         pane.getChildren().add(description);
-        description = new Label(name);
-        description.setTextFill(role.roleToColor().brighter());
-        description.setLayoutX(350);
-        description.setLayoutY(20);
-        pane.getChildren().add(description);
+        nameLabel = new Label(name);
+        nameLabel.setTextFill(role.roleToColor().brighter());
+        nameLabel.setLayoutX(350);
+        nameLabel.setLayoutY(20);
+        pane.getChildren().add(nameLabel);
 
 
         pawn = new Pawn(this);
@@ -185,5 +186,13 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public void setCurrent(boolean current) {
+        if (current) {
+            nameLabel.setBackground(new Background(new BackgroundFill(color.deriveColor(0,1,.5,.8), new CornerRadii(10), new Insets(-5))));
+        }else {
+            nameLabel.setBackground(null);
+        }
     }
 }
