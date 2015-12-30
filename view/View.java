@@ -365,7 +365,15 @@ public class View extends Stage {
         Platform.runLater(() -> board.setActionsPoints(actionPoints));
     }
 
-    public void fireAnimationFinished() {
-        listeners.forEach(ViewListener::animationFinished);
+    public void fireCardToCenterFinished() {
+        listeners.forEach(ViewListener::cardToCenterFinished);
+    }
+
+    public void fireCardToDeckFinished() {
+        listeners.forEach(ViewListener::cardToDeckFinished);
+    }
+
+    public void fireCleared() {
+        listeners.forEach(ViewListener::cleared);
     }
 }

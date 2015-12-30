@@ -425,7 +425,6 @@ public class Board extends Scene {
 
     public void clean() {
         discardCards();
-        pane.getChildren().remove(hidingRectangle);
         pane.getChildren().stream().filter(node -> node instanceof Clickable && !(node instanceof Card)).forEach(node -> {
             try {
                 ((Clickable) node).setClickable(false, view);
@@ -433,6 +432,8 @@ public class Board extends Scene {
             } catch (Exception ignore) {}
         });
         pawns.forEach(pawn -> pawn.getShape().toFront());
+        pane.getChildren().remove(hidingRectangle);
+        view.fireCleared();
     }
 
     private StackPane ownerToDeck(Owner owner) {
@@ -483,7 +484,6 @@ public class Board extends Scene {
                 }
             }
             PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
-            pathTransition.setOnFinished(e->view.fireAnimationFinished());
             pathTransition.play();
             lastTransition = pathTransition;
 
@@ -501,7 +501,11 @@ public class Board extends Scene {
 
             displayedCards.add(card);
         }
-        lastTransition.setOnFinished(event -> putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()])));
+
+        lastTransition.setOnFinished(event -> {
+            putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()]));
+            view.fireCardToCenterFinished();
+        });
     }
 
     /**
@@ -617,7 +621,8 @@ public class Board extends Scene {
      */
     public void discardCards() {
         if (displayedCards.size() > 0) {
-            displayedCards.stream().forEach(card -> {
+            Card lastCard = displayedCards.peekLast();
+            displayedCards.stream().forEachOrdered(card -> {
                 PathTransition pathTransition = moveToDeck(card);
                 pathTransition.setOnFinished(event -> {
                     if (card.getOwner() == Owner.HACKER) {
@@ -664,7 +669,8 @@ public class Board extends Scene {
                         default:
                             break;
                     }
-                    view.fireAnimationFinished();
+                    if (card == lastCard)
+                        view.fireCardToDeckFinished();
                 });
                 pathTransition.play();
             });

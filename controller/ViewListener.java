@@ -22,9 +22,12 @@ public interface ViewListener {
 	void giveUpButtonClicked();
 	void YesButtonClicked();
 	void NoButtonClicked();
-	void ConfirmationButtonClicked();
 
-	void animationFinished();
-	
+	void cardToCenterFinished();
+	void cardToDeckFinished();
+	void cleared();
+
 	void endOfStageButtonClicked();
+
+
 }
