@@ -23,9 +23,6 @@ public interface ViewListener {
 	void YesButtonClicked();
 	void NoButtonClicked();
 	void ConfirmationButtonClicked();
-
-	void animationFinished();
-	void cleaned();
 	
 	void endOfStageButtonClicked();
 }
