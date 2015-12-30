@@ -18,7 +18,7 @@ import javafx.util.Duration;
 public class OutbreaksGauge extends Pane implements Gauge {
 
     private int lvl;
-    private Circle actual;
+    private final Circle actual;
 
     /**
      * The Constructor of the OutbreaksGauge

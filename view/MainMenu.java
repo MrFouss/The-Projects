@@ -18,13 +18,13 @@ import java.util.LinkedList;
 /**
  * TODO complete
  */
-public class MainMenu extends Scene {
+class MainMenu extends Scene {
 
 
-    private ScrollBar difficulty;
-    private TextField[] courses;
-    private TextField[] playersFields;
-    private ChoiceBox<String>[] rolesBoxes;
+    private final ScrollBar difficulty;
+    private final TextField[] courses;
+    private final TextField[] playersFields;
+    private final ChoiceBox<String>[] rolesBoxes;
 
     public MainMenu(Group root, View view) {
         super(root);
@@ -51,6 +51,7 @@ public class MainMenu extends Scene {
             roleNames[index++] = role.roleToName();
 
         playersFields = new TextField[4];
+        //noinspection unchecked
         rolesBoxes = new ChoiceBox[4];
 
         gridPane.add(new Text("Nom du Joueur 1 :"), 1, 1);

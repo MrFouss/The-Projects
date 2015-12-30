@@ -11,11 +11,11 @@ import java.util.Arrays;
 /**
  * The main building, defining their shape and color
  */
-public class Building {
+class Building {
 
-    private Shape shape;
-    private Color color;
-    private String UV;
+    private final Shape shape;
+    private final Color color;
+    private final String UV;
 
     /**
      * Constructor of a Building

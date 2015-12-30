@@ -14,9 +14,7 @@ import javafx.scene.text.Font;
 /**
  * The place where card are drawn/discarded
  */
-public class Deck extends StackPane {
-    private boolean horizontal;
-
+class Deck extends StackPane {
     /**
      * complete constructor
      * @param scene the scene in which the Deck appear
@@ -31,7 +29,6 @@ public class Deck extends StackPane {
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))));
 
-        this.horizontal = horizontal;
         rectangle.setWidth(scene.getWidth()*(horizontal ? 22*9/16 : 9)/100.);
         rectangle.setHeight(scene.getHeight()*(horizontal ? 9*16/9 : 22)/100.);
 
@@ -59,13 +56,5 @@ public class Deck extends StackPane {
      */
     public Deck (Scene scene,String text, Color color, double relativeX, double relativeY) {
         this(scene, text, color, relativeX, relativeY, false);
-    }
-
-    /**
-     * Getter of horizontality
-     * @return true if horizontal
-     */
-    public boolean isHorizontal() {
-        return horizontal;
     }
 }

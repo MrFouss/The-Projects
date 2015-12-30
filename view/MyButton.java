@@ -12,7 +12,7 @@ import javafx.scene.paint.Stop;
 /**
  * Customized button
  */
-public class MyButton extends Button {
+class MyButton extends Button {
 
     /**
      * Constructor with text to display

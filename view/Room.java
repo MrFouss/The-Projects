@@ -13,21 +13,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
-
 /**
  * The nodes of the games, the rooms where the Projects are done
  */
 public class Room extends StackPane implements Clickable {
-    private Color color;
-    private String UV;
-    private String name;
-    private Circle circle;
+    private final Color color;
+    private final String UV;
+    private final String name;
+    private final Circle circle;
     private Shape roomShape;
-    private Rectangle[][] projectCubes;
+    private final Rectangle[][] projectCubes;
     private int nbProjectCubes;
-    private Pawn[] pawns;
-    private ArrayList<Corridor> corridors;
+    private final Pawn[] pawns;
     private ChangeListener hoverListener;
 
     /**
@@ -66,8 +63,6 @@ public class Room extends StackPane implements Clickable {
         for(Integer i = 0; i < 4; ++i) {
             pawns[i] = null;
         }
-
-        corridors = new ArrayList<>();
     }
 
     /**
@@ -222,22 +217,6 @@ public class Room extends StackPane implements Clickable {
         return name;
     }
 
-    /**
-     * Method to add a corridor to a room
-     * @param c the corridor to add
-     */
-    public void addCorridor(Corridor c) {
-        corridors.add(c);
-    }
-
-    /**
-     * Method to get the corridors of a Room
-     * @return an ArrayList of the corridors of the Room
-     */
-    public ArrayList<Corridor> getCorridors() {
-        return corridors;
-    }
-
     public Pawn[] getPawns() {
         return pawns;
     }
@@ -248,6 +227,7 @@ public class Room extends StackPane implements Clickable {
             hoverListener = Board.setHoverStrokeChange(roomShape, color);
             roomShape.setOnMouseClicked(event -> view.fireRoomClicked(name));
         }else {
+            //noinspection unchecked
             roomShape.hoverProperty().removeListener(hoverListener);
             roomShape.setStrokeWidth(0);
             roomShape.setOnMouseClicked(null);

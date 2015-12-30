@@ -18,15 +18,15 @@ import the_projects.view.View;
  * TODO make fancier
  */
 public class Card extends StackPane implements Clickable {
-    private Rectangle rectangle;
-    private Color color;
-    private String title;
-    private String text;
+    private final Rectangle rectangle;
+    private final Color color;
+    private final String title;
+    private final String text;
     private ChangeListener hoverListener;
     private Owner owner;
-    protected Label textLabel;
+    final Label textLabel;
 
-    public Card(Pane pane, String title, String text, Color color, Owner owner) {
+    Card(Pane pane, String title, String text, Color color, Owner owner) {
         this.color = color;
         this.title = title;
         this.text = text;
@@ -63,6 +63,7 @@ public class Card extends StackPane implements Clickable {
             rectangle.setOnMouseClicked(event -> view.fireCardClicked(title, text));
         }else {
             if (hoverListener != null)
+                //noinspection unchecked
                 rectangle.hoverProperty().removeListener(hoverListener);
             rectangle.setStrokeWidth(0);
             rectangle.setOnMouseClicked(null);

@@ -17,14 +17,14 @@ import java.util.LinkedList;
  * The representation of a player
  */
 public class Player {
-    private Label nameLabel;
-    private String name;
-    private Role role;
-    private Pawn pawn;
+    private final Label nameLabel;
+    private final String name;
+    private final Role role;
+    private final Pawn pawn;
     private LinkedList<Card> hand;
     private StackPane handDeck;
-    private Pane pane;
-    private Color color;
+    private final Pane pane;
+    private final Color color;
 
     /**
      * Constructor without cards
@@ -113,12 +113,10 @@ public class Player {
      * Setter for the Deck of the player
      * @param handDeck the new Deck of the player
      */
-    public StackPane setHandDeck(StackPane handDeck, View view) {
-        StackPane prev = this.handDeck;
+    public void setHandDeck(StackPane handDeck, View view) {
         this.handDeck = handDeck;
         if (handDeck instanceof Clickable)
             ((Clickable)handDeck).setClickable(true, view);
-        return prev;
     }
 
     /**

@@ -19,7 +19,7 @@ import javafx.util.Duration;
 public class PropagationGauge extends Pane implements Gauge {
 
     private int lvl;
-    private Circle actual;
+    private final Circle actual;
 
     /**
      * The Constructor of the PropagationGauge
@@ -77,7 +77,7 @@ public class PropagationGauge extends Pane implements Gauge {
      */
     public void increase() {
         if (lvl < 7) {
-            double line1 = 40, line2 = line1 + 30, r = 14;
+            double line1 = 40, line2 = line1 + 30;
             Path path = new Path(new MoveTo(50 + (lvl-1)*35,lvl%2 == 0 ? line1 : line2), new LineTo(50 + lvl*35, lvl%2 == 0 ? line2 : line1));
             (new PathTransition(Duration.millis(1000),path,actual)).play();
 

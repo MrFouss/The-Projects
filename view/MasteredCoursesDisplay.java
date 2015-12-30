@@ -23,9 +23,9 @@ import javafx.util.Duration;
 /**
  * Representation of the toMastered states
  */
-public class MasteredCoursesDisplay extends Pane {
-    private Timeline[] toMastered;
-    private Timeline[] toEradicated;
+class MasteredCoursesDisplay extends Pane {
+    private final Timeline[] toMastered;
+    private final Timeline[] toEradicated;
 
     /**
      * Complete constructor

@@ -20,8 +20,7 @@ import java.util.*;
  *  TODO complete
  */
 public class View extends Stage {
-    private Model model;
-    private MainMenu mainMenu;
+    private final MainMenu mainMenu;
     private Board board;
     private final HashSet<ViewListener> listeners = new HashSet<>();
 
@@ -37,11 +36,10 @@ public class View extends Stage {
      * Method to generate a new board
      */
     public void displayGameBoard(Model model){
-        this.model = model;
-        Course[] courses = this.model.getCourses();
-        Player[] players = new Player[this.model.getPlayers().size()];
+        Course[] courses = model.getCourses();
+        Player[] players = new Player[model.getPlayers().size()];
         int i = 0;
-        for (PhDStudent phDStudent : this.model.getPlayers())
+        for (PhDStudent phDStudent : model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
         setBoard(courses[0].getName(), courses[1].getName(), courses[2].getName(), courses[3].getName(), players);
     }
@@ -73,7 +71,7 @@ public class View extends Stage {
      * Method to display a new settings menu
      */
     public void displaySetting() {
-        Platform.runLater(() -> setSettings());
+        Platform.runLater(this::setSettings);
     }
 
     private void setSettings() {

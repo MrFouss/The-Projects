@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * The representation of a corridor between two rooms
  */
-public class Corridor extends Path {
+class Corridor extends Path {
 
     /**
      * Complete constructor

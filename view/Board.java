@@ -36,22 +36,22 @@ import java.util.*;
  */
 public class Board extends Scene {
 
-    private View view;
-    private Building[] batiments;
+    private final View view;
+    private final Building[] batiments;
     private HashMap<String, Room> rooms;
-    private Pane pane;
-    private Actions actions;
-    private ArrayList<Pawn> pawns;
-    private ArrayList<StackPane> decks;
-    private PropagationGauge propagationGauge;
-    private OutbreaksGauge outbreaksGauge;
-    private MasteredCoursesDisplay masteredCoursesDisplay;
-    private MyButton giveUp;
+    private final Pane pane;
+    private final Actions actions;
+    private final ArrayList<Pawn> pawns;
+    private final ArrayList<StackPane> decks;
+    private final PropagationGauge propagationGauge;
+    private final OutbreaksGauge outbreaksGauge;
+    private final MasteredCoursesDisplay masteredCoursesDisplay;
+    private final MyButton giveUp;
     private LinkedList<Card> displayedCards;
     private Rectangle hidingRectangle;
-    private Player[] players;
+    private final Player[] players;
     private Player currentPlayer;
-    private Label actionPoints;
+    private final Label actionPoints;
 
     /**
      * TODO doc when finished
@@ -135,8 +135,8 @@ public class Board extends Scene {
         pane.getChildren().addAll(decks);
 
         //Creation of the rooms and corridors
-        setRooms("/src/the_projects/resources/rooms.csv");
-        setCorridors("/src/the_projects/resources/corridors.csv");
+        setRooms();
+        setCorridors();
 
 
         //Creating the pawns
@@ -206,17 +206,19 @@ public class Board extends Scene {
                 shape.setStroke(color.deriveColor(0, 1, .5, 1));
             }
         };
+        //noinspection unchecked
         shape.hoverProperty().addListener(changeListener);
         return changeListener;
     }
 
+
+
     /**
      * Method to read the position and place the rooms on the board from a text file
-     * @param path the path to the text file
      */
-    public void setRooms(String path) {
+    private void setRooms() {
         try {
-            List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
+            List<String> newRoomsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/rooms.csv"));
             rooms = new HashMap<>();
             Room newRoom;
             for (String s : newRoomsList) {
@@ -238,11 +240,10 @@ public class Board extends Scene {
 
     /**
      * Method to read the position and place the corridors on the board from a text file
-     * @param path the path to the text file
      */
-    public void setCorridors(String path) {
+    private void setCorridors() {
         try {
-            List<String> newCorridorsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + path));
+            List<String> newCorridorsList = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/the_projects/resources/corridors.csv"));
             Corridor newCorridor;
             for (String s : newCorridorsList) {
                 String[] vars = s.split(",");
@@ -275,7 +276,7 @@ public class Board extends Scene {
      * @param pawn the pawn to move
      * @param dest the room welcoming the pawn
      */
-    public PathTransition movePawn(Pawn pawn, Room dest) {
+    private PathTransition movePawn(Pawn pawn, Room dest) {
         if (dest != null) {
             Point2D destPoint2Ds = dest.addPawn(pawn);
             Point2D startPoint2Ds = pawn.setRoom(dest);
@@ -320,7 +321,7 @@ public class Board extends Scene {
      * @param projectIndex the index of the project
      * @return the color of the project
      */
-    public Color projectIndexToColor(int projectIndex) {
+    private Color projectIndexToColor(int projectIndex) {
         return batiments[projectIndex].getColor();
     }
 
@@ -397,7 +398,7 @@ public class Board extends Scene {
      * @param clickable if true, the elements will be clickable
      * @param nodes the list of elements to put in front
      */
-    public void putInFront(boolean clickable, Node... nodes) {
+    private void putInFront(boolean clickable, Node... nodes) {
         hidingRectangle = new Rectangle();
         hidingRectangle.setFill(Color.BLACK.deriveColor(0,1,1,.6));
         hidingRectangle.setWidth(pane.getWidth());
@@ -434,7 +435,7 @@ public class Board extends Scene {
         pawns.forEach(pawn -> pawn.getShape().toFront());
     }
 
-    public StackPane ownerToDeck(Owner owner) {
+    private StackPane ownerToDeck(Owner owner) {
         switch (owner) {
             case PLAYER1:
                 return players[0].getHandDeck();
@@ -464,7 +465,7 @@ public class Board extends Scene {
      * @param deck the deck from where the cards come
      * @param cards the cards to move
      */
-    public void moveFromDeck(boolean clickable, StackPane deck, boolean horizontal, Card... cards) {
+    private void moveFromDeck(boolean clickable, StackPane deck, boolean horizontal, Card... cards) {
         double i = (6 - cards.length)/2., j = 1;
         if (cards.length > 6) {
             i = (6 - cards.length/2)/2.;
@@ -504,7 +505,7 @@ public class Board extends Scene {
      * Method to display the movement of a card to a Deck
      * @param card the card to move
      */
-    public PathTransition moveToDeck(Card card) {
+    private PathTransition moveToDeck(Card card) {
         StackPane deck = ownerToDeck(card.getOwner());
         Path path = new Path(new MoveTo(card.localToParent(0,0).getX() + card.getWidth()/2, card.localToParent(0,0).getY() + card.getHeight()/2),
                 new LineTo(deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getX(), deck.localToParent(deck.getWidth()/2.,deck.getHeight()/2.).getY()));
@@ -633,16 +634,16 @@ public class Board extends Scene {
             displayedCards.forEach((card2) -> moveToDeck(card2).play());
             switch (last.getOwner()) {
                 case PLAYER1:
-                    displayedCards.forEach(card -> players[0].addCard(card));
+                    displayedCards.forEach(players[0]::addCard);
                     break;
                 case PLAYER2:
-                    displayedCards.forEach(card -> players[1].addCard(card));
+                    displayedCards.forEach(players[1]::addCard);
                     break;
                 case PLAYER3:
-                    displayedCards.forEach(card -> players[2].addCard(card));
+                    displayedCards.forEach(players[2]::addCard);
                     break;
                 case PLAYER4:
-                    displayedCards.forEach(card -> players[3].addCard(card));
+                    displayedCards.forEach(players[3]::addCard);
                     break;
                 default:
                     break;
@@ -700,9 +701,7 @@ public class Board extends Scene {
      * @param roomNameOfRoomCard the name of the room card
      */
     public void discardCard(Owner newOwner, String roomNameOfRoomCard) {
-        displayedCards.stream().filter(card -> roomNameOfRoomCard.equals(card.getText())).forEach(card -> {
-            discardCard(newOwner, card);
-        });
+        displayedCards.stream().filter(card -> roomNameOfRoomCard.equals(card.getText())).forEach(card -> discardCard(newOwner, card));
     }
 
     /**
@@ -711,9 +710,7 @@ public class Board extends Scene {
      * @param eventOfEventCard the name of the event card
      */
     public void discardCard(Owner newOwner, Event eventOfEventCard) {
-        displayedCards.stream().filter(card -> eventOfEventCard.equals(Event.nameToEvent(card.getTitle()))).forEach(card -> {
-            discardCard(newOwner, card);
-        });
+        displayedCards.stream().filter(card -> eventOfEventCard.equals(Event.nameToEvent(card.getTitle()))).forEach(card -> discardCard(newOwner, card));
     }
 
     private void discardCard(Owner newOwner, Card card) {

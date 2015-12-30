@@ -11,10 +11,10 @@ import javafx.scene.shape.Shape;
  * The representation of a player, a shape appearing in the room he is.
  */
 public class Pawn implements Clickable{
-    private Shape shape;
+    private final Shape shape;
     private Room actualRoom;
-    private Player player;
-    private Color color;
+    private final Player player;
+    private final Color color;
     private ChangeListener hoverListener;
 
     /**
@@ -67,6 +67,7 @@ public class Pawn implements Clickable{
             hoverListener = Board.setHoverStrokeChange(shape, color);
             shape.setOnMouseClicked(event -> view.firePawnCLicked(player.getRole()));
         }else {
+            //noinspection unchecked
             shape.hoverProperty().removeListener(hoverListener);
             shape.setStroke(color.deriveColor(0, 1, .5, 1));
             shape.setStrokeWidth(2);

@@ -3,6 +3,6 @@ package the_projects.view;
 /**
  * Interface for the Gauges
  */
-public interface Gauge {
+interface Gauge {
     void increase();
 }

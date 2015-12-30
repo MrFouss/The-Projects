@@ -8,20 +8,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.transform.Scale;
 
 /**
  * TODO complete : add selected player + javadoc
  */
-public class Actions extends BorderPane {
-    private MyButton moves;
-    private MyButton projects;
-    private MyButton share;
-    private MyButton card;
-    private MyButton master;
-    private MyButton labRoom;
-    private MyButton hacker;
-    private MyButton endButton;
+class Actions extends BorderPane {
+    private final MyButton moves;
+    private final MyButton projects;
+    private final MyButton share;
+    private final MyButton card;
+    private final MyButton master;
+    private final MyButton labRoom;
+    private final MyButton hacker;
+    private final MyButton endButton;
 
 
     public Actions(Board board, View view, Pane pane, Player... players) {
