@@ -135,13 +135,10 @@ public class Controller extends Thread implements ViewListener {
 										// stress
 	
 										ProjectCard pCard = (ProjectCard) model.getProjectDeck().drawLast();
-										ArrayList<String> temp = new ArrayList<String>();
-										temp.add(pCard.getRoom().getName());
+										LinkedList<Card> temp = new LinkedList<>();
+										temp.add(pCard);
 										
-										view.displayDrawCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, false, temp, new ArrayList<Event>(), 0);
-										Thread.sleep(1500);
-										view.displayDiscardCards();
-										view.clean();
+										displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, temp);
 										
 										Course course = pCard.getRoom().getCourse();
 										int courseIndex = 0;
