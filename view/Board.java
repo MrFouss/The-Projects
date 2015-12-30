@@ -483,6 +483,7 @@ public class Board extends Scene {
                 }
             }
             PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
+            pathTransition.setOnFinished(e->view.fireAnimationFinished());
             pathTransition.play();
             lastTransition = pathTransition;
 
@@ -663,6 +664,7 @@ public class Board extends Scene {
                         default:
                             break;
                     }
+                    view.fireAnimationFinished();
                 });
                 pathTransition.play();
             });

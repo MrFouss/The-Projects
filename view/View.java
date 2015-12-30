@@ -364,4 +364,8 @@ public class View extends Stage {
     public void displayActionsPoints(int actionPoints) {
         Platform.runLater(() -> board.setActionsPoints(actionPoints));
     }
+
+    public void fireAnimationFinished() {
+        listeners.forEach(ViewListener::animationFinished);
+    }
 }
