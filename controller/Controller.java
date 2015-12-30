@@ -59,7 +59,7 @@ public class Controller extends Thread implements ViewListener {
 					Thread.sleep(1500);
 					
 					//discard
-					
+
 					displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
 					
 					//projects and labs
