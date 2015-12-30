@@ -423,6 +423,7 @@ public class Board extends Scene {
             } catch (Exception ignore) {}
         });
         pawns.forEach(pawn -> pawn.getShape().toFront());
+        view.fireCleaned();
     }
 
     public StackPane ownerToDeck(Owner owner) {
@@ -471,7 +472,9 @@ public class Board extends Scene {
                     i = (6 - cards.length/2)/2.;
                 }
             }
-            (new PathTransition(Duration.millis(500),path,card)).play();
+            PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
+            pathTransition.setOnFinished(e->view.fireAnimationFinished());
+            pathTransition.play();
 
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
             scaleTransition.setToX(decks.get(2).getScaleX());
@@ -613,6 +616,7 @@ public class Board extends Scene {
                 tmpPath = thisPath;
                 displayedCards.pollLast();
             }
+            pathToPlay.setOnFinished(event -> view.fireAnimationFinished());
             pathToPlay.play();
         }
         if (displayedCards.size() > 0) {
@@ -641,6 +645,7 @@ public class Board extends Scene {
                 displayedCards = new LinkedList<>() ;
 
                 discardLastCard(last);
+                view.fireAnimationFinished();
 
             });
             lastPathTransition.play();

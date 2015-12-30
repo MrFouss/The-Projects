@@ -227,11 +227,15 @@ public class View extends Stage {
         listeners.forEach(e -> e.eventCardClicked(event));
     }
 
-    protected void fireGiveUpButtonClicked() {
+    public void fireGiveUpButtonClicked() {
         listeners.forEach(ViewListener::giveUpButtonClicked);
     }
 
+    public void fireAnimationFinished() {
+        listeners.forEach(ViewListener::animationFinished);
+    }
 
+    public void fireCleaned() {listeners.forEach(ViewListener::cleaned);}
 
     public LinkedList<String> getPlayerNames() {
         return mainMenu.getPlayerNames();
@@ -341,4 +345,28 @@ public class View extends Stage {
         Platform.runLater(() -> board.setEndButtonButtonDisabled(disabled) );
     }
 
+    /**
+     * Method to make a Pawn clickable or not
+     * @param clickable true to make the pawn clickable
+     * @param role the role of the pawn to change
+     */
+    public void makePawnClickable(boolean clickable, Role role) {
+        //TODO
+    }
+
+    /**
+     * Method to change the current player
+     * @param role the role of the new current player
+     */
+    public void displayCurrentPlayer(Role role) {
+        //TODO
+    }
+
+    /**
+     * Method to display the number of remaining action points
+     * @param actionPoints the number of remaining action points
+     */
+    public void displayActionsPoints(int actionPoints) {
+        //TODO
+    }
 }
