@@ -67,7 +67,17 @@ public class Controller extends Thread implements ViewListener {
 							}
 						}
 					}
-
+					for (PhDStudent phds : model.getPlayers()) {
+						Owner owner = playerToOwner(phds);
+						ArrayList<String> rooms = new ArrayList<String>(roomCardsToStrings(getRoomCards(phds.getCards().getCardList())));
+						ArrayList<Event> events = new ArrayList<Event>(eventCardsToEvents(getEventCards(phds.getCards().getCardList())));
+						view.displayDrawCards(Owner.PLAYER_DECK, owner, false, rooms, events, 0);
+						Thread.sleep(2000);
+						view.displayDiscardCards();
+						view.clean();
+						Thread.sleep(1500);
+					}
+					
 					// game loop
 					
 					while (status == GameStatus.VALID) {
