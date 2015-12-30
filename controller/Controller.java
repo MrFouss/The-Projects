@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.application.Platform;
+import jdk.nashorn.internal.objects.annotations.SpecializedFunction.LinkLogic;
+import sun.awt.image.ImageWatched.Link;
 import the_projects.model.*;
 import the_projects.model.card.*;
 import the_projects.view.View;
@@ -110,7 +112,6 @@ public class Controller extends Thread implements ViewListener {
 								cards.add(model.getCurrentPlayer().getCards().drawFirst());
 								
 								displayCards(Owner.PLAYER_DECK, owner, new LinkedList<Card>(cards));
-
 								
 								for (int i = 0; i < 2; i++) {	
 									PlayerCard card = cards.get(i);
@@ -119,7 +120,7 @@ public class Controller extends Thread implements ViewListener {
 										model.getCurrentPlayer().getCards().addCard(card);
 									} else if (card.getClass() == EventCard.class) {
 										model.getCurrentPlayer().getCards().addCard(card);
-									} //else {
+									} else {
 										// résoudre épidémie
 	
 										// exams
@@ -160,7 +161,7 @@ public class Controller extends Thread implements ViewListener {
 											Thread.sleep(1500);
 											
 											if (pCard.getRoom().getProject(course).getProjectAmount() > 0) {
-												//burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
+												burnOut(new LinkedList<Room>(), pCard.getRoom(), course);
 											}
 										}
 										
@@ -176,7 +177,7 @@ public class Controller extends Thread implements ViewListener {
 			
 										model.getProjectDeck().addCardsOnTop(model.getProjectDiscard());
 										model.getProjectDiscard().getCardList().removeAll(model.getProjectDiscard().getCardList());
-									//}
+									}
 								}
 								
 
@@ -234,7 +235,8 @@ public class Controller extends Thread implements ViewListener {
 	
 						break;
 					case BURN_OUT:
-	
+						view.displayValidationMessage("YOU LOST\nLa gauge de burn out est au maximum.\nDo you want to start a new party ?");
+						this.wait();
 						break;
 					case PROJECT_LACK:
 	
@@ -261,21 +263,30 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	private void burnOut(LinkedList<Room> burnOutRooms, Room room, Course course) {
-		if (!burnOutRooms.contains(room)) {
+		if (!burnOutRooms.contains(room) && status == GameStatus.VALID) {
+			burnOutRooms.add(room);
+			
 			model.increaseBurnOutGauge();
+			view.displayIncreaseBurnOutGauge();
+			
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			if (model.getBurnOutValue() > 7) {
 				status = GameStatus.BURN_OUT;
-			}
-			burnOutRooms.add(room);
-			for (Room r : room.getNeighbours()) {
-				if (status != GameStatus.VALID) {
-					break;
-				}
-				if (r.getProject(course).getProjectAmount() == 3) {
-					burnOut(burnOutRooms, r, course);
-				} else {
-					r.getProject(course).setProjectAmount(
-							r.getProject(course).getProjectAmount() + 1);
+			} else {
+				for (Room r : room.getNeighbours()) {
+					if (r.getProject(course).getProjectAmount() == 3) {
+						burnOut(burnOutRooms, r, course);
+					} else {
+						r.getProject(course).setProjectAmount(
+								r.getProject(course).getProjectAmount() + 1);
+						view.displayAddProjectToRoom(r.getName(), courseToInteger(course));
+					}
 				}
 			}
 		}
@@ -340,6 +351,15 @@ public class Controller extends Thread implements ViewListener {
 		default:
 			return null;
 		}
+	}
+	
+	private int courseToInteger(Course c) {
+		for (int i = 0; i < 4; i++) {
+			if (model.getCourses()[i] == c) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	private int getPartyCards(LinkedList<Card> cards) {
@@ -625,7 +645,9 @@ public class Controller extends Thread implements ViewListener {
 		if (actionPoints > 0) {
 			if (model.getCurrentPlayer().getCards().getSize() > 0) {
 				Owner owner = playerToOwner(model.getCurrentPlayer());
-				//TODO displayCards(owner, owner, true, new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()));
+				ArrayList<String> rooms = new ArrayList<String>(roomCardsToStrings(getRoomCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()))));
+				ArrayList<Event> events = new ArrayList<Event>(eventCardsToEvents(getEventCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()))));
+				view.displayDrawCards(owner, owner, true, rooms, events, 0);
 				action = ActionType.USE_CARD;
 			} else {
 				view.displayMessage("Vous n'avez aucune carte dans votre main.");
@@ -768,12 +790,48 @@ public class Controller extends Thread implements ViewListener {
 
 
 	@Override
-	public void eventCardClicked(Event card) {
+	synchronized public void eventCardClicked(Event card) {
 		System.out.println("event");
 	}
 
+	//TODO animation fails
 	@Override
-	public void roomCardClicked(String room) {
-		System.out.println("room");	
+	synchronized public void roomCardClicked(String room) {
+		if (action == ActionType.USE_CARD) {
+			Owner owner = playerToOwner(model.getCurrentPlayer());
+			LinkedList<Card> cards = new LinkedList<>();
+
+			for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
+				if (card.getClass() == RoomCard.class) {
+					if (((RoomCard)card).getRoom().getName().equals(room)) {
+						cards.add(card);
+						break;
+					}
+				}
+			}
+			
+			Displayer d = new Displayer(owner, Owner.PLAYER_DISCARD, cards);
+			d.start();
+		}
+	}
+	
+	private class Displayer extends Thread {
+		Owner src;
+		Owner dest;
+		LinkedList<Card> cards;
+		
+		public Displayer(Owner src, Owner dest, LinkedList<Card> cards) {
+			super();
+			this.src = src;
+			this.dest = dest;
+			this.cards = cards;
+		}
+		
+		public void run() {
+			if (action == ActionType.USE_CARD) {
+				view.displayDiscardCard(Owner.PLAYER_DISCARD, ((RoomCard)cards.get(0)).getRoom().getName());
+				view.clean();
+			}
+		}
 	}
 }
