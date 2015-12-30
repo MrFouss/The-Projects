@@ -798,33 +798,18 @@ public class Controller extends Thread implements ViewListener {
 	@Override
 	synchronized public void roomCardClicked(String room) {
 		if (action == ActionType.USE_CARD) {
-			Owner owner = playerToOwner(model.getCurrentPlayer());
-			LinkedList<Card> cards = new LinkedList<>();
-
-			for (PlayerCard card : model.getCurrentPlayer().getCards().getCardList()) {
-				if (card.getClass() == RoomCard.class) {
-					if (((RoomCard)card).getRoom().getName().equals(room)) {
-						cards.add(card);
-						break;
-					}
-				}
-			}
-			
-			Displayer d = new Displayer(owner, Owner.PLAYER_DISCARD, cards);
+			Owner owner = playerToOwner(model.getCurrentPlayer());			
+			Displayer d = new Displayer(room);
 			d.start();
 		}
 	}
 	
 	private class Displayer extends Thread {
-		Owner src;
-		Owner dest;
-		LinkedList<Card> cards;
+		String selectedCard;
 		
-		public Displayer(Owner src, Owner dest, LinkedList<Card> cards) {
+		public Displayer(String s) {
 			super();
-			this.src = src;
-			this.dest = dest;
-			this.cards = cards;
+			this.selectedCard = s;
 		}
 		
 		public void run() {
