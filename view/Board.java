@@ -470,6 +470,7 @@ public class Board extends Scene {
         if (cards.length > 6) {
             i = (6 - cards.length/2)/2.;
         }
+        PathTransition lastTransition = new PathTransition();
         for (Card card : cards) {
             Path path;
             if (cards.length < 6) {
@@ -483,6 +484,7 @@ public class Board extends Scene {
             }
             PathTransition pathTransition = new PathTransition(Duration.millis(500),path,card);
             pathTransition.play();
+            lastTransition = pathTransition;
 
             ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(500), card);
             scaleTransition.setToX(decks.get(2).getScaleX());
@@ -498,7 +500,7 @@ public class Board extends Scene {
 
             displayedCards.add(card);
         }
-        putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()]));
+        lastTransition.setOnFinished(event -> putInFront(clickable, displayedCards.toArray(new Card[displayedCards.size()])));
     }
 
     /**
