@@ -361,6 +361,6 @@ public class View extends Stage {
      * @param actionPoints the number of remaining action points
      */
     public void displayActionsPoints(int actionPoints) {
-        //TODO
+        board.setActionsPoints(actionPoints);
     }
 }

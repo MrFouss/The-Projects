@@ -5,13 +5,13 @@ import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
@@ -51,6 +51,7 @@ public class Board extends Scene {
     private Rectangle hidingRectangle;
     private Player[] players;
     private Player currentPlayer;
+    private Label actionPoints;
 
     /**
      * TODO doc when finished
@@ -174,6 +175,12 @@ public class Board extends Scene {
         rectangle.setFill(Color.BLACK.deriveColor(0,1,1,.5));
         rectangle.heightProperty().bind(pane.heightProperty());
         rectangle.widthProperty().bind(pane.widthProperty());
+
+        actionPoints = new Label("Points d'actions restants : 0");
+        actionPoints.setBackground(new Background(new BackgroundFill(Color.WHITE.deriveColor(0,1,.9,.5), new CornerRadii(10), new Insets(-5))));
+        actionPoints.setLayoutX(getWidth()*85.5/100.);
+        actionPoints.setLayoutY(getHeight()*62.5/100.);
+        pane.getChildren().add(actionPoints);
 
         //making the board proportional to the window
         pane.setMaxSize(getWidth(),getHeight());
@@ -819,5 +826,9 @@ public class Board extends Scene {
                 return;
             }
         }
+    }
+
+    public void setActionsPoints(int actionPoints) {
+        this.actionPoints.setText("Points d'actions restants : " + actionPoints);
     }
 }
