@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import javafx.application.Platform;
 import jdk.nashorn.internal.objects.annotations.SpecializedFunction.LinkLogic;
 import sun.awt.image.ImageWatched.Link;
+import the_projects.controller.animation.Animation;
+import the_projects.controller.animation.CardDisplay;
 import the_projects.model.*;
 import the_projects.model.card.*;
 import the_projects.view.View;
@@ -26,9 +28,11 @@ public class Controller extends Thread implements ViewListener {
 
 	int actionPoints;
 	Card selectedCard;
+	RoomCard selectedRoomCard;
 	HashMap<String, Integer> selectedReachableRooms;
 	PhDStudent selectedPlayer;
 	LinkedList<PhDStudent> selectedPlayers;
+	AnimationController animCon = new AnimationController();
 
 	public Controller(View view) {
 		this.view = view;
@@ -46,7 +50,7 @@ public class Controller extends Thread implements ViewListener {
 		try {
 			synchronized (this) {
 				while (status == GameStatus.VALID) {
-					
+					animCon.start();
 				
 					phase = GamePhase.SETTING;
 					// setting phase
@@ -58,11 +62,11 @@ public class Controller extends Thread implements ViewListener {
 					
 					//display initial stuff
 					
-					Thread.sleep(1500);
+					Thread.sleep(1000);
 					
 					//discard
 
-					displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
+					animCon.addCardShow(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
 					
 					//projects and labs
 					
@@ -78,17 +82,21 @@ public class Controller extends Thread implements ViewListener {
 						}
 					}
 					
+					
+					
 					//player hands
 					
 					for (PhDStudent phds : model.getPlayers()) {
 						Owner owner = playerToOwner(phds);
-						displayCards(Owner.PLAYER_DECK, owner, new LinkedList<Card>(phds.getCards().getCardList()));
+						animCon.addCardShow(Owner.PLAYER_DECK, owner, new LinkedList<Card>(phds.getCards().getCardList()));
 					}
+					
+					this.wait();
 					
 					// game loop
 					
 					while (status == GameStatus.VALID) {
-						view.displayInfoMessage("NOUVEAU TOUR\n" + model.getCurrentPlayer().getName());
+						animCon.add((x) -> x.displayInfoMessage("NOUVEAU TOUR\n" + model.getCurrentPlayer().getName()));
 						
 						phase = GamePhase.ACTION;
 						// action phase
@@ -110,8 +118,8 @@ public class Controller extends Thread implements ViewListener {
 								LinkedList<PlayerCard> cards = new LinkedList<>();
 								Owner owner = playerToOwner(model.getCurrentPlayer());
 					
-								cards.add(model.getCurrentPlayer().getCards().drawFirst());
-								cards.add(model.getCurrentPlayer().getCards().drawFirst());
+								cards.add(model.getPlayerDeck().drawFirst());
+								cards.add(model.getPlayerDeck().drawFirst());
 								
 								displayCards(Owner.PLAYER_DECK, owner, new LinkedList<Card>(cards));
 								
@@ -297,9 +305,9 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	synchronized private void displayCards(Owner src, Owner dest, LinkedList<Card> cards) {
-		ArrayList<String> rooms = new ArrayList<String>(roomCardsToStrings(getRoomCards(cards)));
 		ArrayList<Event> events = new ArrayList<Event>(eventCardsToEvents(getEventCards(cards)));
 		ArrayList<String> projs = new ArrayList<String>(projectCardsToStrings(getProjectCards(cards)));
+		ArrayList<String> rooms = new ArrayList<String>(roomCardsToStrings(getRoomCards(cards)));
 		int parties = getPartyCards(cards);
 		
 		//TODO remove
@@ -388,6 +396,7 @@ public class Controller extends Thread implements ViewListener {
 		return events;
 	}
 	
+	//TODO remove
 	private LinkedList<ProjectCard> getProjectCards(LinkedList<Card> cards) {
 		LinkedList<ProjectCard> rooms = new LinkedList<>();
 		
@@ -458,8 +467,6 @@ public class Controller extends Thread implements ViewListener {
 
 	private void resolveEventCard(EventCard extraEventCard) {
 	}
-	
-	
 	
 	
 	
@@ -565,6 +572,16 @@ public class Controller extends Thread implements ViewListener {
 	synchronized public void placeClicked(String name) {
 		actionPoints -= selectedReachableRooms.get(name);
 		view.displayActionsPoints(actionPoints);
+		
+		if (action == ActionType.USE_CARD) {
+			LinkedList<Card> toDisplay = new LinkedList<>();
+			toDisplay.add(selectedCard);
+			//TODO
+			//CardDisplayer cd = new CardDisplayer(playerToOwner(model.getCurrentPlayer()), Owner.PLAYER_DISCARD, toDisplay);
+			//cd.start();
+			model.getCurrentPlayer().getCards().getCardList().remove(toDisplay.get(0));
+			action = ActionType.RUN;
+		}
 		
 		LinkedList<String> shortP = model.shortestPath(selectedPlayer.getPosition().getName(), name);
 		
@@ -799,32 +816,128 @@ public class Controller extends Thread implements ViewListener {
 
 	@Override
 	synchronized public void eventCardClicked(Event card) {
-		System.out.println("event");
+		if (action == ActionType.USE_CARD) {
+			view.displayChangeOwnerOfDisplayedCard(Owner.PLAYER_DISCARD, card);
+			view.displayDiscardCards();
+			view.clean();
+			resolveEventCard(new EventCard(card)); //TODO
+		}
 	}
 
 	//TODO animation fails
 	@Override
 	synchronized public void roomCardClicked(String room) {
 		if (action == ActionType.USE_CARD) {
-			Owner owner = playerToOwner(model.getCurrentPlayer());			
-			Displayer d = new Displayer(room);
-			d.start();
+			view.displayDiscardCards();
+			view.clean();
+			
+			HashMap<String, Integer> reachable = new HashMap<String, Integer>();
+			
+			if (model.getCurrentPlayer().getPosition() == roomNameToRoom(room)) {
+				for (Room r : model.getRooms()) {
+					if (!r.getName().equals(room)) {
+						reachable.put(r.getName(), 1);
+					}
+				}
+			} else {
+				reachable.put(room, 1);
+			}
+			
+			for (Card c : model.getCurrentPlayer().getCards().getCardList()) {
+				if (c.getClass() == RoomCard.class) {
+					RoomCard rc = (RoomCard)c;
+					if (rc.getRoom().getName().equals(room)) {
+						selectedCard = rc;
+					}
+				}
+			}
+			
+			selectedReachableRooms = reachable;
+			selectedPlayer = model.getCurrentPlayer();
+			view.displayReachableRooms(reachable);			
 		}
 	}
 	
-	private class Displayer extends Thread {
-		String selectedCard;
+	private class AnimationController extends Thread {
+		LinkedList<Animation> anims = new LinkedList<Animation>();
+		boolean finish = false;
+		boolean wait = false;
 		
-		public Displayer(String s) {
-			super();
-			this.selectedCard = s;
+		@Override
+		public void run() {
+			synchronized (this) {
+				while (!finish) {	
+					if (!anims.isEmpty()) {
+						wait = true;
+						anims.getFirst().run(view);
+					}
+					anims.poll();
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		
-		public void run() {
-			if (action == ActionType.USE_CARD) {
-				//TODO change owner
-				view.clean();
+		synchronized public void add(Animation a) {
+			synchronized (this) {
+				anims.add(a);
+				if (!wait) {
+					this.notify();
+				}
 			}
+		}
+		
+		synchronized public void addCardShow(Owner a, Owner b, LinkedList<Card> c) {
+				this.add((x) -> {
+					System.out.println("display");
+					ArrayList<Event> events = new ArrayList<Event>(eventCardsToEvents(getEventCards(c)));
+					ArrayList<String> projs = new ArrayList<String>(projectCardsToStrings(getProjectCards(c)));
+					ArrayList<String> rooms = new ArrayList<String>(roomCardsToStrings(getRoomCards(c)));
+					int parties = getPartyCards(c);
+					
+					//TODO remove
+					rooms.addAll(projs);
+					
+					x.displayDrawCards(a, b, false, rooms, events, parties);
+
+					wait = true;
+				});
+				/*
+				this.add((x) -> {try {
+					System.out.println("waiting");
+					Thread.sleep(1000); wait = false;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}});*/
+				this.add((x) -> {try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}System.out.println("discard");x.displayDiscardCards();});
+				this.add((x) -> {System.out.println("clean");x.clean();});
+			
+		}
+		
+		synchronized public void animationFinished() {
+			System.out.println("fin");
+			this.notify();
+		}
+		
+		public void finish() {
+			finish = true;
+		}
+	}
+
+	@Override
+	public void animationFinished() {
+		synchronized (animCon) {
+			animCon.animationFinished();
 		}
 	}
 }
