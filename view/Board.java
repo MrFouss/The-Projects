@@ -794,4 +794,16 @@ public class Board extends Scene {
     public void setEndButtonButtonDisabled(boolean disabled) {
         actions.setEndButtonDisabled(disabled);
     }
+
+    /**
+     * Method to make a Pawn clickable or not
+     * @param clickable true to make the pawn clickable
+     * @param role the role of the pawn to change
+     */
+    public void makePawnClickable(boolean clickable, Role role) {
+        pawns.forEach(pawn -> {
+            if (pawn.getPlayer().getRole() == role)
+                pawn.setClickable(clickable, view);
+        });
+    }
 }

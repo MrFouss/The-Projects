@@ -351,7 +351,7 @@ public class View extends Stage {
      * @param role the role of the pawn to change
      */
     public void makePawnClickable(boolean clickable, Role role) {
-        //TODO
+        board.makePawnClickable(clickable, role);
     }
 
     /**
