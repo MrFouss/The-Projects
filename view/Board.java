@@ -589,8 +589,8 @@ public class Board extends Scene {
             pane.getChildren().addAll(cards);
         }
         cards.forEach(card -> {
-            card.setScaleX(ownerToDeck(card.getOwner()).getScaleX());
-            card.setScaleY(ownerToDeck(card.getOwner()).getScaleY());
+            card.setScaleX(ownerToDeck(actualOwner).getScaleX());
+            card.setScaleY(ownerToDeck(actualOwner).getScaleY());
         });
 
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
