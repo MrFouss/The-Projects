@@ -179,7 +179,7 @@ public class Board extends Scene {
         actionPoints = new Label("Points d'actions restants : 0");
         actionPoints.setBackground(new Background(new BackgroundFill(Color.WHITE.deriveColor(0,1,.9,.5), new CornerRadii(10), new Insets(-5))));
         actionPoints.setLayoutX(getWidth()*85.5/100.);
-        actionPoints.setLayoutY(getHeight()*62.5/100.);
+        actionPoints.setLayoutY(getHeight()*62/100.);
         pane.getChildren().add(actionPoints);
 
         //making the board proportional to the window

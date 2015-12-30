@@ -343,7 +343,7 @@ public class View extends Stage {
      * @param role the role of the pawn to change
      */
     public void makePawnClickable(boolean clickable, Role role) {
-        board.makePawnClickable(clickable, role);
+        Platform.runLater(() -> board.makePawnClickable(clickable, role));
     }
 
     /**
@@ -351,7 +351,7 @@ public class View extends Stage {
      * @param role the role of the new current player
      */
     public void displayCurrentPlayer(Role role) {
-        board.setCurrentPlayer(role);
+        Platform.runLater(() -> board.setCurrentPlayer(role));
     }
 
     /**
@@ -359,6 +359,6 @@ public class View extends Stage {
      * @param actionPoints the number of remaining action points
      */
     public void displayActionsPoints(int actionPoints) {
-        board.setActionsPoints(actionPoints);
+        Platform.runLater(() -> board.setActionsPoints(actionPoints));
     }
 }
