@@ -230,8 +230,8 @@ public class Model {
      * Move the iterator currentPlayer to the next player.
      */
     public void nextPlayer() {
-        if(!this.currentPlayer.hasNext()){
-            this.currentPlayer = this.playerList.listIterator(0);
+        if(this.currentPlayer.nextIndex() == this.playerList.size()-1){
+            this.currentPlayer = this.playerList.listIterator();
         } else {
             this.currentPlayer.next();
         }

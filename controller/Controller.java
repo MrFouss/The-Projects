@@ -741,6 +741,16 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
+	public void animationFinished() {
+
+	}
+
+	@Override
+	public void cleaned() {
+
+	}
+
+	@Override
 	synchronized public void YesButtonClicked() {
 		if (action == ActionType.GIVE_UP) {
 			status = GameStatus.GIVE_UP;
