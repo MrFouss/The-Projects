@@ -91,12 +91,13 @@ public class Controller extends Thread implements ViewListener {
 						animCon.addCardShow(Owner.PLAYER_DECK, owner, new LinkedList<Card>(phds.getCards().getCardList()));
 					}
 					
-					this.wait();
-					
 					// game loop
 					
 					while (status == GameStatus.VALID) {
-						animCon.add((x) -> x.displayInfoMessage("NOUVEAU TOUR\n" + model.getCurrentPlayer().getName()));
+						animCon.add((x) -> {
+							x.displayInfoMessage("NOUVEAU TOUR\n" + model.getCurrentPlayer().getName());
+							animCon.wait = false;
+						});
 						
 						phase = GamePhase.ACTION;
 						// action phase
@@ -775,20 +776,6 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void ConfirmationButtonClicked() {
-		if (phase == GamePhase.ACTION) {
-			if (action == ActionType.HACK) {
-				resolveEventCard(model.getCurrentPlayer().getExtraEventCard());
-				model.getCurrentPlayer().setExtraEventCard(null);
-				// view.extraEventCardChanged(null);
-				action = ActionType.NONE;
-				// view.clean();
-			}
-		}
-	}
-
-
-	@Override
 	synchronized public void YesButtonClicked() {
 		if (action == ActionType.GIVE_UP) {
 			status = GameStatus.GIVE_UP;
@@ -858,10 +845,13 @@ public class Controller extends Thread implements ViewListener {
 		}
 	}
 	
+	
+	
 	private class AnimationController extends Thread {
 		LinkedList<Animation> anims = new LinkedList<Animation>();
 		boolean finish = false;
 		boolean wait = false;
+		AnimationEventType waitedEvent = null;
 		
 		@Override
 		public void run() {
@@ -905,6 +895,7 @@ public class Controller extends Thread implements ViewListener {
 					x.displayDrawCards(a, b, false, rooms, events, parties);
 
 					wait = true;
+					waitedEvent = AnimationEventType.CENTERED;
 				});
 				/*
 				this.add((x) -> {try {
@@ -914,19 +905,35 @@ public class Controller extends Thread implements ViewListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}});*/
-				this.add((x) -> {try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}System.out.println("discard");x.displayDiscardCards();});
-				this.add((x) -> {System.out.println("clean");x.clean();});
+				
+				this.add((x) -> {
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println("discard");
+					x.displayDiscardCards();
+					wait = true;
+					waitedEvent = AnimationEventType.STORED;
+				});
+				
+				this.add((x) -> {
+					System.out.println("clean");
+					x.clean();
+					wait = true;
+					waitedEvent = AnimationEventType.CLEARED;
+				});
 			
 		}
 		
-		synchronized public void animationFinished() {
-			System.out.println("fin");
-			this.notify();
+		synchronized public void animationFinished(AnimationEventType type) {
+			if (type == waitedEvent && waitedEvent != null) {
+				waitedEvent = null;
+				System.out.println(type);
+				this.notify();
+			}
 		}
 		
 		public void finish() {
@@ -935,9 +942,19 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void animationFinished() {
-		synchronized (animCon) {
-			animCon.animationFinished();
-		}
+	public void cardToCenterFinished() {
+		animCon.animationFinished(AnimationEventType.CENTERED);
 	}
+
+	@Override
+	public void cardToDeckFinished() {
+		animCon.animationFinished(AnimationEventType.STORED);
+	}
+
+	@Override
+	public void cleared() {
+		animCon.animationFinished(AnimationEventType.CLEARED);
+	}
+
+	
 }
