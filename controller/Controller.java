@@ -58,6 +58,10 @@ public class Controller extends Thread implements ViewListener {
 					
 					Thread.sleep(1500);
 					
+					//discard
+					
+					displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
+					
 					//projects and labs
 					
 					for (Room room : model.getRooms()) {
@@ -71,10 +75,6 @@ public class Controller extends Thread implements ViewListener {
 							}
 						}
 					}
-					
-					//discard
-					
-					displayCards(Owner.PROJECT_DECK, Owner.PROJECT_DISCARD, new LinkedList<Card>(model.getProjectDiscard().getCardList()));
 					
 					//player hands
 					
@@ -741,8 +741,8 @@ public class Controller extends Thread implements ViewListener {
 	}
 
 	@Override
-	public void animationFinished() {
-
+	synchronized public void animationFinished() {
+		
 	}
 
 	@Override
