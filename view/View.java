@@ -179,7 +179,7 @@ public class View extends Stage {
         listeners.forEach(listener -> listener.placeClicked(name));
     }
 
-    public void firePawnCLicked(Role role) {//TODO use
+    public void firePawnCLicked(Role role) {
         listeners.forEach(event->event.pawnClicked(role));
     }
 
@@ -353,7 +353,7 @@ public class View extends Stage {
      * @param role the role of the new current player
      */
     public void displayCurrentPlayer(Role role) {
-        //TODO
+        board.setCurrentPlayer(role);
     }
 
     /**

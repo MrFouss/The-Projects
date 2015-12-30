@@ -122,6 +122,7 @@ public class Board extends Scene {
         decks = new ArrayList<>(5);
         decks.add(0, new Deck(this, "Cartes\nProjet", Color.FORESTGREEN, 60/100., 1/100., true));
         decks.add(1, new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true));
+        pane.getChildren().add(new Deck(this, "Défausse\nCartes\nProjet", Color.FORESTGREEN, 75/100., 1/100., true));
         decks.add(2, new Deck(this, "Cartes\nJoueur", Color.INDIGO, 1/100., 75/100.));
         decks.add(3, new Deck(this, "Défausse\nCartes\nJoueur", Color.INDIGO, 12.5/100., 75/100.));
         //hackerDeck
@@ -593,6 +594,9 @@ public class Board extends Scene {
         });
 
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
+        if (actualOwner == Owner.PROJECT_DISCARD) {
+            pane.getChildren().remove(decks.get(1));
+        }
     }
 
     /**
@@ -801,5 +805,9 @@ public class Board extends Scene {
             if (pawn.getPlayer().getRole() == role)
                 pawn.setClickable(clickable, view);
         });
+    }
+
+    public void setCurrentPlayer(Role role) {
+        //TODO
     }
 }
