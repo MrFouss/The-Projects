@@ -1,6 +1,5 @@
 package the_projects.view;
 
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
@@ -10,7 +9,7 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 
 /**
- * TODO complete : add selected player + javadoc
+ * Class for the area containing the different buttons and list of players
  */
 class Actions extends BorderPane {
     private final MyButton moves;
@@ -22,12 +21,16 @@ class Actions extends BorderPane {
     private final MyButton hacker;
     private final MyButton endButton;
 
-
+    /**
+     * Constructor of the actions area
+     * @param board the board on which the area appear
+     * @param view the parent View of the area
+     * @param pane the pane on which the area appear
+     * @param players the different players to represent
+     */
     public Actions(Board board, View view, Pane pane, Player... players) {
         Color color = Color.DARKSLATEBLUE;
         setBackground(new Background(new BackgroundFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color), new Stop(1, color.deriveColor(0,1,.5,1))), new CornerRadii(20), new Insets(0))));
-
-
 
         setLayoutX(board.getWidth()*50/100.);
         setLayoutY(board.getHeight()*65/100.);
@@ -120,34 +123,66 @@ class Actions extends BorderPane {
         }
     }
 
+    /**
+     * Setter for disabling the moves button
+     * @param disabled if true, the button will be disabled
+     */
     public void setMovesDisabled(boolean disabled) {
         moves.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the projects button
+     * @param disabled if true, the button will be disabled
+     */
     public void setProjectsDisabled(boolean disabled) {
         projects.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the share button
+     * @param disabled if true, the button will be disabled
+     */
     public void setShareDisabled(boolean disabled) {
         share.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the card button
+     * @param disabled if true, the button will be disabled
+     */
     public void setCardDisabled(boolean disabled) {
         card.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the master button
+     * @param disabled if true, the button will be disabled
+     */
     public void setMasterDisabled(boolean disabled) {
         master.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the lab room button
+     * @param disabled if true, the button will be disabled
+     */
     public void setLabRoomDisabled(boolean disabled) {
         labRoom.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the hacker button
+     * @param disabled if true, the button will be disabled
+     */
     public void setHackerDisabled(boolean disabled) {
         hacker.setDisable(disabled);
     }
 
+    /**
+     * Setter for disabling the end button
+     * @param disabled if true, the button will be disabled
+     */
     public void setEndButtonDisabled(boolean disabled) {
         endButton.setDisable(disabled);
     }
