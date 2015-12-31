@@ -153,6 +153,11 @@ public class Model {
                 do {
                     tmpRole = Role.random();
                     isInside = false;
+                    for(String str : players.keySet()) {
+                        if(players.get(str) == tmpRole) {
+                            isInside = true;
+                        }
+                    }
                     for(PhDStudent student : this.playerList) {
                         if (student.getRole() == tmpRole) {
                             isInside = true;
@@ -437,7 +442,7 @@ public class Model {
         distanceMap.put(start, 0);
 
         while(queue.size() > 0) {
-            Room u = null;
+            Room u = this.roomTab[0]; // to avoid a warning about null pointer exceptions
             Integer minDist = Integer.MAX_VALUE;
             for(Room room : distanceMap.keySet()) {
                 if(distanceMap.get(room) < minDist && queue.contains(room)) {
