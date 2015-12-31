@@ -187,7 +187,7 @@ public class Controller extends Thread implements ViewListener {
 								
 								//discard
 								
-								final int toDiscard = model.getCurrentPlayer().getCards().getSize() - 1;
+								final int toDiscard = model.getCurrentPlayer().getCards().getSize() - 7;
 								if (toDiscard > 0) {
 									phase = GamePhase.DISCARD;
 									animCon.add((x) -> {
@@ -545,23 +545,51 @@ public class Controller extends Thread implements ViewListener {
 		} else {
 			action = ActionType.RUN;
 			if (model.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
-				model.getPlayers().stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
+				selectedPlayers = new LinkedList<PhDStudent>(model.getPlayers());
+				selectedPlayers.stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
 			} else {
 				pawnClicked(model.getCurrentPlayer().getRole());
 			}			
 		}
 	}
 	
+	private PhDStudent roleToPlayer(Role r) {
+		for (PhDStudent p : model.getPlayers()) {
+			if (p.getRole() == r) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	synchronized public void pawnClicked(Role player) {
-		selectedPlayer = playerRoleToPlayer(player);
-		selectedReachableRooms = model.reachableRooms(player, actionPoints);
-		animCon.addClean();
-		animCon.add((x) -> {
-			x.displayReachableRooms(selectedReachableRooms);
-			animCon.wait = false;
-			animCon.waitedEvent = null;
-		});
+		for (PhDStudent p : selectedPlayers) {
+			view.makePawnClickable(false, p.getRole());
+		}
+		if (action == ActionType.SHARE_KNOWLEDGE) {
+			actionPoints--;
+			
+			view.displayActionsPoints(actionPoints);
+			
+			selectedCards = new LinkedList<Card>();
+			selectedCards.add(selectedCard);
+			
+			animCon.addClean();
+			animCon.addCardShow(playerToOwner(model.getCurrentPlayer()), playerToOwner(roleToPlayer(player)), selectedCards);
+			
+			model.getCurrentPlayer().getCards().getCardList().remove(selectedCard);
+			playerRoleToPlayer(player).getCards().addCard((PlayerCard)selectedCard);
+		} else if (action == ActionType.RUN) {
+			selectedPlayer = playerRoleToPlayer(player);
+			selectedReachableRooms = model.reachableRooms(player, actionPoints);
+			animCon.addClean();
+			animCon.add((x) -> {
+				x.displayReachableRooms(selectedReachableRooms);
+				animCon.wait = false;
+				animCon.waitedEvent = null;
+			});
+		}
 	}
 
 	@Override
@@ -654,6 +682,7 @@ public class Controller extends Thread implements ViewListener {
 	//TODO
 	@Override
 	public void shareKnowledgeButtonClicked() {
+		System.out.println("share");
 		if (actionPoints == 0) {
 			view.displayMessage("Vous n'avez pas assez de points d'action.");
 		} else {
@@ -683,8 +712,8 @@ public class Controller extends Thread implements ViewListener {
 				if (selectedCard == null) {
 					view.displayMessage("Personne dans la salle ne possède la carte de la salle.");
 				} else {
+					action = ActionType.SHARE_KNOWLEDGE;
 					if (model.getCurrentPlayer() == selectedPlayer) {
-						view.displayInfoMessage("Vous possédez la carte de la ville dans laquelle vous vous trouvez. Choisissez une personne à qui la donner.");
 						selectedPlayers.remove(model.getCurrentPlayer());
 						selectedPlayers.stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
 					} else {
@@ -767,6 +796,7 @@ public class Controller extends Thread implements ViewListener {
 			
 			for (RoomCard r : getRoomCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()))) {				
 				if (r.getRoom() == model.getCurrentPlayer().getPosition()) {
+					selectedCard = r;
 					room = r;
 					break;
 				}
@@ -782,6 +812,11 @@ public class Controller extends Thread implements ViewListener {
 					view.displayActionsPoints(actionPoints);
 					model.addLabRoom(room.getRoom().getName());
 					view.displaySetRoomToLab(room.getRoom().getName());
+					selectedCards = new LinkedList<Card>();
+					selectedCards.add(selectedCard);
+					animCon.addCardShow(playerToOwner(model.getCurrentPlayer()), Owner.PLAYER_DISCARD, selectedCards);
+					model.getCurrentPlayer().getCards().getCardList().remove(selectedCard);
+					model.getPlayerDiscard().addCard((PlayerCard)selectedCard);
 				}
 			}
 		}
@@ -841,6 +876,14 @@ public class Controller extends Thread implements ViewListener {
 			animCon.addCardStore();
 			resolveEventCard(model.getCurrentPlayer().getExtraEventCard());
 			model.getCurrentPlayer().setExtraEventCard(null);			
+		}
+		if (action == ActionType.SHARE_KNOWLEDGE) {
+			selectedCards = new LinkedList<Card>();
+			selectedCards.add(selectedCard);
+			
+			animCon.addCardShow(playerToOwner(selectedPlayer), playerToOwner(model.getCurrentPlayer()), selectedCards);
+			selectedPlayer.getCards().getCardList().remove(selectedCard);
+			model.getCurrentPlayer().getCards().addCard((PlayerCard)selectedCard);
 		}
 	}
 
