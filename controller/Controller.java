@@ -677,7 +677,7 @@ public class Controller extends Thread implements ViewListener {
 				}
 			}
 
-			if (i == 5) {
+			if (i == 4) {
 				view.displayMessage("Il n'y a aucun projet dans cette salle.");
 			} else {
 				//removing
