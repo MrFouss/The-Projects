@@ -312,6 +312,7 @@ public class Board extends Scene {
                 final int j = i;
                 transitions[i-1].setOnFinished(event -> transitions[j].play());
             }
+            transitions[transitions.length-1].setOnFinished(event -> view.fireMovePawnFinished());
             transitions[0].play();
         }
     }
@@ -355,14 +356,14 @@ public class Board extends Scene {
      * Method to increase the propagation gauge
      */
     public void increasePropagationGauge() {
-        propagationGauge.increase();
+        propagationGauge.increase(view);
     }
 
     /**
      * Method to increase the burn-out gauge
      */
     public void increaseBurnOutGauge() {
-        outbreaksGauge.increase();
+        outbreaksGauge.increase(view);
     }
 
     /**

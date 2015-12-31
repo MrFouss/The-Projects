@@ -69,11 +69,13 @@ public class OutbreaksGauge extends Pane implements Gauge {
     /**
      * Method to increase of 1 unit the Outbreaks Gauge
      */
-    public void increase() {
+    public void increase(View view) {
         if (lvl < 9) {
             double column1 = 42, column2 = column1 + 60;
             Path path = new Path(new MoveTo(lvl%2 == 0 ? column2 : column1, 50 + (lvl-1)*35), new LineTo(lvl%2 == 0 ? column1 : column2, 50 + lvl*35));
-            (new PathTransition(Duration.millis(1000),path,actual)).play();
+            PathTransition pathTransition = new PathTransition(Duration.millis(1000),path,actual);
+            pathTransition.setOnFinished(event -> view.fireOutbreakFinished());
+            pathTransition.play();
             lvl++;
         }
 

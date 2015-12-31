@@ -26,6 +26,9 @@ public interface ViewListener {
 	void cardToCenterFinished();
 	void cardToDeckFinished();
 	void cleared();
+	void movePawnFinished();
+	void propagationFinished();
+	void outbreakFinished();
 
 	void endOfStageButtonClicked();
 

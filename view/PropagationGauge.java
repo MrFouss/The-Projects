@@ -75,11 +75,13 @@ public class PropagationGauge extends Pane implements Gauge {
     /**
      * Method to increase of 1 unit the Propagation Gauge
      */
-    public void increase() {
+    public void increase(View view) {
         if (lvl < 7) {
             double line1 = 40, line2 = line1 + 30;
             Path path = new Path(new MoveTo(50 + (lvl-1)*35,lvl%2 == 0 ? line1 : line2), new LineTo(50 + lvl*35, lvl%2 == 0 ? line2 : line1));
-            (new PathTransition(Duration.millis(1000),path,actual)).play();
+            PathTransition pathTransition = new PathTransition(Duration.millis(1000),path,actual);
+            pathTransition.setOnFinished(e->view.firePropagationFinished());
+            pathTransition.play();
 
             lvl++;
         }

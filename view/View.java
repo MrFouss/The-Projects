@@ -376,4 +376,16 @@ public class View extends Stage {
     public void fireCleared() {
         listeners.forEach(ViewListener::cleared);
     }
+
+    public void fireMovePawnFinished() {
+        listeners.forEach(ViewListener::movePawnFinished);
+    }
+
+    public void firePropagationFinished() {
+        listeners.forEach(ViewListener::propagationFinished);
+    }
+
+    public void fireOutbreakFinished() {
+        listeners.forEach(ViewListener::outbreakFinished);
+    }
 }
