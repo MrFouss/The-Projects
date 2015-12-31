@@ -1,6 +1,5 @@
 package the_projects.view;
 
-
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,19 +15,21 @@ import the_projects.model.Role;
 import java.util.LinkedList;
 
 /**
- * TODO complete
+ * The settings menu
  */
 class MainMenu extends Scene {
-
-
     private final ScrollBar difficulty;
     private final TextField[] courses;
     private final TextField[] playersFields;
     private final ChoiceBox<String>[] rolesBoxes;
 
+    /**
+     * Constructor of the settings menu
+     * @param root the root of the scene
+     * @param view the parent view
+     */
     public MainMenu(Group root, View view) {
         super(root);
-
 
         GridPane gridPane = new GridPane();
         root.getChildren().add(gridPane);
@@ -140,10 +141,18 @@ class MainMenu extends Scene {
         }
     }
 
+    /**
+     * Getter of the difficulty chosen by the players
+     * @return The difficulty as an integer [0-3]
+     */
     public int getDifficulty() {
         return (int)(difficulty.getValue()+.5);
     }
 
+    /**
+     * Getter of the roles chosen by the players
+     * @return a linked list of the chosen roles
+     */
     public LinkedList<Role> getRoles() {
         LinkedList<Role> roles = new LinkedList<>();
         for (ChoiceBox<String> roleBox : rolesBoxes) {
@@ -154,6 +163,10 @@ class MainMenu extends Scene {
         return roles;
     }
 
+    /**
+     * Getter of the names of the players
+     * @return a linked list of the names
+     */
     public LinkedList<String> getPlayerNames() {
         LinkedList<String> playerNames = new LinkedList<>();
         for (TextField playerField : playersFields) {
@@ -164,6 +177,10 @@ class MainMenu extends Scene {
         return playerNames;
     }
 
+    /**
+     * Getter of the courses names chosen by the players
+     * @return a linked list of the courses names
+     */
     public LinkedList<String> getUVNames() {
         LinkedList<String> UVNames = new LinkedList<>();
         for (TextField course : courses) {
@@ -171,6 +188,4 @@ class MainMenu extends Scene {
         }
         return UVNames;
     }
-
-
 }
