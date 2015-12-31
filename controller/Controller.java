@@ -853,6 +853,7 @@ public class Controller extends Thread implements ViewListener {
 				} else {
 					//build
 					actionPoints--;
+					view.displayActionsPoints(actionPoints);
 					model.addLabRoom(model.getCurrentPlayer().getPosition().getName());
 					view.displaySetRoomToLab(model.getCurrentPlayer().getPosition().getName());
 				}
