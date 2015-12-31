@@ -637,7 +637,7 @@ public class Board extends Scene {
         }
 
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
-        displayedCards.stream().filter(card -> card instanceof EventCard).forEach(card1 -> card1.setClickable(true, view));
+
         if (actualOwner == Owner.PROJECT_DISCARD) {
             pane.getChildren().remove(decks.get(1));
         }
