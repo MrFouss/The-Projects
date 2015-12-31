@@ -2,6 +2,7 @@ package the_projects.controller;
 
 import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -603,6 +604,27 @@ public class Controller extends Thread implements ViewListener {
 		animCon.addClean();
 		animCon.addMovePawn(selectedPlayer, shortP.toArray(new String[shortP.size()]));
 		
+		if (model.getCurrentPlayer().getRole() == Role.MENTOR) {
+			for (String r : shortP) {
+				Room ro = roomNameToRoom(r);
+				for (Course c : model.getCourses()) {
+					if (c.isCompleted()) {
+						int i = ro.getProject(c).getProjectAmount();
+						ro.getProject(c).setProjectAmount(0);
+						for (int j = 0; j < i; j++) {
+							animCon.addRemoveProject(ro, c);
+						}
+					}
+				}
+			}
+			
+			for (Course c : model.getCourses()) {
+				if (isEradicated(c)) {
+					view.displayCourseEradicated(courseToInteger(c));
+				}
+			}
+		}
+		
 		selectedPlayer.setPosition(roomNameToRoom(name));
 		selectedPlayers = new LinkedList<PhDStudent>();
 		if (actionPoints > 0) {
@@ -658,13 +680,29 @@ public class Controller extends Thread implements ViewListener {
 			if (i == 5) {
 				view.displayMessage("Il n'y a aucun projet dans cette salle.");
 			} else {
+				//removing
 				for (int j = 0; j < toRemove; j++) {
-					view.displayRemoveProjectFromRoom(room.getName(), i);
+					animCon.addRemoveProject(room, model.getCourses()[i]);
+				}
+				if (isEradicated(model.getCourses()[i])) {
+					view.displayCourseEradicated(i);
 				}
 			}	
 		}
 	}
 
+	private boolean isEradicated(Course c) {
+		for (Room r : model.getRooms()) {
+			if (r.getProject(c).getProjectAmount() != 0) {
+				return false;
+			}
+		}
+		if (c.isCompleted()) {
+			return true;
+		}
+		return false;
+	}
+	
 	//TODO
 	@Override
 	public void shareKnowledgeButtonClicked() {
@@ -682,6 +720,7 @@ public class Controller extends Thread implements ViewListener {
 			if (selectedPlayers.isEmpty()) {
 				view.displayMessage("Il n'y a personne avec vous dans la salle.");
 			} else {
+				//looking for the room card
 				selectedCard = null;
 				all:
 				for (PhDStudent pl : selectedPlayers) {
@@ -715,6 +754,9 @@ public class Controller extends Thread implements ViewListener {
 		action = ActionType.NONE;
 		if (actionPoints == 0) {
 			selectedCards = new LinkedList<Card>(getEventCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList())));
+			if (model.getCurrentPlayer().getRole() == Role.HACKER && model.getCurrentPlayer().getExtraEventCard() != null) {
+				selectedCards.add(model.getCurrentPlayer().getExtraEventCard());
+			}
 			if (phase == GamePhase.ACTION) {
 				if (selectedCards.isEmpty()) {
 					view.displayMessage("Vous n'avez pas assez de points d'action et vous ne possédez aucune carte événement");
@@ -732,6 +774,9 @@ public class Controller extends Thread implements ViewListener {
 			}
 		} else {
 			selectedCards = new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList());
+			if (model.getCurrentPlayer().getRole() == Role.HACKER && model.getCurrentPlayer().getExtraEventCard() != null) {
+				selectedCards.add(model.getCurrentPlayer().getExtraEventCard());
+			}
 			if (selectedCards.isEmpty()) {
 				view.displayMessage("Vous n'avez aucune carte dans votre main.");
 			} else {			
@@ -760,7 +805,7 @@ public class Controller extends Thread implements ViewListener {
 					LinkedList<RoomCard> cards = getRoomCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()), model.getCourses()[course]);
 					if (model.getCurrentPlayer().getRole() == Role.DAOUID) {
 						if (cards.size() >= 4) {
-							selectedCards = new LinkedList<Card>(cards.subList(0, 5));
+							selectedCards = new LinkedList<Card>(cards.subList(0, 4));
 							break;
 						}
 					} else {
@@ -772,14 +817,20 @@ public class Controller extends Thread implements ViewListener {
 				}
 
 				if (course == 5) {
-					view.displayMessage("Vous n'avez les cartes nécessaires.");
+					view.displayMessage("Vous n'avez pas les cartes nécessaires.");
 				} else {
 					Owner owner = playerToOwner(model.getCurrentPlayer());
+					Course c = ((RoomCard)selectedCards.get(0)).getRoom().getCourse();
 					//TODO let the user select the cards
-							
-					animCon.addCardCenter(owner, owner, false, selectedCards);
-					action = ActionType.BUILD_TP;
-					view.displayValidationMessage("Voulez-vous vraiment utiliser ces cartes ?");
+					animCon.addCardShow(owner, Owner.PLAYER_DISCARD, selectedCards);
+					model.getCurrentPlayer().getCards().getCardList().removeAll(selectedCards);
+					model.getPlayerDiscard().getCardList().addAll((Collection<? extends PlayerCard>) selectedCards);
+					view.displayCourseMastered(courseToInteger(c));
+					c.setCompleted();
+					if (isEradicated(c)) {
+						c.setEradicated();
+						view.displayCourseEradicated(courseToInteger(c));
+					}
 				}
 			}
 		}
@@ -796,13 +847,14 @@ public class Controller extends Thread implements ViewListener {
 				if (model.getLabRoomAmount() == 0) {
 					view.displayMessage("Toutes les salles de TP ont déjà été posées.");
 				} else {
+					//build
 					actionPoints--;
 					model.addLabRoom(model.getCurrentPlayer().getPosition().getName());
 					view.displaySetRoomToLab(model.getCurrentPlayer().getPosition().getName());
 				}
 			} else {
 				RoomCard room = null;
-				
+				//looking for the room card
 				for (RoomCard r : getRoomCards(new LinkedList<Card>(model.getCurrentPlayer().getCards().getCardList()))) {				
 					if (r.getRoom() == model.getCurrentPlayer().getPosition()) {
 						selectedCard = r;
@@ -817,6 +869,7 @@ public class Controller extends Thread implements ViewListener {
 					if (model.getLabRoomAmount() == 0) {
 						view.displayMessage("Toutes les salles de TP ont déjà été posées.");
 					} else {
+						//build
 						actionPoints--;
 						view.displayActionsPoints(actionPoints);
 						model.addLabRoom(room.getRoom().getName());
@@ -941,8 +994,12 @@ public class Controller extends Thread implements ViewListener {
 			
 			EventCard ec = getEventCard(selectedCards, event);
 			resolveEventCard(ec);
-			model.getCurrentPlayer().getCards().getCardList().remove(ec);
-			model.getPlayerDiscard().addCard(ec);
+			if (ec != model.getCurrentPlayer().getExtraEventCard()) {
+				model.getCurrentPlayer().getCards().getCardList().remove(ec);
+				model.getPlayerDiscard().addCard(ec);
+			} else {
+				model.getCurrentPlayer().setExtraEventCard(null);
+			}
 			
 			if (phase == GamePhase.DISCARD) {
 				this.notify();
@@ -1115,6 +1172,14 @@ public class Controller extends Thread implements ViewListener {
 				x.displayMovePawn(player.getRole(), path);
 				wait = true;
 				waitedEvent = AnimationEventType.PAWN;
+			});
+		}
+		
+		synchronized public void addRemoveProject(Room r, Course c) {
+			this.add((x) -> {
+				view.displayRemoveProjectFromRoom(r.getName(), courseToInteger(c));
+				wait = false;
+				waitedEvent = null;
 			});
 		}
 		
