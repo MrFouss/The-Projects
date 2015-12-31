@@ -824,7 +824,11 @@ public class Controller extends Thread implements ViewListener {
 					//TODO let the user select the cards
 					animCon.addCardShow(owner, Owner.PLAYER_DISCARD, selectedCards);
 					model.getCurrentPlayer().getCards().getCardList().removeAll(selectedCards);
-					model.getPlayerDiscard().getCardList().addAll((Collection<? extends PlayerCard>) selectedCards);
+					
+					LinkedList<PlayerCard> pctemp = new LinkedList<PlayerCard>();
+					selectedCards.stream().forEach((x) -> pctemp.add((PlayerCard)x));
+					
+					model.getPlayerDiscard().getCardList().addAll(pctemp);
 					view.displayCourseMastered(courseToInteger(c));
 					c.setCompleted();
 					if (isEradicated(c)) {
