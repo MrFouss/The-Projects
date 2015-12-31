@@ -122,8 +122,10 @@ public class Player {
         if (handCard != null)
             handCard.setClickable(false, view);
         handCard = card;
-        if (handCard != null)
+        if (handCard != null) {
             handCard.setClickable(true, view);
+            handCard.toFront();
+        }
     }
 
     /**

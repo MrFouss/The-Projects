@@ -610,8 +610,34 @@ public class Board extends Scene {
             if (!(card instanceof PartyCard))
                 card.setOwner(newOwner);
         });
+        if (cards.size() == 1) {
+            switch (actualOwner) {
+                case PLAYER1:
+                    if (players[0].getHand().size() > 0) {
+                        players[0].setHandCard(players[0].getHand().peekLast(), view);
+                    }
+                    break;
+                case PLAYER2:
+                    if (players[1].getHand().size() > 0) {
+                        players[1].setHandCard(players[1].getHand().peekLast(), view);
+                    }
+                    break;
+                case PLAYER3:
+                    if (players[2].getHand().size() > 0) {
+                        players[2].setHandCard(players[2].getHand().peekLast(), view);
+                    }
+                    break;
+                case PLAYER4:
+                    if (players[3].getHand().size() > 0) {
+                        players[3].setHandCard(players[3].getHand().peekLast(), view);
+                    }
+                    break;
+
+            }
+        }
 
         moveFromDeck(clickable, ownerToDeck(actualOwner), actualOwner == Owner.PROJECT_DECK || actualOwner == Owner.PROJECT_DISCARD, cards.toArray(new Card[cards.size()]));
+        displayedCards.stream().filter(card -> card instanceof EventCard).forEach(card1 -> card1.setClickable(true, view));
         if (actualOwner == Owner.PROJECT_DISCARD) {
             pane.getChildren().remove(decks.get(1));
         }
