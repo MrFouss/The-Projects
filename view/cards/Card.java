@@ -15,7 +15,7 @@ import the_projects.view.Clickable;
 import the_projects.view.View;
 
 /**
- * TODO make fancier
+ * The representation of a card for the View
  */
 public class Card extends StackPane implements Clickable {
     private final Rectangle rectangle;
@@ -26,6 +26,14 @@ public class Card extends StackPane implements Clickable {
     private Owner owner;
     final Label textLabel;
 
+    /**
+     * Constructor of a card
+     * @param pane the Pane on which the card appear
+     * @param title the title of the card, written on top
+     * @param text the text of the card, written in the middle
+     * @param color the main color of the card
+     * @param owner the owner of the card
+     */
     Card(Pane pane, String title, String text, Color color, Owner owner) {
         this.color = color;
         this.title = title;
