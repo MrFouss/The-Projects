@@ -349,6 +349,10 @@ public class View extends Stage {
         Platform.runLater(() -> board.makePawnClickable(clickable, role));
     }
 
+    public void makePawnsClickable() {
+        Platform.runLater(() -> board.makePawnsClickable());
+    }
+
     /**
      * Method to change the current player
      * @param role the role of the new current player

@@ -529,7 +529,7 @@ public class Controller extends Thread implements ViewListener {
 			action = ActionType.RUN;
 			if (model.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
 				selectedPlayers = new LinkedList<PhDStudent>(model.getPlayers());
-				selectedPlayers.stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
+				view.makePawnsClickable();
 			} else {
 				selectedPlayers = new LinkedList<PhDStudent>();
 				pawnClicked(model.getCurrentPlayer().getRole());
@@ -677,7 +677,7 @@ public class Controller extends Thread implements ViewListener {
 				}
 			}
 
-			if (i == 4) {
+			if (i == 5) {
 				view.displayMessage("Il n'y a aucun projet dans cette salle.");
 			} else {
 				//removing

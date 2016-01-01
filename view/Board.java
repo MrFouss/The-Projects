@@ -795,6 +795,15 @@ public class Board extends Scene {
         });
     }
 
+    public void makePawnsClickable() {
+        Shape[] pawnsNode = new Shape[pawns.size()];
+        for (int i = 0; i < pawns.size(); ++i) {
+            pawnsNode[i] = pawns.get(i).getShape();
+        }
+        pawns.forEach(pawn -> pawn.setClickable(true, view));
+        putInFront(true, pawnsNode);
+    }
+
     public void setCurrentPlayer(Role role) {
         if (currentPlayer != null) {
             currentPlayer.setCurrent(false);
