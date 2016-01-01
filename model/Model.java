@@ -385,9 +385,11 @@ public class Model {
                 map.put(sourceName, 0);
                 stack.push(student.getPosition());
 
+                // if the GROUP_LEADER is moving anybody, including himself
                 if(this.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
                     for(PhDStudent otherStudent : this.getPlayers()) {
-                        if(!otherStudent.equals(student)) {
+                        // if otherStudent isn't the one moving and if they aren't at the same position
+                        if((!otherStudent.equals(student)) && (!otherStudent.getPosition().equals(student.getPosition()))) {
                             map.put(otherStudent.getPosition().getName(), 1);
                             stack.push(otherStudent.getPosition());
                         }
