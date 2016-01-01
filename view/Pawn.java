@@ -67,8 +67,11 @@ public class Pawn implements Clickable{
             hoverListener = Board.setHoverStrokeChange(shape, color);
             shape.setOnMouseClicked(event -> view.firePawnCLicked(player.getRole()));
         }else {
-            //noinspection unchecked
-            shape.hoverProperty().removeListener(hoverListener);
+            if (hoverListener != null) {
+                //noinspection unchecked
+                shape.hoverProperty().removeListener(hoverListener);
+
+            }
             shape.setStroke(color.deriveColor(0, 1, .5, 1));
             shape.setStrokeWidth(2);
             shape.setOnMouseClicked(null);

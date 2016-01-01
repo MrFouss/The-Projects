@@ -431,7 +431,10 @@ public class Board extends Scene {
                 ((Clickable) node).resetFill();
             } catch (Exception ignore) {}
         });
-        pawns.forEach(pawn -> pawn.getShape().toFront());
+        pawns.forEach(pawn -> {
+            pawn.getShape().toFront();
+            pawn.setClickable(false, view);
+        });
         pane.getChildren().remove(hidingRectangle);
         view.fireCleared();
     }
