@@ -31,7 +31,6 @@ import java.util.*;
 
 /**
  * The main scene of the game, where the action takes place
- * TODO complete
  */
 public class Board extends Scene {
 
@@ -53,7 +52,14 @@ public class Board extends Scene {
     private final Label actionPoints;
 
     /**
-     * TODO doc when finished
+     * The constructor of a Board
+     * @param root the group in to which the Board belongs
+     * @param view the View making the Board
+     * @param UV1 the name of the first course
+     * @param UV2 the name of the second course
+     * @param UV3 the name of the third course
+     * @param UV4 the name of the fourth course
+     * @param players the name of the players
      */
     public Board(Group root, View view, String UV1, String UV2, String UV3, String UV4, Player... players) {
         super(root, 1600, 900);
@@ -422,7 +428,9 @@ public class Board extends Scene {
         hidingRectangle.setOnMouseClicked(e -> clean());
     }
 
-
+    /**
+     * Method to return the board to a clean state (only buttons and player hands can be clicked)
+     */
     public void clean() {
         discardCards();
         pane.getChildren().stream().filter(node -> node instanceof Clickable && !(node instanceof Card)).forEach(node -> {
@@ -439,6 +447,11 @@ public class Board extends Scene {
         view.fireCleared();
     }
 
+    /**
+     * Method to convert an Owner to its Deck
+     * @param owner the Owner
+     * @return the Deck
+     */
     private StackPane ownerToDeck(Owner owner) {
         switch (owner) {
             case PLAYER1:
@@ -754,34 +767,66 @@ public class Board extends Scene {
         }
     }
 
+    /**
+     * Method to disable or enable the moves button
+     * @param disabled if true, the button will be disabled
+     */
     public void setMovesButtonDisabled(boolean disabled) {
         actions.setMovesDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the projects button
+     * @param disabled if true, the button will be disabled
+     */
     public void setProjectsButtonDisabled(boolean disabled) {
         actions.setProjectsDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the share button
+     * @param disabled if true, the button will be disabled
+     */
     public void setShareButtonDisabled(boolean disabled) {
         actions.setShareDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the card button
+     * @param disabled if true, the button will be disabled
+     */
     public void setCardButtonDisabled(boolean disabled) {
         actions.setCardDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the master button
+     * @param disabled if true, the button will be disabled
+     */
     public void setMasterButtonDisabled(boolean disabled) {
         actions.setMasterDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the lab room button
+     * @param disabled if true, the button will be disabled
+     */
     public void setLabRoomButtonDisabled(boolean disabled) {
         actions.setLabRoomDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the hacker button
+     * @param disabled if true, the button will be disabled
+     */
     public void setHackerButtonDisabled(boolean disabled) {
         actions.setHackerDisabled(disabled);
     }
 
+    /**
+     * Method to disable or enable the end button
+     * @param disabled if true, the button will be disabled
+     */
     public void setEndButtonButtonDisabled(boolean disabled) {
         actions.setEndButtonDisabled(disabled);
     }
@@ -798,6 +843,9 @@ public class Board extends Scene {
         });
     }
 
+    /**
+     * Method to make all pawns clickable
+     */
     public void makePawnsClickable() {
         Shape[] pawnsNode = new Shape[pawns.size()];
         for (int i = 0; i < pawns.size(); ++i) {
@@ -807,6 +855,10 @@ public class Board extends Scene {
         putInFront(true, pawnsNode);
     }
 
+    /**
+     * Method to change the current player
+     * @param role the role of the new current player
+     */
     public void setCurrentPlayer(Role role) {
         if (currentPlayer != null) {
             currentPlayer.setCurrent(false);
@@ -820,6 +872,10 @@ public class Board extends Scene {
         }
     }
 
+    /**
+     * Method to change the amount of current action points available
+     * @param actionPoints the new amount of action points
+     */
     public void setActionsPoints(int actionPoints) {
         this.actionPoints.setText("Points d'actions restants : " + actionPoints);
     }

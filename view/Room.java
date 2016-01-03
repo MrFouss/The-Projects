@@ -217,10 +217,19 @@ public class Room extends StackPane implements Clickable {
         return name;
     }
 
+    /**
+     * Getter of the pawns in the room
+     * @return an array of the Pawns in the room
+     */
     public Pawn[] getPawns() {
         return pawns;
     }
 
+    /**
+     * Method to make a object clickable or not
+     * @param clickable if true, the object will be made clickable
+     * @param view the View to which the object must declare when it has been clicked
+     */
     @Override
     public void setClickable(boolean clickable, View view) {
         if (clickable) {
@@ -234,10 +243,17 @@ public class Room extends StackPane implements Clickable {
         }
     }
 
+    /**
+     * Method to change the Fill of the Shape of the room
+     * @param value the new Fill
+     */
     public void setFill(Paint value) {
         roomShape.setFill(value);
     }
 
+    /**
+     * Method to reset the original color of an object
+     */
     @Override
     public void resetFill() {
         roomShape.setFill(new RadialGradient(0, 0, .5, .5, .8, true, CycleMethod.NO_CYCLE, new Stop(0, color.deriveColor(0,1,1 - 0.3*nbProjectCubes,1)), new Stop(1, color.deriveColor(0,1,.5,1))));

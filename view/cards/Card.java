@@ -64,6 +64,11 @@ public class Card extends StackPane implements Clickable {
         this.owner = owner;
     }
 
+    /**
+     * Method to make a object clickable or not
+     * @param clickable if true, the object will be made clickable
+     * @param view the View to which the object must declare when it has been clicked
+     */
     @Override
     public void setClickable(boolean clickable, View view) {
         if (clickable) {
@@ -78,23 +83,42 @@ public class Card extends StackPane implements Clickable {
         }
     }
 
+    /**
+     * Method to reset the original color of an object
+     */
     @Override
     public void resetFill() {
         rectangle.setFill(color);
     }
 
+    /**
+     * Getter of the Owner of the card
+     * @return the owner of the card
+     */
     public Owner getOwner() {
         return owner;
     }
 
+    /**
+     * Setter of the Owner of the card
+     * @param owner the new Owner of the card
+     */
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
 
+    /**
+     * Getter for the text on the card
+     * @return the text on the card
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Getter for the title of the card
+     * @return the title of the card
+     */
     public String getTitle() {
         return title;
     }

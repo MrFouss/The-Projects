@@ -118,6 +118,11 @@ public class Player {
         this.handDeck = handDeck;
     }
 
+    /**
+     * Setter for the hand card
+     * @param card the new hand card
+     * @param view the view in which the card appear
+     */
     public void setHandCard(Card card, View view) {
         if (handCard != null)
             handCard.setClickable(false, view);
@@ -166,6 +171,11 @@ public class Player {
         return false;
     }
 
+    /**
+     * Method to check if a player have an EventCard
+     * @param event the event of the event card
+     * @return true if the player have the card in his hand
+     */
     public boolean have(Event event) {
         for (Card card : hand) {
             if (card.getTitle().equals(event.eventToName())) {
@@ -175,6 +185,11 @@ public class Player {
         return false;
     }
 
+    /**
+     * Method to take a room card from a Player
+     * @param roomName the name of the room of the room card
+     * @return the room card
+     */
     public Card take(String roomName) {
         for (Card card : hand) {
             if (card.getText().equals(roomName)) {
@@ -185,6 +200,11 @@ public class Player {
         return null;
     }
 
+    /**
+     * Method to take a event card from a Player
+     * @param event the event of the event card
+     * @return the event card
+     */
     public Card take(Event event) {
         for (Card card : hand) {
             if (card.getTitle().equals(event.eventToName())) {
@@ -195,6 +215,10 @@ public class Player {
         return null;
     }
 
+    /**
+     * Method to set the Player as the current player
+     * @param current if true the player is set to current
+     */
     public void setCurrent(boolean current) {
         if (current) {
             nameLabel.setBackground(new Background(new BackgroundFill(color.deriveColor(0,1,.5,.8), new CornerRadii(10), new Insets(-5))));

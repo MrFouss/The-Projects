@@ -61,6 +61,11 @@ public class Pawn implements Clickable{
         return player;
     }
 
+    /**
+     * Method to make a Pawn clickable or not
+     * @param clickable if true, the Pawn will be made clickable
+     * @param view the View to which the Pawn must declare when it has been clicked
+     */
     @Override
     public void setClickable(boolean clickable, View view) {
         if (clickable) {
@@ -78,6 +83,9 @@ public class Pawn implements Clickable{
         }
     }
 
+    /**
+     * Method to reset the original color of a Pawn
+     */
     @Override
     public void resetFill() {
         shape.setFill(player.getRole().roleToColor());
