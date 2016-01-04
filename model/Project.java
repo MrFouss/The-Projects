@@ -30,7 +30,6 @@ public class Project {
      *
      * @return the course linked to the project.
      */
-    // TODO add to the class diagram
     public Course getCourse() {
         return this.course;
     }

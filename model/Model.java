@@ -24,8 +24,6 @@ public class Model {
      */
     private int burnOutGauge;
 
-    // TODO update the class diagram (-labRoomAmount)
-
     /**
      * The project deck.
      */
@@ -59,7 +57,6 @@ public class Model {
     /**
      * The list of rooms.
      */
-    // TODO update the class diagram
     private Room[] roomTab;
 
     /**
@@ -247,7 +244,6 @@ public class Model {
      *
      * @return the project deck.
      */
-    // TODO update the class diagram
     public CardDeck<ProjectCard> getProjectDeck() {
         return this.projectDeck;
     }
@@ -257,7 +253,6 @@ public class Model {
      *
      * @return the discard pile of the project deck.
      */
-    // TODO update the class diagram
     public CardDeck<ProjectCard> getProjectDiscard() {
         return this.projectDiscard;
     }
@@ -267,7 +262,6 @@ public class Model {
      *
      * @return the player deck.
      */
-    // TODO update the class diagram
     public CardDeck<PlayerCard> getPlayerDeck() {
         return this.playerDeck;
     }
@@ -277,7 +271,6 @@ public class Model {
      *
      * @return the discard pile of the player deck.
      */
-    // TODO update the class diagram
     public CardDeck<PlayerCard> getPlayerDiscard() {
         return this.playerDiscard;
     }
@@ -361,8 +354,6 @@ public class Model {
         return this.getLabRooms().size();
     }
 
-    // TODO update the class diagram (-setLabRoomAmount)
-
     /**
      * Gets the list of rooms reachable by a player, considering its remaining actions.
      *
@@ -370,7 +361,6 @@ public class Model {
      * @param remainingMoves the amount of actions remaining.
      * @return the hash map containing each room reachable linked to the amount of actions needed to go to the room.
      */
-    // TODO add to the class diagram
     public HashMap<String, Integer> reachableRooms(Role playerRole, int remainingMoves) {
         LinkedList<Room> stack = new LinkedList<>();
         HashMap<String, Integer> map = new HashMap<>();
@@ -421,7 +411,6 @@ public class Model {
         return map;
     }
 
-    // TODO javadoc
     public LinkedList<String> shortestPath(String startName, String endName) {
         Room start = null, end = null;
         HashMap<Room, Integer> distanceMap = new HashMap<>();

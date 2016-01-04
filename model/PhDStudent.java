@@ -80,7 +80,6 @@ public class PhDStudent {
      *
      * @return the position of the student.
      */
-    // TODO add to the class diagram
     public Room getPosition() {
         return this.position;
     }
@@ -90,7 +89,6 @@ public class PhDStudent {
      *
      * @param position the new position of the student.
      */
-    // TODO add to the class diagram
     public void setPosition(Room position) {
         this.position = position;
     }
@@ -109,7 +107,6 @@ public class PhDStudent {
      *
      * @param card the event card of the TRELLO_ADEPT.
      */
-    // TODO update the class diagram
     public void setExtraEventCard(EventCard card) {
         this.extraEventCard = card;
     }

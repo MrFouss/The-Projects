@@ -15,7 +15,6 @@ public class CardDeck <T extends Card> {
     /**
      * Random object used to shuffle the deck.
      */
-    // TODO add to the class diagram
     private Random rnd;
 
     /**

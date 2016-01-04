@@ -10,7 +10,6 @@ public class Room {
     /**
      * The name of the room.
      */
-    // TODO add to the class diagram
     private String name;
 
     /**
@@ -40,7 +39,6 @@ public class Room {
      * @param course The course affected to the room.
      * @param coursesInGame The list of courses used to create the Project objects.
      */
-    // TODO update the class diagram
     public Room(String name, Course course, Course[] coursesInGame) {
         this.name = name;
         this.labRoom = false;
@@ -111,7 +109,6 @@ public class Room {
      *
      * @return the list of rooms adjacent to this one.
      */
-    // TODO update the class diagram
     public LinkedList<Room> getNeighbours() {
         return this.neighbours;
     }
