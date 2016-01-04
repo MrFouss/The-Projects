@@ -529,7 +529,10 @@ public class Controller extends Thread implements ViewListener {
 			action = ActionType.RUN;
 			if (model.getCurrentPlayer().getRole() == Role.GROUP_LEADER) {
 				selectedPlayers = new LinkedList<PhDStudent>(model.getPlayers());
-				view.makePawnsClickable();
+				LinkedList<Role> roles = new LinkedList<Role>();
+				selectedPlayers.stream().forEach((x) -> roles.add(x.getRole()));
+				view.makePawnsClickable(roles);
+				//view.makePawnsClickable();
 			} else {
 				selectedPlayers = new LinkedList<PhDStudent>();
 				pawnClicked(model.getCurrentPlayer().getRole());
@@ -739,7 +742,10 @@ public class Controller extends Thread implements ViewListener {
 					action = ActionType.SHARE_KNOWLEDGE;
 					if (model.getCurrentPlayer() == selectedPlayer) {
 						selectedPlayers.remove(model.getCurrentPlayer());
-						selectedPlayers.stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
+						LinkedList<Role> roles = new LinkedList<Role>();
+						selectedPlayers.stream().forEach((x) -> roles.add(x.getRole()));
+						view.makePawnsClickable(roles);
+						//selectedPlayers.stream().forEach((x) -> view.makePawnClickable(true, x.getRole()));
 					} else {
 						view.displayValidationMessage(selectedPlayer.getName() + " possède la carte de la ville dans laquelle vous vous trouvez. Voulez vous la lui prendre ?");
 					}
