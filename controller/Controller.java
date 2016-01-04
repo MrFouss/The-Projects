@@ -238,7 +238,7 @@ public class Controller extends Thread implements ViewListener {
 						this.wait();
 						break;
 					case BURN_OUT:
-						view.displayValidationMessage("DOMMAGE !\nLa gauge de burn out est au maximum.\nVoulez-vous recommencer ?");
+						view.displayValidationMessage("DOMMAGE !\nLa jauge de burn out est au maximum.\nVoulez-vous recommencer ?");
 						this.wait();
 						break;
 					case PROJECT_LACK:
