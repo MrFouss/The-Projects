@@ -80,7 +80,7 @@ public class View extends Stage {
     private void setSettings() {
         Platform.runLater(() -> setScene(mainMenu));
         setHeight(50);
-        setMaximized(false); //Why doesn't it works :'(
+        setMaximized(false); //Why doesn't it works  :'(
     }
 
 
