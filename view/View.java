@@ -45,6 +45,7 @@ public class View extends Stage {
         for (PhDStudent phDStudent : model.getPlayers())
                 players[i++] = new Player(phDStudent.getName(), phDStudent.getRole());
         setBoard(courses[0].getName(), courses[1].getName(), courses[2].getName(), courses[3].getName(), players);
+        Platform.runLater(() -> setMaximized(true));
     }
 
     /**
@@ -57,7 +58,6 @@ public class View extends Stage {
      * @param players the list of the players (please use the format "new Player(String name, Role role)"
      */
     public void setBoard(String UV1, String UV2, String UV3, String UV4, Player... players) {
-        setHeight(getWidth()*9/16);
         Platform.runLater(() -> board = new Board(new Group(), this, UV1, UV2, UV3, UV4, players));
         Platform.runLater(() -> setScene(board));
     }
@@ -80,6 +80,7 @@ public class View extends Stage {
     private void setSettings() {
         Platform.runLater(() -> setScene(mainMenu));
         setHeight(50);
+        setMaximized(false); //Why doesn't it works :'(
     }
 
 
