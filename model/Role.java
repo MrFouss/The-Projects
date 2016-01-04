@@ -29,7 +29,7 @@ public enum Role {
             case GROUP_LEADER :
                 return Color.RED;
             case MENTOR :
-                return Color.ORANGE;
+                return Color.BLUE;
             case INSTALLER :
                 return Color.WHITE;
             case COFFEE_MAKER :
