@@ -843,6 +843,13 @@ public class Board extends Scene {
         });
     }
 
+    public void makePawnsClickable(LinkedList<Role> roles) {
+        ArrayList<Shape> pawnsNode = new ArrayList<>();
+        pawns.stream().filter(pawn1 -> roles.contains(pawn1.getPlayer().getRole())).forEach(pawn2 -> pawnsNode.add(pawn2.getShape()));
+        pawns.forEach(pawn -> pawn.setClickable(true, view));
+        putInFront(true, pawnsNode.toArray(new Node[pawnsNode.size()]));
+    }
+
     /**
      * Method to make all pawns clickable
      */
