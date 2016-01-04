@@ -843,6 +843,10 @@ public class Board extends Scene {
         });
     }
 
+    /**
+     * Method to make a list of Pawns clickable
+     * @param roles the list of the roles of the Pawns
+     */
     public void makePawnsClickable(LinkedList<Role> roles) {
         ArrayList<Shape> pawnsNode = new ArrayList<>();
         pawns.stream().filter(pawn1 -> roles.contains(pawn1.getPlayer().getRole())).forEach(pawn2 -> pawnsNode.add(pawn2.getShape()));

@@ -485,6 +485,10 @@ public class View extends Stage {
         Platform.runLater(() -> board.makePawnClickable(clickable, role));
     }
 
+    /**
+     * Method to make a list of Pawns clickable
+     * @param roles the list of the roles of the Pawns
+     */
     public void makePawnsClickable(LinkedList<Role> roles) {
         board.makePawnsClickable(roles);
     }
